@@ -1,4 +1,6 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, MenuItem } from 'electron';
+
+const path = require('path');
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) { // eslint-disable-line global-require
@@ -17,10 +19,35 @@ const createWindow = () => {
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`file://${__dirname}/index.html`);
+  mainWindow.loadURL(`file://${__dirname}/pages/enrollment.html`);
 
+  // Application Menu on the top bar
+  // Temmplate
+
+  const template = [
+    {
+       label: 'Goto',
+       submenu: [
+          {
+             label: 'Preferences',
+             click: () => {
+              mainWindow.loadFile(path.join(__dirname, 'pages/preferences.html'))
+             }
+          },
+          {
+             label: 'DevTools',
+             click: () => {
+              mainWindow.webContents.openDevTools();
+             }
+          }
+       ]
+    }
+ ]
+ 
+ const menu = Menu.buildFromTemplate(template)
+ Menu.setApplicationMenu(menu)
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {
