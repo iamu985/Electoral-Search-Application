@@ -45,12 +45,6 @@ const createWindow = () => {
       label: 'Goto',
       submenu: [
         {
-          label: 'Preferences',
-          click: () => {
-            mainWindow.loadFile(path.join(__dirname, 'pages/preferences.html'))
-          }
-        },
-        {
           label: 'DevTools',
           click: () => {
             mainWindow.webContents.openDevTools();
@@ -59,7 +53,13 @@ const createWindow = () => {
         {
           label: 'Form',
           click: () => {
-            mainWindow.loadFile(path.join(__dirname, 'index.html'))
+            mainWindow.loadURL('http://localhost:3000/enrollment')
+          }
+        },
+        {
+          label: 'Main Page',
+          click: () => {
+            mainWindow.loadURL('http://localhost:3000/')
           }
         }
       ]
