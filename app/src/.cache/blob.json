@@ -1,0 +1,17 @@
+{
+  "firstname": "Test",
+  "middlename": "M",
+  "lastname": "Last",
+  "mobile_number": "1234567890",
+  "status_of_employment": "Working",
+  "number_of_family_member": "4",
+  "number_of_electors": "4",
+  "number_of_new_electors": "4",
+  "association_name": "Kalimpong Association",
+  "district": "KPG",
+  "municipality": "Pudung",
+  "block": "1",
+  "gp": "P1",
+  "village": "VT",
+  "remarks": "RT"
+}

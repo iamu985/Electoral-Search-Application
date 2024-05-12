@@ -11,7 +11,9 @@ const SchemaObject = {
     caste: String,
     religion: String,
     status_of_employment: {type: String, default: "working"},
-    
+    number_of_family_members: {type: Number, default: 2, required:true, min: 2, max: 10},
+    number_of_electors: {type: Number, default: 0, required: true, min: 1, max: 10},
+    number_of_new_electors: {type: Number, default: 0, required: true, min: 0, max: 10},
     job_details: {
         designation: {type: String, required: true},
         date_of_joining: {type: Date, required: true}

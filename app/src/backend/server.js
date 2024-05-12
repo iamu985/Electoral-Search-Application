@@ -5,7 +5,15 @@ const app =  express();
 const BaseRouter = require('./routes/base.router.js');
 
 const port = 3000;
-const mongo_uri = 'mongodb://localhost:27017'; 
+const mongo_uri = 'mongodb://localhost:27017/test';
+
+
+// Middleware
+const static_files = path.join(__dirname, '../static');
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+app.use(express.static(static_files));
 
 
 // Set views to pages
@@ -18,7 +26,7 @@ mongoose.connect(mongo_uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
-    console.log('Connection Successful')
+    console.log('Connection Successful.')
 }).catch(err => {
     console.error(`Could not connect to Database\nError: ${err}`)
     process.exit();

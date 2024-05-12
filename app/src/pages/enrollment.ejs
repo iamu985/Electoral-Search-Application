@@ -1,6 +1,9 @@
 <%- include ('partials/base.ejs') %>
 <body>
     <div class="container mb-5">
+        <div id="fValidationNotif" class="alert alert-info">
+            Field is mandatory!
+        </div>
         <div id="header-title" class="d-flex justify-content-center my-3">
             <h1 class="center">Enrollment Form</h1>
         </div>
@@ -16,13 +19,13 @@
                         <div class="card-body px-3 pb-4">
                             <div class="my-1">
                                 <label for="first-name">First Name</label>
-                                <input type="text" id="firstName" class="form-control" name="firstName">
+                                <input type="text" id="firstName" class="form-control" name="firstName" data-fName="First Name" required>
                             </div>
-                            <div class="my-1">
+                            <div class="my-3">
                                 <label for="middle-name">Middle Name</label>
                                 <input type="text" id="middleName" class="form-control" name="middleName" id="middle-name" placeholder="optional">
                             </div>
-                            <div class="my-1">
+                            <div class="my-3 ">
                                 <label for="last-name">Last Name</label>
                                 <input type="text" class="form-control " id="lastName" name="lastName">
                             </div>
@@ -31,37 +34,37 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon1">+91</span>
                                 </div>
-                                <input type="telNo" pattern="[0-9]{10}" class="form-control " id="lastName" name="lastName" placeholder="Mobile or Whatsapp Number">
+                                <input type="telNo" pattern="[0-9]{10}" class="form-control " id="phoneNumber" name="phoneNumber" placeholder="Mobile or Whatsapp Number">
                             </div>
                             <div class="row mt-3">
                                 <div class="col-sm my-1">
                                     <label for="family-member-count">Number of Family Members</label>
-                                    <input type="number" min="0" max="10" class="form-control" value="4">
+                                    <input name="numberOfFamily" type="number" min="0" max="10" class="form-control" value="4">
                                 </div>
                                 <div class="col-sm my-1">
                                     <label for="number-of-electors">Number of Electors</label>
-                                    <input type="number" min="0" max="10" class="form-control " value="4">
+                                    <input name="numberOfElectors" type="number" min="0" max="10" class="form-control " value="4">
                                 </div>
                                 <div class="col-sm my-1">
                                     <label for="number-of-new-electors">Number of New Electors</label>
-                                    <input type="number" min="0" max="10" class="form-control " value="4">
+                                    <input name="numberOfNewElectors" type="number" min="0" max="10" class="form-control " value="4">
                                 </div>
                             </div>
                         
                             <div class="mt-1">
                                 <label class="py-2" for="associationName">Name of the Association</label>
                                 <select name="associationName" id="associationName" class="form-control  custom-select">
-                                    <option value="KPG">Kalimpong Association</option>
-                                    <option value="DRJ">Darjeeling Association</option>
-                                    <option value="KUR">Kurseong Association</option>
-                                    <option value="TIM">Sano Thimi Association</option>
+                                    <option value="Kalimpong Association">Kalimpong Association</option>
+                                    <option value="Darjeeling Association">Darjeeling Association</option>
+                                    <option value="Kurseong Association">Kurseong Association</option>
+                                    <option value="Sano Thimi Association">Sano Thimi Association</option>
                                  </select>
                             </div>
                             <div class="mt-2">
                                 <label class="py-2" for="statusOfEmployment">Staus of Employment</label>
                                 <select name="statusOfEmployment" id="statusOfEmployment" class="form-control  custom-select">
-                                    <option value="KPG">Working</option>
-                                    <option value="DRJ">Retired</option>
+                                    <option value="Working">Working</option>
+                                    <option value="Retired">Retired</option>
                                  </select>
                             </div>
                         </div>
@@ -87,40 +90,40 @@
                                     <label for="municipalityName">
                                         Municipality
                                     </label>
-                                    <select name="district" id="municipalityName" class="mx-3 form-control custom-select">
-                                       <option value="KPG">Pudung</option>
-                                       <option value="DRJ">Pedong</option>
-                                       <option value="KUR">Eagles Den</option>
-                                       <option value="TIM">Thimi</option>
+                                    <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select">
+                                       <option value="Pudung">Pudung</option>
+                                       <option value="Pedong">Pedong</option>
+                                       <option value="Eagles Den">Eagles Den</option>
+                                       <option value="Thimi">Thimi</option>
                                     </select>
                                 </div>
                                 <div class="col-sm">
-                                    <label for="district">
+                                    <label for="blockName">
                                         Block
                                     </label>
-                                    <select name="district" id="blockName" class="form-control mx-3 custom-select">
-                                       <option value="KPG">1</option>
-                                       <option value="DRJ">2</option>
-                                       <option value="KUR">3</option>
-                                       <option value="TIM">4</option>
+                                    <select name="block" id="blockName" class="form-control mx-3 custom-select">
+                                       <option value="1">1</option>
+                                       <option value="2">2</option>
+                                       <option value="3">3</option>
+                                       <option value="4">4</option>
                                     </select>
                                 </div>
                                 <div class="col-sm">
-                                    <label for="district">
+                                    <label for="gp">
                                         Gram Panchayat
                                     </label>
-                                    <select name="district" id="districtName" class="form-control mx-3 custom-select">
-                                       <option value="KPG">P1</option>
-                                       <option value="DRJ">P2</option>
-                                       <option value="KUR">P3</option>
-                                       <option value="TIM">P4</option>
+                                    <select name="gp" id="gp" class="form-control mx-3 custom-select">
+                                       <option value="P1">P1</option>
+                                       <option value="P2">P2</option>
+                                       <option value="P3">P3</option>
+                                       <option value="P4">P4</option>
                                     </select>
                                 </div>
                                 <div class="col-sm">
                                     <label for="villlageName">
                                         Village/Para/Ward Number
                                     </label>
-                                    <input type="text" class="form-control mx-3">
+                                    <input type="text" name="village" id="villageName" class="form-control mx-3">
                                 </div>
                             </div>
                             <div class="row card-body" id="f-ra-p2">
@@ -142,10 +145,36 @@
                         </div>
                     </div>
                 </div>
+                <button type="submit" class="btn btn-warning rounded">Next Page</button>
             </form>
         </div>
     </div>
 
 </body>
+<style>
+    .f-error {
+        display: block;
+        border: 1px solid red;
+    }
+    .f-hidden {
+        display: none;
+    }
+</style>
 
 </html>
+<script>
+    $(document).ready(function() {
+        var alert = $('#fValidationNotif');
+        alert.addClass('f-hidden');
+        $('#firstName').blur(function() {
+            var firstName = $(this).val();
+            if (firstName === "") {
+                $(this).addClass('f-error');
+                alert.removeClass('f-hidden');
+            } else {
+                $(this).removeClass('f-error');
+                alert.addClass('f-hidden');
+            }
+        })
+    })
+</script>
