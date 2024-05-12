@@ -2,4 +2,3 @@ node_modules
 out
 .eslintrc
 .compilerc
-TestSchema.js
