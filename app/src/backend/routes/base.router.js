@@ -92,7 +92,10 @@ const settingsGetHandler = (req, res) => {
     res.render('settings', { title: 'Settings Page' });
 }
 
-
+const information1GetHandler = (req, res) => {
+    console.log(`method: GET | handler: information2handler`);
+    res.render('information-1', { title: 'Detailed Information I' })
+}
 
 
 router.get('/', indexGetHandler)
@@ -101,5 +104,8 @@ router.get('/settings', settingsGetHandler)
 router.route('/enrollment')
     .get(enrollmentGetHandler)
     .post(enrollmentPostHandler)
+
+router.route('/information1')
+    .get(information1GetHandler)
 
 module.exports = router;
