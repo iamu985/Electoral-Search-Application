@@ -1,226 +1,89 @@
-<%- include ('partials/base.ejs') %>
+<%- include('partials/base.ejs') %>
 
 <body>
   <div class="container mb-5">
-    <div id="fValidationNotif2" class="alert alert-info">
+    <div id="fValidationNotif2" class="alert alert-info f-hidden">
       Field is mandatory!
     </div>
     <div id="header-title" class="d-flex justify-content-center my-3">
       <h1 class="center">Detail Information</h1>
     </div>
-    <!-- <a href="../index.html">Index</a> -->
     <div class="row d-flex justify-content-left">
-      <!-- Form begins here -->
-      <form action="" method="post">
+      <form id="detailForm" action="" method="post">
         <div class="form-group">
           <h4>Personal Details</h4>
-          <!-- Card 1 Details about the person signing up -->
           <div class="row input-group mb-3 card" id="details">
-            <!-- Card Body -->
             <div class="card-body px-3 pb-4">
               <div class="my-1">
-                <label for="first-name">Full Name</label>
-                <input type="text" id="fullName" class="form-control" name="fullName" readonly value="Frank Brano Gomes">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" class="form-control" name="fullname" readonly value="<%= data.fullname %>">
               </div>
               <div class="my-3">
-                <label for="middle-name">Nick Name</label>
-                <input type="text" id="nickName" class="form-control" name="nickName" placeholder="optional">
+                <label for="nickName">Nick Name</label>
+                <input type="text" id="nickName" class="form-control" name="nickname" placeholder="optional">
               </div>
-
               <div class="row">
                 <div class="col col-sm my-2">
                   <label for="dob" class="py-1">Date Of Birth</label>
                   <input type="date" id="dob" class="form-control" name="dob">
                 </div>
                 <div class="col col-sm my-2">
-                  <label class="py-1" for="statusOfEmployment">Caste</label>
+                  <label class="py-1" for="caste">Caste</label>
                   <select name="caste" id="caste" class="form-control custom-select">
                     <option value="SC">SC</option>
-                    <option selected value="ST">ST</option>
-                    <option selected value="OBC">OBC</option>
-                    <option selected value="Other">Other</option>
+                    <option value="ST">ST</option>
+                    <option value="OBC">OBC</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
                 <div class="col col-sm my-2">
                   <label class="py-1" for="religion">Religion</label>
                   <select name="religion" id="religion" class="form-control custom-select">
                     <option value="SC">SC</option>
-                    <option selected value="ST">Hindi</option>
-                    <option selected value="OBC">Muslim</option>
-                    <option selected value="OBC">Christian</option>
-                    <option selected value="OBC">Jain</option>
-                    <option selected value="OBC">Buddhist</option>
-                    <option selected value="Other">Other</option>
+                    <option value="Hindi">Hindi</option>
+                    <option value="Muslim">Muslim</option>
+                    <option value="Christian">Christian</option>
+                    <option value="Jain">Jain</option>
+                    <option value="Buddhist">Buddhist</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
               </div>
-
               <div class="mt-2">
                 <label class="py-2" for="designation">Designation</label>
                 <select name="designation" id="designation" class="form-control custom-select">
-                  <option value="CEO">CEO (Chief Executive Officer)</option>
-                  <option value="COO">COO (Chief Operating Officer)</option>
-                  <option value="CFO">CFO (Chief Financial Officer)</option>
-                  <option value="CTO">CTO (Chief Technology Officer)</option>
-                  <option value="CMO">CMO (Chief Marketing Officer)</option>
-                  <option value="CIO">CIO (Chief Information Officer)</option>
-                  <option value="General Manager">General Manager</option>
-                  <option value="Department Manager">Department Manager</option>
-                  <option value="Project Manager">Project Manager</option>
-                  <option value="Team Leader">Team Leader</option>
-                  <option value="Supervisor">Supervisor</option>
-                  <option value="Software Engineer">Software Engineer</option>
-                  <option value="Systems Analyst">Systems Analyst</option>
-                  <option value="Network Engineer">Network Engineer</option>
-                  <option value="Database Administrator">Database Administrator</option>
-                  <option value="Quality Assurance Engineer">Quality Assurance Engineer</option>
-                  <option value="DevOps Engineer">DevOps Engineer</option>
-                  <option value="Graphic Designer">Graphic Designer</option>
-                  <option value="UI/UX Designer">UI/UX Designer</option>
-                  <option value="Content Creator">Content Creator</option>
-                  <option value="Copywriter">Copywriter</option>
-                  <option value="Multimedia Artist">Multimedia Artist</option>
-                  <option value="Sales Manager">Sales Manager</option>
-                  <option value="Marketing Manager">Marketing Manager</option>
-                  <option value="Sales Representative">Sales Representative</option>
-                  <option value="Marketing Coordinator">Marketing Coordinator</option>
-                  <option value="Business Development Manager">Business Development Manager</option>
-                  <option value="Customer Support Manager">Customer Support Manager</option>
-                  <option value="Technical Support Specialist">Technical Support Specialist</option>
-                  <option value="Customer Success Manager">Customer Success Manager</option>
-                  <option value="Help Desk Technician">Help Desk Technician</option>
-                  <option value="Administrative Assistant">Administrative Assistant</option>
-                  <option value="Office Manager">Office Manager</option>
-                  <option value="Human Resources Manager">Human Resources Manager</option>
-                  <option value="Executive Assistant">Executive Assistant</option>
-                  <option value="Accountant">Accountant</option>
-                  <option value="Financial Analyst">Financial Analyst</option>
-                  <option value="Accounts Payable/Receivable Clerk">Accounts Payable/Receivable Clerk</option>
-                  <option value="Auditor">Auditor</option>
-                  <option value="Consultant">Consultant</option>
-                  <option value="Advisor">Advisor</option>
-                  <option value="Analyst">Analyst</option>
-                  <option value="Legal Counsel">Legal Counsel</option>
-                  <option value="Compliance Officer">Compliance Officer</option>
-                  <option value="Operations Manager">Operations Manager</option>
-                  <option value="Logistics Coordinator">Logistics Coordinator</option>
-                  <option value="Intern">Intern</option>
-                  <option value="Freelancer/Contractor">Freelancer/Contractor</option>
-                  <option value="Trainee">Trainee</option>
+                  <!-- (Designation options go here) -->
+                  <% designations.forEach(designation => { %>
+                  <option value="<%= designation %>"><%= designation %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="mt-2">
                 <label class="py-2" for="natureOfJob">Nature of Employment</label>
                 <select name="nature_of_job" id="natureOfJob" class="form-control custom-select">
                   <option value="Permanent">Permanent</option>
-                  <option selected value="Contractual">Contractual</option>
+                  <option value="Contractual">Contractual</option>
                 </select>
               </div>
-
             </div>
           </div>
 
-          <!-- Card 2 Additional Details -->
           <h4>Additional Details</h4>
           <div class="row input-group mb-3 card">
             <div class="card-body py-3 pb-4">
               <div class="my-3 col-sm">
-                <label for="">Name of the Leader who you are regularly in touch with</label>
+                <label for="contactLeaderName">Name of the Leader who you are regularly in touch with</label>
                 <input type="text" id="contactLeaderName" class="form-control" name="contact_leader_name" value="Frank Brano Gomes">
-              </div>
-
-              <div class="my-3">
-                <label for="familyMemberAttachedWithOrg">If any other family member is attached with any other organization</label>
-                <select name="family_member_attached_org" id="familyMemberAttachedWithOrg" class="form-control  custom-select">
-                  <option value="Yes">Yes</option>
-                  <option selected value="No">No</option>
-                </select>
-              </div>
-              <div class="my-3">
-                <!-- Button trigger modal -->
-                <!-- Modal -->
-                <div class="modal fade" id="myModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                      <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Details</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="card m-2">
-                          <div class="card-body">
-                            <div id="card-wrapper">
-                              <div class="row card-row">
-                                <div class="col-sm my-2">
-                                  <div class="input-group">
-                                    <div class="input-group-prepend">
-                                      <span class="input-group-text" id="basic-addon1">Name</span>
-                                    </div>
-                                    <!-- <label for="">Phone Number</label> -->
-                                    <input type="text" class="form-control">
-                                  </div>
-                                </div>
-                                <div class="col-sm my-2">
-                                  <div class="input-group">
-                                    <div class="input-group-prepend">
-                                      <span class="input-group-text" id="basic-addon1">Association</span>
-                                    </div>
-                                    <!-- <label for="">Phone Number</label> -->
-                                    <input type="text" class="form-control">
-                                  </div>
-                                </div>
-                                <div class="col-sm my-2">
-                                  <div class="input-group">
-                                    <div class="input-group-prepend">
-                                      <span class="input-group-text" id="basic-addon1">+91</span>
-                                    </div>
-                                    <!-- <label for="">Phone Number</label> -->
-                                    <input type="tel" class="form-control">
-                                  </div>
-                                </div>
-                                <div class="col-sm my-2">
-                                  <div class="input-group">
-                                    <div class="input-group-prepend">
-                                      <span class="input-group-text" id="basic-addon1">Leadership Role</span>
-                                    </div>
-                                    <!-- <label for="">Phone Number</label> -->
-                                    <select name="leadership_role" id="inLeadershipRole" class="form-control custom-select disabled">
-                                      <option value="Yes">Yes</option>
-                                      <option selected value="No">No</option>
-                                    </select>
-                                  </div>
-                                </div>
-                                <div class="col col-1 my-2">
-                                  <div class="row">
-                                    <button type="button" id="delButton" class="col col-xs btn btn-danger mx-1 del-field-btn">Delete</button>
-                                    <!-- <button type="button" id="removeButton" class="col col-xs btn btn-danger mx-1">Delete</button> -->
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="modal-footer">
-                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-
-                        <button class="btn btn-success">Save</button>
-                        <button type="button" id="addButton" class="btn btn-primary mx-1 add-field-btn">Add</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
 
-          <!-- Employment Section -->
           <h4>Employment</h4>
           <div class="row input-group mb-3 card">
             <div class="card-body py-3 pb-4">
               <div class="my-3 col-sm">
-                <label for="">Association Name</label>
-                <select name="associationName" id="associationName" class="form-control  custom-select">
+                <label for="associationName">Association Name</label>
+                <select name="employment_organization_name" id="associationName" class="form-control custom-select">
                   <option value="Kalimpong Association">Kalimpong Association</option>
                   <option value="Darjeeling Association">Darjeeling Association</option>
                   <option value="Kurseong Association">Kurseong Association</option>
@@ -229,60 +92,54 @@
               </div>
               <div class="my-3 col-sm">
                 <label class="py-2" for="statusOfEmployment">Status of Employment</label>
-                <select name="statusOfEmployment" id="statusOfEmployment" class="form-control custom-select disabled">
-                  <option value="Working">Working</option>
-                  <option selected value="Retired">Retired</option>
+                <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select disabled" disabled>
+                  <option value="Working" <%= data.status_of_employment === 'Working' ? 'selected' : '' %>>Working</option>
+                  <option value="Retired" <%= data.status_of_employment === 'Retired' ? 'selected' : '' %>>Retired</option>
                 </select>
               </div>
-
               <div class="my-3" id="dateOfJoining">
                 <label for="dateOfJoining">Date Of Joining</label>
-                <input type="date" id="dateOfJoining" class="form-control" name="dob">
+                <input type="date" id="dateOfJoining" class="form-control" name="date_of_joining">
               </div>
-
               <div class="card-body py-3 pb-4" id="retiredSection">
                 <div class="my-3 col-sm">
-                  <label for="">During service whether you have taken membership of any other opposition?</label>
-                  <select name="oppositionMembership" id="oppositionMembership" class="form-control  custom-select f-disabled-class-question">
+                  <label for="oppositionMembership">During service whether you have taken membership of any other opposition?</label>
+                  <select name="had_taken_opposition_membership" id="oppositionMembership" class="form-control custom-select">
                     <option value="Yes">Yes</option>
-                    <option selected value="No">No</option>
+                    <option value="No" selected>No</option>
                   </select>
                 </div>
                 <div class="my-3 col-sm">
-                  <label for="">Whether the Trade Union Right existed at the time of your service?</label>
-                  <select name="oppositionMembership" id="oppositionMembership" class="form-control  custom-select f-disabled-class-question">
+                  <label for="tradeUnionRight">Whether the Trade Union Right existed at the time of your service?</label>
+                  <select name="trade_union_right_on" id="tradeUnionRight" class="form-control custom-select">
                     <option value="Yes">Yes</option>
-                    <option selected value="No">No</option>
+                    <option value="No" selected>No</option>
                   </select>
                 </div>
                 <div class="my-3 col-sm">
-                  <label for="">Whether you played any leadership role at the time of your service?</label>
-                  <select name="has_played_leadership_role" id="hasPlayedLeadershipRole" class="form-control  custom-select f-disabled-class-question">
+                  <label for="has_played_leadership_role">Whether you played any leadership role at the time of your service?</label>
+                  <select name="has_played_leadership_role" id="hasPlayedLeadershipRole" class="form-control custom-select">
                     <option value="Yes">Yes</option>
-                    <option selected value="No">No</option>
+                    <option value="No" selected>No</option>
                   </select>
                 </div>
-                <div class="my-3 col-sm alert" id="whichStageWrapper" class="f-hidden">
-                  <label for="">If yes at Which stage?</label>
-                  <select name="which_stage" id="whichStage" class="form-control custom-select f-disabled-class-question">
-                    <option value="Yes">SCC</option>
-                    <option value="No">Samiti</option>
+                <div class="my-3 col-sm alert f-hidden" id="whichStageWrapper">
+                  <label for="whichStage">If yes, at which stage?</label>
+                  <select name="played_leadership_role_stage" id="whichStage" class="form-control custom-select">
+                    <option value="SCC">SCC</option>
+                    <option value="Samiti">Samiti</option>
                   </select>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Residential Address Section copied from previous form -->
           <h4>Residential Address</h4>
           <div class="my-3" id="residentialAddress">
             <div class="row card input-group mb-3 py-3 px-3">
               <div class="row card-body" id="f-ra-p1">
-                <!--frank residetial address part 1-->
                 <div class="col-sm">
-                  <label for="districtName">
-                    District
-                  </label>
+                  <label for="districtName">District</label>
                   <select name="district" id="districtName" class="form-control mx-3 custom-select">
                     <option value="KPG">Kalimpong</option>
                     <option value="DRJ">Darjeeling</option>
@@ -291,9 +148,7 @@
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="municipalityName">
-                    Municipality
-                  </label>
+                  <label for="municipalityName">Municipality</label>
                   <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select">
                     <option value="Pudung">Pudung</option>
                     <option value="Pedong">Pedong</option>
@@ -302,9 +157,7 @@
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="blockName">
-                    Block
-                  </label>
+                  <label for="blockName">Block</label>
                   <select name="block" id="blockName" class="form-control mx-3 custom-select">
                     <option value="1">1</option>
                     <option value="2">2</option>
@@ -313,9 +166,7 @@
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="gp">
-                    Gram Panchayat
-                  </label>
+                  <label for="gp">Gram Panchayat</label>
                   <select name="gp" id="gp" class="form-control mx-3 custom-select">
                     <option value="P1">P1</option>
                     <option value="P2">P2</option>
@@ -324,39 +175,32 @@
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="villlageName">
-                    Village/Para/Ward Number
-                  </label>
+                  <label for="villageName">Village/Para/Ward Number</label>
                   <input type="text" name="village" id="villageName" class="form-control mx-3">
                 </div>
               </div>
               <div class="row card-body" id="f-ra-p2">
                 <div class="col-sm">
-                  <label for="landMark">
-                    Landmark
-                  </label>
-                  <input type="text" name="Landmark" id="landMark" class="form-control">
+                  <label for="landMark">Landmark</label>
+                  <input type="text" name="landmark" id="landMark" class="form-control">
                 </div>
               </div>
               <div class="row card-body" id="f-ra-p3">
                 <div class="col-sm">
-                  <label for="remarksContent">
-                    Remarks
-                  </label>
+                  <label for="remarksContent">Remarks</label>
                   <textarea name="remarks" id="remarksContent" class="form-control"></textarea>
                 </div>
               </div>
             </div>
           </div>
 
-
         </div>
-        <button type="submit" class="btn btn-warning rounded">Next Page</button>
+        <button type="button" id="nextPageBtn" class="btn btn-warning rounded">Next Page</button>
       </form>
     </div>
   </div>
-
 </body>
+
 <style>
   .f-error {
     display: block;
@@ -365,55 +209,52 @@
 
   .f-hidden {
     opacity: 0;
-    /* Set initial opacity to 0 */
     display: none;
     transition: opacity 2s ease;
-    /* Add transition for opacity property */
   }
 
-  /* Visible state */
   .f-visible {
     opacity: 1;
-    /* Set opacity to 1 */
     display: block;
-    /* Make sure the element is displayed */
   }
 </style>
 
-</html>
 <script>
   $(document).ready(function() {
     var alert = $('#fValidationNotif2');
     alert.addClass('f-hidden');
-    $('#firstName').blur(function() {
-      var firstName = $(this).val();
-      if (firstName === "") {
+
+    $('#fullName').blur(function() {
+      var fullName = $(this).val();
+      if (fullName === "") {
         $(this).addClass('f-error');
         alert.removeClass('f-hidden');
       } else {
         $(this).removeClass('f-error');
         alert.addClass('f-hidden');
       }
-    })
+    });
 
-    // Disable or Enable other question based on status of employment
     var retiredSection = $('#retiredSection');
     var dateOfJoining = $('#dateOfJoining');
-    $('#statusOfEmployment').change(function() {
-      var status = $(this).val();
+    var statusOfEmployment = $('#statusOfEmployment');
+
+    function handleEmploymentStatus() {
+      var status = statusOfEmployment.val();
       if (status === 'Working') {
-        console.log('working');
         retiredSection.addClass('f-hidden');
         dateOfJoining.removeClass('f-hidden');
       } else {
-        console.log('retired');
         retiredSection.removeClass('f-hidden');
         dateOfJoining.addClass('f-hidden');
       }
-    });
+    }
+
+    handleEmploymentStatus();
 
     var leadershipRoleProp = $('#hasPlayedLeadershipRole');
     var followUpQuestion = $('#whichStageWrapper');
+
     leadershipRoleProp.change(function() {
       var answer = $(this).val();
       if (answer === 'Yes') {
@@ -421,88 +262,81 @@
       } else {
         followUpQuestion.addClass('f-hidden').removeClass('f-visible');
       }
-    })
-
-    // show modal when member attached is yes
-    var modal = $('#myModal');
-    var memberAttached = $('#familyMemberAttachedWithOrg');
-    memberAttached.change(function() {
-      var attached = $(this).val();
-      if (attached === 'Yes') {
-        modal.modal('show');
-      }
-    })
-
-    // add member and association specific detail fields in modal when clicked on add
-    var cardWrapper = $('#card-wrapper');
-    var addBtn = $('.add-field-btn');
-    addBtn.click(function() {
-      console.log('clicked add')
-      cardWrapper.append(`<div class="row card-row">
-          <div class="col-sm my-2">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Name</span>
-              </div>
-              <!-- <label for="">Phone Number</label> -->
-              <input type="text" class="form-control">
-            </div>
-          </div>
-          <div class="col-sm my-2">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Association</span>
-              </div>
-              <!-- <label for="">Phone Number</label> -->
-              <input type="text" class="form-control">
-            </div>
-          </div>
-          <div class="col-sm my-2">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">+91</span>
-              </div>
-              <!-- <label for="">Phone Number</label> -->
-              <input type="tel" class="form-control">
-            </div>
-          </div>
-          <div class="col-sm my-2">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <span class="input-group-text" id="basic-addon1">Leadership Role</span>
-              </div>
-              <select name="leadership_role" id="inLeadershipRole" class="form-control custom-select disabled">
-                <option value="Yes">Yes</option>
-                <option selected value="No">No</option>
-              </select>
-            </div>
-          </div>
-          <div class="col-1 my-2">
-            <div class="row">
-              <button type="button" id="delButton" class="col col-xs btn btn-danger mx-1 del-field-btn">Delete</button>
-              <!-- <button type="button" id="removeButton" class="col col-xs btn btn-danger mx-1">Delete</button> -->
-            </div>
-          </div>
-          </div>`)
-      checkIfEmpty();
-    })
-
-    // delete button
-    cardWrapper.on('click', '.del-field-btn', function(e) {
-      e.preventDefault();
-      console.log('DelClicked');
-      $(this).closest('.card-row').remove();
-      checkIfEmpty();
     });
 
-    // check if card-row is empty
-    function checkIfEmpty() {
-      console.log('If Empty');
-      if (cardWrapper.children('.card-row').length <= 0) {
-        cardWrapper.append('<div id="empty-message" class="text-center">Its Empty!</div>')
-      } else {
-        $('#empty-message').remove();
+    // prefill district address data
+    $.ajax({
+      url: '/session-data',
+      method: 'GET',
+      success: function(formData) {
+        var address = formData.addresses[0];
+        $('#districtName').val(address.district);
+        $('#municipalityName').val(address.municipality);
+        $('#blockName').val(address.block);
+        $('#gp').val(address.gp);
+        $('#villageName').val(address.village);
+        $('#landMark').val(address.landmark);
+        $('#remarksContent').val(address.remarks);
       }
+    });
+
+    $('#nextPageBtn').click(function(event) {
+      console.log('next page from information 1')
+      event.preventDefault();
+      const formData = collectFormData();
+      console.log(formData); // Debugging - see the collected data object
+      $.ajax({
+        url: '/information1', // Change to your endpoint
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          // Handle the response
+          console.log(response);
+          if (response.success) {
+            window.location.href = response.redirect;
+          }
+        },
+        error: function(error) {
+          // Handle the error
+          console.error(error);
+        }
+      });
+    });
+
+    function collectFormData() {
+      const form = $('#detailForm');
+      const formData = {
+        fullname: form.find('[name="fullname"]').val(),
+        nickname: form.find('[name="nickname"]').val(),
+        dob: form.find('[name="dob"]').val(),
+        caste: form.find('[name="caste"]').val(),
+        religion: form.find('[name="religion"]').val(),
+        contact_leader_name: form.find('[name="contact_leader_name"]').val(),
+        status_of_employment: form.find('[name="status_of_employment"]').val(),
+        had_taken_opposition_membership: form.find('[name="had_taken_opposition_membership"]').val(),
+        trade_union_right_on: form.find('[name="trade_union_right_on"]').val(),
+        has_played_leadership_role: form.find('[name="has_played_leadership_role"]').val(),
+        played_leadership_role_stage: form.find('[name="played_leadership_role_stage"]').val(),
+        job_details: {
+          designation: form.find('[name="designation"]').val(),
+          nature_of_job: form.find('[name="nature_of_job"]').val(),
+          date_of_joining: form.find('[name="date_of_joining"]').val(),
+          employment_organization_name: form.find('[name="employment_organization_name"]').val()
+        },
+        addresses: [{
+          district: form.find('[name="district"]').val(),
+          municipality: form.find('[name="municipality"]').val(),
+          block: form.find('[name="block"]').val(),
+          gp: form.find('[name="gp"]').val(),
+          village: form.find('[name="village"]').val(),
+          landmark: form.find('[name="landmark"]').val(),
+          remarks: form.find('[name="remarks"]').val()
+        }]
+      };
+
+      return formData;
     }
-  })
+
+  });
 </script>

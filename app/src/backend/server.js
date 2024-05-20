@@ -1,16 +1,23 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const session = require('express-session');
 const path = require('path');
 const app =  express();
 const BaseRouter = require('./routes/base.router.js');
 
 const port = 3000;
 const mongo_uri = 'mongodb://localhost:27017/test';
-
+const static_files = path.join(__dirname, '../static');
+console.log(static_files);
 
 // Middleware
-const static_files = path.join(__dirname, '../static');
 
+app.use(session({
+    secret: 'some_unique_secret',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { save: true }
+}))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(static_files));

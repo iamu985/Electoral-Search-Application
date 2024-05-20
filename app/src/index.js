@@ -35,7 +35,7 @@ const createWindow = () => {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadURL(`http://localhost:3000/information1`);
+  mainWindow.loadURL(`http://localhost:3000/`);
 
   // Application Menu on the top bar
   // Temmplate
@@ -66,6 +66,18 @@ const createWindow = () => {
           label: 'Second Form',
           click: () => {
             mainWindow.loadURL('http://localhost:3000/information1')
+          }
+        },
+        {
+          label: 'Third Form',
+          click: () => {
+            mainWindow.loadURL('http://localhost:3000/information2')
+          }
+        },
+        {
+          label: 'Final Form',
+          click: () => {
+            mainWindow.loadURL('http://localhost:3000/evaluation')
           }
         }
       ]

@@ -2,10 +2,12 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 
+
 const SchemaObject = {
-    first_name: {type: String, required: true},
-    middle_name: String,
-    last_name: {type: String, required: true},
+    id: {type: String, required: true, unique: true},
+    firstname: {type: String, required: true},
+    middlename: String,
+    lastname: {type: String, required: true},
     mobile_number: {type: String, required: true, unique: true},
     dob: {type: Date, required: true},
     caste: String,
@@ -14,9 +16,12 @@ const SchemaObject = {
     number_of_family_members: {type: Number, default: 2, required:true, min: 2, max: 10},
     number_of_electors: {type: Number, default: 0, required: true, min: 1, max: 10},
     number_of_new_electors: {type: Number, default: 0, required: true, min: 0, max: 10},
+    association_name: String,
     job_details: {
         designation: {type: String, required: true},
-        date_of_joining: {type: Date, required: true}
+        date_of_joining: {type: Date, required: true},
+        nature_of_job: {type: String},
+        employment_organization_name: String
     },
 
     leadership_role_information: {
@@ -28,8 +33,8 @@ const SchemaObject = {
         district: String,
         municipality: String,
         gp: String,
-        village: String,
         ward: String,
+        village: String,
         para: String
     },
     
@@ -38,47 +43,47 @@ const SchemaObject = {
         family_members: [
             {
                 relationship: String,
-                first_name: String,
-                middle_name: String,
-                last_name: String,
-                is_new_elector: Boolean,
-                is_children: Boolean,
-                is_student: Boolean,
-                
+                firstname: String,
+                middlename: String,
+                lastname: String,
+                is_new_elector: String,
+                is_student: String,
+                age: Number,
                 institution_information: {
-                    institution_name: String,
-                    club: [String],
-                    has_scheme: Boolean,
+                    name_of_institution: String,
+                    state_of_institution: String,
+                    club: String,
                     beneficiary_scheme: [String]
                 },
-                attached_organization: Boolean,
-                attached_organization_information: {
-                    contact_person_name: String,
+                associated_association: {
+                    name_of_organization: String,
                     phone: String,
-                    organization_name: String
+                    in_leadership_role: String
                 }
             }
         ]
     },
 
     additional_details: {
-        trade_union_right_existed: Boolean,
+        trade_union_right_on: String,
         other_front: String,
-        contact_leader_name: String
+        contact_leader_name: String,
+        had_taken_opposition_membership: String,
+        has_played_leadership_role: String,
+        played_leadership_role_stage: String    
     },
     
     evaluation: {
         role_play: {
             organization: String,
-            working_area: Boolean,
-            concern_association: Boolean,
-            regular_manner: Boolean,
+            working_area: String,
+            concern_association: String,
+            regular_manner: String,
         },
         questions: [
             {
                 question: String,
-                answer: String,
-                number: Number
+                answer: String
             }
         ],
         compliers_note: String
@@ -86,7 +91,8 @@ const SchemaObject = {
 
 }
 
-const schema = mongoose.Schema(SchemaObject);
+const schema = Schema(SchemaObject);
 const DataModel = mongoose.model('DataModel', schema);
+
 
 module.exports = DataModel;

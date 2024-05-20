@@ -5,6 +5,7 @@ const path = require('path');
 
 const TestModel = require('../../src/models/TestSchema');
 const DataModel = require('../../src/models/Schema');
+const Counter = require('../../src/models/Counter');
 const { Model } = require('mongoose');
 
 
@@ -58,12 +59,32 @@ async function saveToDatabase(jsondata, debug=true) {
     }
 
     modelInstance = new Model(jsondata);
-    await modelInstance.save().then(() => {
+    try {
+        await modelInstance.save();
         console.log('Saved to database.');
-    }).catch(err => {
+        return { saved: true };
+    } catch (err) {
         console.log(`Error: ${err}`);
-    })
+        return { saved: false, error: err };
+    }
 }
 
+function deepMerge(target, source) {
+    for (var key in target) {
+        source[key] = target[key];
+    }
+    return source;
+}
 
-module.exports = { saveData, readData, saveToDatabase }
+const getNextSequenceValue = async (sequenceName) => {
+    const counter = await Counter.findOneAndUpdate(
+      { name: sequenceName },
+      { $inc: { sequence_value: 1 } },
+      { new: true, upsert: true }
+    );
+    return counter.sequence_value;
+  };
+  
+
+
+module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue }

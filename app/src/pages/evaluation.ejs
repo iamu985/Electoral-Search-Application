@@ -1,0 +1,93 @@
+<%- include ('partials/base.ejs') %>
+
+<body>
+  <div class="container mb-5">
+    <div id="header-title" class="d-flex justify-content-center my-3">
+      <h1 class="center">Evaluation Form</h1>
+    </div>
+
+    <div class="row d-flex justify-content-left">
+      <form id="evaluationForm" action="" method="post">
+        <div class="form-group">
+          <div class="row input-group mb-3 card">
+
+            <!-- Card Body -->
+            <div class="card-body px-3 pb-4">
+              <% options.forEach(function(object, index) { %>
+              <label id="<%= object.name %>" class="py-2"><%= object.question %></label>
+              <% if (object.values != null) { %>
+              <select name="<%= object.name %>" class="form-control custom-select" data-index="<%= index %>">
+                <% object.values.forEach(function(value) { %>
+                <option value="<%= value %>"><%= value %></option>
+                <% }); %>
+              </select>
+              <% } else { %>
+              <% if (object.type === "large") { %>
+              <textarea name="<%= object.name %>" class="form-control" rows="3" data-index="<%= index %>"></textarea>
+              <% } else { %>
+              <input type="text" name="<%= object.name %>" class="form-control" data-index="<%= index %>">
+              <% } %>
+              <% } %>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-warning rounded">Submit</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
+
+<script>
+  $(document).ready(function() {
+    $('#evaluationForm').submit(function(event) {
+      event.preventDefault();
+      
+      const formData = collectFormData();
+      console.log(formData); // Debugging - see the collected data object
+      $.ajax({
+        url: '/evaluation', // Change to your endpoint
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          // Handle the response
+          console.log(response);
+        },
+        error: function(error) {
+          // Handle the error
+          console.error(error);
+        }
+      });
+    });
+
+    function collectFormData() {
+      const form = $('#evaluationForm');
+      const rolePlay = {
+        organization: form.find('[name="organization"]').val(),
+        working_area: form.find('[name="working_area"]').val(),
+        concern_association: form.find('[name="concern_association"]').val(),
+        regular_manner: form.find('[name="regular_manner"]').val()
+      };
+
+      const questions = [];
+      for(var i=1; i<=6; i++) {
+        questions.push({
+          question: $(`#eval-ques-${i}`).text(),
+          answer: form.find(`[name="eval-ques-${i}"]`).val()
+        })
+      }
+
+      const compilersNote = form.find('[name="compilers_note"]').val();
+
+      return {
+        evaluation: {
+          role_play: rolePlay,
+          questions: questions,
+          compilers_note: compilersNote
+        }
+      };
+    }
+  });
+</script>
