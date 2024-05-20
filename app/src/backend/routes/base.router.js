@@ -22,6 +22,27 @@ const indexGetHandler = (req, res) => {
     res.render('index', { title: 'Index Page' });
 }
 
+const searchGetHandler = async (req, res) => {
+    console.log(`method: GET | handler: searchHandler`);
+    const { field, value } = req.query;
+
+    if (!field || !value) {
+        return res.status(400).json({ message: 'Missing field or value for search' });
+    }
+
+    try {
+        const query = {};
+        query[field] = value;
+        console.log(query);
+        const results = await DataModel.find(query, 'id firstname middlename lastname'); // Adjust the fields as needed
+        console.log('Returning from inside the handler: ', results);
+        res.json(results);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server Error' });
+    }
+}
+
 const sessionDataGetHandler = (req, res) => {
     console.log(`method: GET | handler: sessionDataHandler`);
     res.json(req.session.data);
@@ -119,6 +140,7 @@ const evaluationPostHandler = async (req, res) => {
 }
 
 router.get('/', indexGetHandler)
+router.get('/search', searchGetHandler)
 router.get('/session-data', sessionDataGetHandler)
 router.get('/settings', settingsGetHandler)
 

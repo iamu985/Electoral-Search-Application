@@ -11,6 +11,126 @@
         </div>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm">
+        <h2>Search Data</h2>
+        <div class="form-group position-relative">
+          <input type="text" id="fSearchInput" class="form-control" placeholder="Search..." autocomplete="off">
+          <div id="fDropdown" class="f-dropdown f-hidden"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm my-3">
+        <h3>Search Results</h3>
+        <table class="table table-bordered f-hidden" id="fSearchResults">
+          <thead>
+            <tr>
+              <th>FormId</th>
+              <th>FirstName</th>
+              <th>MiddleName</th>
+              <th>LastName</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Results will be appended here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </body>
 </html>
+
+<style>
+  .f-dropdown {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .f-dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+  }
+
+  .f-dropdown-item:hover {
+    background-color: #f8f9fa;
+  }
+
+  .f-hidden {
+    display: none;
+  }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  $(document).ready(function() {
+    const fields = ['firstname', 'lastname', 'id'];
+
+    $('#fSearchInput').on('input', function() {
+      const query = $(this).val().trim();
+      if (query.length > 0) {
+        let suggestions = fields.map(field => `<div class="f-dropdown-item">Search: ${field}: ${query}</div>`).join('');
+        $('#fDropdown').html(suggestions).removeClass('f-hidden');
+      } else {
+        $('#fDropdown').addClass('f-hidden');
+      }
+    });
+
+    $(document).on('click', '.f-dropdown-item', function() {
+      const [ , field, value] = $(this).text().split(': ').map(item => item.trim());
+      $('#fSearchInput').val($(this).text().replace('Search: ', ''));
+      $('#fDropdown').addClass('f-hidden');
+      triggerSearch(field.toLowerCase(), value);
+    });
+
+    $(document).click(function(event) {
+      if (!$(event.target).closest('.form-group').length) {
+        $('#fDropdown').addClass('f-hidden');
+      }
+    });
+
+    function triggerSearch(field, value) {
+      $.ajax({
+        url: '/search',
+        method: 'GET',
+        data: { field, value },
+        success: async function(response) {
+          console.log('Successful to receive response.');
+          await displayResults(response);
+        },
+        error: function(xhr, status, error) {
+          alert('Error: ' + error);
+        }
+      });
+    }
+
+    function displayResults(results) {
+      console.log('Display Results Called:', results); // Added console log
+      const table = $('#fSearchResults');
+      const tbody = table.find('tbody');
+      tbody.empty();
+
+      if (results.length > 0) {
+        results.forEach(result => {
+          const row = `
+            <tr>
+              <td>${result.id}</td>
+              <td>${result.firstname}</td>
+              <td>${result.middlename || ''}</td>
+              <td>${result.lastname}</td>
+            </tr>
+          `;
+          tbody.append(row);
+        });
+        table.removeClass('f-hidden').closest('.col-sm').removeClass('f-hidden');
+      } else {
+        tbody.append('<tr><td colspan="4" class="text-center">No results found</td></tr>');
+        table.removeClass('f-hidden').closest('.col-sm').removeClass('f-hidden');
+      }
+    }
+  });
+</script>
