@@ -70,6 +70,23 @@
                       <label for="age">Age</label>
                       <input type="number" class="form-control" name="age" min="5" max="100">
                     </div>
+                    <div class="col my-3">
+                      <label for="age">Relationship</label>
+                      <select name="family_member__relationship" class="form-control custom-select">
+                        <option value="Mother">Mother</option>
+                        <option value="Father">Father</option>
+                        <option value="Son">Son</option>
+                        <option value="Daughter">Daughter</option>
+                        <option value="Maternal Aunt">Maternal Aunt</option>
+                        <option value="Maternal Uncle">Maternal Uncle</option>
+                        <option value="Maternal Grandfather">Maternal Grandfather</option>
+                        <option value="Maternal Grandmother">Maternal Grandmother</option>
+                        <option value="Paternal Aunt">Paternal Aunt</option>
+                        <option value="Paternal Uncle">Paternal Uncle</option>
+                        <option value="Paternal Grandfather">Paternal Grandfather</option>
+                        <option value="Paternal Grandmother">Paternal Grandmother</option>
+                      </select>
+                    </div>
                   </div>
                   <div class="institution-block f-block-invisible">
                     <div class="col my-3">
@@ -374,10 +391,12 @@
     function collectFormData() {
       const form = $('#familyForm');
       const familyDetails = {
-        family_type: form.find('[name="family_type"]').val(),
         number_of_electors: form.find('[name="number_of_electors"]').val(),
         number_of_family_members: form.find('[name="number_of_family_members"]').val(),
-        family_members: []
+        family_information: {
+          family_type: form.find('[name="family_type"]').val(),
+          family_members: [],
+        }
       };
 
       $('#wrapper .f-card').each(function() {
@@ -385,6 +404,7 @@
           first_name: $(this).find('[name="family_member__first_name"]').val(),
           middle_name: $(this).find('[name="family_member__middle_name"]').val(),
           last_name: $(this).find('[name="family_member__last_name"]').val(),
+          relationship: $(this).find(`[name="family_member__relationship"]`).val(),
           is_student: $(this).find('[name="is_student"]').val(),
           is_new_elector: $(this).find('[name="is_new_elector"]').val(),
           age: $(this).find('[name="age"]').val(),
@@ -392,7 +412,7 @@
             name_of_institution: $(this).find('[name="name_of_institution"]').val(),
             state_of_institution: $(this).find('[name="state_of_institution"]').val(),
             club: $(this).find('[name="club"]').val(),
-            beneficiary_schemes: [] // Assign the collected beneficiary schemes
+            beneficiary_scheme: [] // Assign the collected beneficiary schemes
           },
           associated_association: {
             association_name: $(this).find('[name="attached_association__name_of_organization"]').val(),
@@ -400,8 +420,8 @@
             leadership_role: $(this).find('[name="attached_association__in_leadership_role"]').val()
           }
         };
-        familyMember.institution_information.beneficiary_schemes.push(getBeneficiaryScheme());
-        familyDetails.family_members.push(familyMember);
+        familyMember.institution_information.beneficiary_schemes = getBeneficiaryScheme();
+        familyDetails.family_information.family_members.push(familyMember);
       });
 
       return familyDetails;
