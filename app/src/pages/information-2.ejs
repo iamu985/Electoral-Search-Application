@@ -11,8 +11,7 @@
         <div class="form-group">
           <h4>Family Details</h4>
           <!-- Family Details -->
-          <div class="row input-group mb-3 card" id="details">
-            <!-- Card Body -->
+          <div class="row input-group mb-3 card">
             <div class="card-body px-3 pb-4">
               <div class="my-1">
                 <label for="family_type">Family Type</label>
@@ -29,196 +28,161 @@
                 <label for="number_of_family_members">Number of Family Members</label>
                 <input name="number_of_family_members" id="numberOfFamilyMembers" type="number" min="0" max="10" class="form-control" value="4">
               </div>
-
-              <!-- Empty Div -->
-              <div id="empty-message" class="text-center" style="display:none;">It's Empty!</div>
-
-              <!-- Family Section Wrapper -->
-              <div id="wrapper" class="f-overflow-y">
-                <!-- Family Member Template -->
-                <div class="f-card card-row template" style="display:none;">
-                  <div class="row">
-                    <div class="col my-3">
-                      <label for="family_member__first_name">First Name</label>
-                      <input type="text" class="form-control" name="family_member__first_name" required>
-                    </div>
-                    <div class="col my-3">
-                      <label for="family_member__middle_name">Middle Name</label>
-                      <input type="text" class="form-control" name="family_member__middle_name" placeholder="optional">
-                    </div>
-                    <div class="col my-3">
-                      <label for="family_member__last_name">Last Name</label>
-                      <input type="text" class="form-control" name="family_member__last_name">
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col my-3">
-                      <label for="is_student">Is Student</label>
-                      <select name="is_student" class="form-control custom-select is_student">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                    <div class="col my-3">
-                      <label for="is_new_elector">Is New Elector</label>
-                      <select name="is_new_elector" class="form-control custom-select">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                    <div class="col my-3">
-                      <label for="age">Age</label>
-                      <input type="number" class="form-control" name="age" min="5" max="100">
-                    </div>
-                    <div class="col my-3">
-                      <label for="age">Relationship</label>
-                      <select name="family_member__relationship" class="form-control custom-select">
-                        <option value="Mother">Mother</option>
-                        <option value="Father">Father</option>
-                        <option value="Son">Son</option>
-                        <option value="Daughter">Daughter</option>
-                        <option value="Maternal Aunt">Maternal Aunt</option>
-                        <option value="Maternal Uncle">Maternal Uncle</option>
-                        <option value="Maternal Grandfather">Maternal Grandfather</option>
-                        <option value="Maternal Grandmother">Maternal Grandmother</option>
-                        <option value="Paternal Aunt">Paternal Aunt</option>
-                        <option value="Paternal Uncle">Paternal Uncle</option>
-                        <option value="Paternal Grandfather">Paternal Grandfather</option>
-                        <option value="Paternal Grandmother">Paternal Grandmother</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="institution-block f-block-invisible">
-                    <div class="col my-3">
-                      <label for="name_of_institution">Name of the Institution</label>
-                      <input type="text" class="form-control" name="name_of_institution">
-                    </div>
-                    <div class="col my-3">
-                      <label for="state_of_institution">State of the Institution</label>
-                      <select name="state_of_institution" class="form-control custom-select">
-                        <% districts.forEach(function(district) { %>
-                        <option value="<%= district %>"><%= district %></option>
-                        <% }) %>
-                      </select>
-                    </div>
-                    <div class="col my-3">
-                      <label for="club">Club Name</label>
-                      <input name="club" type="text" class="form-control" placeholder="Enter name of club (optional)">
-                    </div>
-                  </div>
-                  <div class="associated-org-block f-block-invisible">
-                    <div class="col my-3">
-                      <label for="attached_association__name_of_organization">Name of the Association</label>
-                      <input name="attached_association__name_of_organization" type="text" class="form-control">
-                    </div>
-                    <div class="col my-3">
-                      <label for="attached_association__association_phone">Phone Number</label>
-                      <input name="attached_association__association_phone" type="tel" class="form-control">
-                    </div>
-                    <div class="col my-3">
-                      <label for="attached_association__in_leadership_role">Is in Leadership Role</label>
-                      <select name="attached_association__in_leadership_role" class="form-control custom-select">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md-12 my-3">
-                      <button type="button" class="btn btn-danger del-family-btn">Delete</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row d-flex justify-content-left">
-                <div class="col-sm my-3">
-                  <button type="button" class="btn btn-primary add-family-btn">Add Family Member</button>
-                </div>
-                <div class="col-sm my-3">
-                  <button type="button" class="btn btn-primary add-beneficiary-btn">Add Beneficiary Scheme</button>
-                </div>
-              </div>
-              <!-- Schemes Display Table -->
-              <div class="schemes-section mt-4">
-                <h5>Added Schemes</h5>
-                <table class="table table-bordered schemes-table">
-                  <thead>
-                    <tr>
-                      <th>Scheme Name</th>
-                    </tr>
-                  </thead>
-                  <tbody class="schemes-list">
-                    <!-- Schemes will be added here -->
-                  </tbody>
-                </table>
+              <div class="col-sm my-3">
+                <button type="button" class="btn btn-primary" id="addFamilyMemberBtn">Add Family Member</button>
+                <button type="button" class="btn btn-primary" id="addBeneficiarySchemeBtn">Add Beneficiary Scheme</button>
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- Hidden Field for Beneficiary Schemes -->
-        <input type="hidden" id="beneficiarySchemesField" name="beneficiary_schemes">
-
-        <!-- Modal Section -->
-        <div class="modal fade" id="beneficiaryModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="beneficiaryModalLabel" aria-hidden="true">
-          <div class="modal-dialog modal-xl">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h1 class="modal-title fs-5" id="beneficiaryModalLabel">Add Beneficiary Scheme for Family Members</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                <div class="card m-2">
-                  <div class="card-body">
-                    <div id="beneficiary-wrapper">
-                      <!-- Beneficiary Template -->
-                      <div class="row card-row template" style="display:none;">
-                        <div class="col-sm my-2">
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">Scheme Name</span>
-                            </div>
-                            <input type="text" class="form-control">
-                          </div>
-                        </div>
-                        <div class="col-sm my-2">
-                          <button type="button" class="btn btn-danger del-beneficiary-field-btn">Delete</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <div id="successMessage" class="alert alert-success" style="display:none;">Schemes successfully saved!</div>
-                <button class="btn btn-success" id="saveBeneficiarySchemesBtn">Save</button>
-                <button type="button" class="btn btn-primary add-beneficiary-field-btn">Add</button>
-              </div>
-            </div>
+          <!-- Family Members List -->
+          <div class="row" id="familyMembersList">
+            <!-- Family member cards will be appended here -->
+          </div>
+          <!-- Beneficiary Schemes List -->
+          <h4>Beneficiary Schemes</h4>
+          <div class="row">
+            <table class="table table-bordered" id="beneficiarySchemesTable">
+              <thead>
+                <tr>
+                  <th>Scheme Name</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Beneficiary schemes will be listed here -->
+              </tbody>
+            </table>
           </div>
         </div>
+        <button type="button" id="nextPageBtn" class="btn btn-warning rounded">Next Page</button>
       </form>
-      <button id="nextPageBtn" class="btn btn-warning rounded">Next Page</button>
+    </div>
+  </div>
+
+  <!-- Family Member Modal -->
+  <div class="modal fade" id="familyMemberModal" tabindex="-1" aria-labelledby="familyMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="familyMemberModalLabel">Add Family Member</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="family_member_first_name">First Name</label>
+            <input type="text" class="form-control" id="family_member_first_name" name="family_member_first_name" required>
+          </div>
+          <div class="form-group">
+            <label for="family_member_middle_name">Middle Name</label>
+            <input type="text" class="form-control" id="family_member_middle_name" name="family_member_middle_name">
+          </div>
+          <div class="form-group">
+            <label for="family_member_last_name">Last Name</label>
+            <input type="text" class="form-control" id="family_member_last_name" name="family_member_last_name">
+          </div>
+          <div class="form-group">
+            <label for="family_member_relationship">Relationship</label>
+            <select name="family_member_relationship" id="family_member_relationship" class="form-control custom-select">
+              <option value="Mother">Mother</option>
+              <option value="Father">Father</option>
+              <option value="Son">Son</option>
+              <option value="Daughter">Daughter</option>
+              <option value="Maternal Aunt">Maternal Aunt</option>
+              <option value="Maternal Uncle">Maternal Uncle</option>
+              <option value="Maternal Grandfather">Maternal Grandfather</option>
+              <option value="Maternal Grandmother">Maternal Grandmother</option>
+              <option value="Paternal Aunt">Paternal Aunt</option>
+              <option value="Paternal Uncle">Paternal Uncle</option>
+              <option value="Paternal Grandfather">Paternal Grandfather</option>
+              <option value="Paternal Grandmother">Paternal Grandmother</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="is_student">Is Student</label>
+            <select name="is_student" id="is_student" class="form-control custom-select">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="is_new_elector">Is New Elector</label>
+            <select name="is_new_elector" id="is_new_elector" class="form-control custom-select">
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" name="age" min="5" max="100">
+          </div>
+          <div id="institutionInformation" class="d-none">
+            <div class="form-group">
+              <label for="name_of_institution">Name of the Institution</label>
+              <input type="text" class="form-control" id="name_of_institution" name="name_of_institution">
+            </div>
+            <div class="form-group">
+              <label for="state_of_institution">State of the Institution</label>
+              <select name="state_of_institution" id="state_of_institution" class="form-control custom-select">
+                <% districts.forEach(function(district) { %>
+                <option value="<%= district %>"><%= district %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="club">Club Name</label>
+              <input name="club" type="text" class="form-control" placeholder="Enter name of club (optional)">
+            </div>
+          </div>
+          <div id="associatedOrganizationInformation" class="d-none">
+            <div class="form-group">
+              <label for="attached_association_name_of_organization">Name of the Association</label>
+              <input name="attached_association_name_of_organization" type="text" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="attached_association_association_phone">Phone Number</label>
+              <input name="attached_association_association_phone" type="tel" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="attached_association_in_leadership_role">Is in Leadership Role</label>
+              <select name="attached_association_in_leadership_role" id="attached_association_in_leadership_role" class="form-control custom-select">
+                <option value="Yes">Yes</option>
+                <option value="No">No</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveFamilyMemberBtn">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Beneficiary Scheme Modal -->
+  <div class="modal fade" id="beneficiarySchemeModal" tabindex="-1" aria-labelledby="beneficiarySchemeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="beneficiarySchemeModalLabel">Add Beneficiary Scheme</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="scheme_name">Scheme Name</label>
+            <input type="text" class="form-control" id="scheme_name" name="scheme_name">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveBeneficiarySchemeBtn">Save Scheme</button>
+        </div>
+      </div>
     </div>
   </div>
 </body>
 
 <style>
-  .f-block-invisible {
-    display: none;
-  }
-
-  .f-block-visible {
-    display: block;
-  }
-  .f-overflow-y {
-    overflow-y: scroll;
-    /* Make the div scrollable vertically */
-    height: 700px;
-    /* Set a fixed height for the div */
-    border: 1px solid #ccc;
-  }
-
   .f-card {
     border: 1px solid #ccc;
     border-radius: 4px;
@@ -229,8 +193,19 @@
     position: relative;
   }
 
-  .schemes-section {
-    margin-top: 20px;
+  .card-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .d-none {
+    display: none;
+  }
+
+  .f-overflow-y {
+    overflow-y: scroll;
+    height: 700px;
+    border: 1px solid #ccc;
   }
 
   .highlight {
@@ -256,133 +231,194 @@
 </style>
 
 <script>
-  $(document).ready(function() {
-    function createNewFamilyField() {
-      const template = $('#wrapper .template').clone().removeClass('template').show();
-      return template;
+  $(document).ready(function () {
+    let familyMembers = [];
+    let beneficiarySchemes = [];
+
+    $('#addFamilyMemberBtn').click(function () {
+      clearModalFields();
+      $('#familyMemberModalLabel').text('Add Family Member');
+      $('#saveFamilyMemberBtn').data('index', -1);
+      $('#familyMemberModal').modal('show');
+    });
+
+    $('#saveFamilyMemberBtn').click(function () {
+      const index = $(this).data('index');
+      const familyMember = collectModalData();
+
+      if (index === -1) {
+        familyMembers.push(familyMember);
+      } else {
+        familyMembers[index] = familyMember;
+      }
+      $('#familyMemberModal').modal('hide');
+      displayFamilyMembers();
+    });
+
+    function clearModalFields() {
+      $('#familyMemberModal input, #familyMemberModal select').val('');
+      $('#institutionInformation, #associatedOrganizationInformation').addClass('d-none');
     }
 
-    function createNewBeneficiaryField() {
-      const template = $('#beneficiary-wrapper .template').clone().removeClass('template').show();
-      return template;
+    function collectModalData() {
+      return {
+        firstname: $('#family_member_first_name').val(),
+        middlename: $('#family_member_middle_name').val(),
+        lastname: $('#family_member_last_name').val(),
+        relationship: $('#family_member_relationship').val(),
+        is_student: $('#is_student').val(),
+        is_new_elector: $('#is_new_elector').val(),
+        age: $('#age').val(),
+        institution_information: {
+          name_of_institution: $('#name_of_institution').val(),
+          state_of_institution: $('#state_of_institution').val(),
+          club: $('#club').val(),
+          beneficiary_schemes: collectBeneficiarySchemes()
+        },
+        associated_association: {
+          name_of_organization: $('#attached_association_name_of_organization').val(),
+          phone: $('#attached_association_association_phone').val(),
+          in_leadership_role: $('#attached_association_in_leadership_role').val(),
+        }
+      };
     }
 
-    function addEventHandler(wrapperId, newElement) {
-      const wrapper = $(`#${wrapperId}`);
-      wrapper.find('.card-row').removeClass('highlight');
-      wrapper.prepend(newElement.addClass('highlight slide-down'));
-      newElement.on('animationend', function() {
-        newElement.removeClass('slide-down');
+    function collectBeneficiarySchemes() {
+    const schemes = [];
+    $('#beneficiarySchemesTable tbody tr').each(function () {
+      const schemeName = $(this).find('td').eq(0).text();
+      if (schemeName) {
+        schemes.push(schemeName);
+      }
+    });
+    return schemes;
+  }
+
+    function displayFamilyMembers() {
+      const container = $('#familyMembersList');
+      container.empty();
+      familyMembers.forEach((member, index) => {
+        const card = createFamilyMemberCard(member, index);
+        container.append(card);
       });
     }
 
-    function checkIfEmpty(wrapperId, emptyMessageId) {
-      const wrapper = $(`#${wrapperId}`);
-      const emptyMessage = $(`#${emptyMessageId}`);
-      if (wrapper.children('.card-row').length === 0) {
-        emptyMessage.show();
-      } else {
-        emptyMessage.hide();
-      }
+    function createFamilyMemberCard(member, index) {
+      return `
+        <div class="col-sm-12 col-md-6">
+          <div class="f-card">
+            <div>
+              <strong>${member.firstname} ${member.middlename || ''} ${member.lastname}</strong>
+              <p>Relationship: ${member.relationship}</p>
+              <p>Age: ${member.age}</p>
+              <p>Is Student: ${member.is_student}</p>
+              <p>Is New Elector: ${member.is_new_elector}</p>
+            </div>
+            <div class="card-buttons">
+              <button type="button" class="btn btn-sm btn-primary edit-family-member" data-index="${index}">Edit</button>
+              <button type="button" class="btn btn-sm btn-danger delete-family-member" data-index="${index}">Delete</button>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
-    $('#wrapper').on('click', '.del-family-btn', function() {
-      $(this).closest('.card-row').remove();
-      checkIfEmpty('wrapper', 'empty-message');
+    $(document).on('click', '.edit-family-member', function () {
+      const index = $(this).data('index');
+      const member = familyMembers[index];
+      fillModalFields(member);
+      $('#familyMemberModalLabel').text('Edit Family Member');
+      $('#saveFamilyMemberBtn').data('index', index);
+      $('#familyMemberModal').modal('show');
     });
 
-    $('#beneficiary-wrapper').on('click', '.del-beneficiary-field-btn', function() {
-      $(this).closest('.card-row').remove();
+    $(document).on('click', '.delete-family-member', function () {
+      const index = $(this).data('index');
+      familyMembers.splice(index, 1);
+      displayFamilyMembers();
     });
 
-    $('.add-family-btn').click(function() {
-      const newField = createNewFamilyField();
-      addEventHandler('wrapper', newField);
-      checkIfEmpty('wrapper', 'empty-message');
-    });
+    function fillModalFields(member) {
+      $('#family_member_first_name').val(member.firstname);
+      $('#family_member_middle_name').val(member.middlename);
+      $('#family_member_last_name').val(member.lastname);
+      $('#family_member_relationship').val(member.relationship);
+      $('#is_student').val(member.is_student);
+      $('#is_new_elector').val(member.is_new_elector);
+      $('#age').val(member.age);
+      $('#name_of_institution').val(member.institution_information.name_of_institution);
+      $('#state_of_institution').val(member.institution_information.state_of_institution);
+      $('#club').val(member.institution_information.club);
+      $('#attached_association_name_of_organization').val(member.associated_association.name_of_organization);
+      $('#attached_association_association_phone').val(member.associated_association.phone);
+      $('#attached_association_in_leadership_role').val(member.associated_association.in_leadership_role);
 
-    $('.add-beneficiary-btn').click(function() {
-      $('#beneficiaryModal').modal('show');
-    });
+      toggleInstitutionOrAssociationBlock();
+    }
 
-    $('.add-beneficiary-field-btn').click(function() {
-      const newField = createNewBeneficiaryField();
-      addEventHandler('beneficiary-wrapper', newField);
-    });
+    $('#is_student').change(toggleInstitutionOrAssociationBlock);
 
     function toggleInstitutionOrAssociationBlock() {
-      const card = $(this).closest('.f-card');
-      const isStudent = card.find('.is_student').val();
-      const institutionBlock = card.find('.institution-block');
-      const associatedOrgBlock = card.find('.associated-org-block');
-
+      const isStudent = $('#is_student').val();
       if (isStudent === 'Yes') {
-        institutionBlock.removeClass('f-block-invisible').addClass('f-block-visible');
-        associatedOrgBlock.removeClass('f-block-visible').addClass('f-block-invisible');
+        $('#institutionInformation').removeClass('d-none');
+        $('#associatedOrganizationInformation').addClass('d-none');
       } else {
-        institutionBlock.removeClass('f-block-visible').addClass('f-block-invisible');
-        associatedOrgBlock.removeClass('f-block-invisible').addClass('f-block-visible');
+        $('#institutionInformation').addClass('d-none');
+        $('#associatedOrganizationInformation').removeClass('d-none');
       }
     }
 
-    $('.is_student').each(toggleInstitutionOrAssociationBlock);
-    $(document).on('change', '.is_student', toggleInstitutionOrAssociationBlock);
-
-    function getBeneficiaryScheme() {
-      const beneficiarySchemes = [];
-      $('#beneficiary-wrapper .card-row:not(.template)').each(function() {
-        const schemeName = $(this).find('input').val();
-        if (schemeName) {
-          beneficiarySchemes.push(schemeName);
-        }
-      });
-      return beneficiarySchemes;
-    }
-
-    $('#saveBeneficiarySchemesBtn').click(function() {
-      var beneficiarySchemes = getBeneficiaryScheme();
-      $('#beneficiarySchemesField').val(JSON.stringify(beneficiarySchemes));
-
-      // Display the schemes in the schemes section
-      const schemesList = $('.schemes-list');
-      schemesList.empty();
-      beneficiarySchemes.forEach(scheme => {
-        schemesList.append(`<tr><td>${scheme}</td></tr>`);
-      });
-
-      $('#successMessage').show().delay(2000).fadeOut();
-      $('#beneficiaryModal').modal('hide');
+    $('#addBeneficiarySchemeBtn').click(function () {
+      $('#scheme_name').val('');
+      $('#beneficiarySchemeModal').modal('show');
     });
-    
-    // Prefill existing data
-    $.ajax({
-      url: '/session-data',
-      method: 'GET',
-      success: function(formData) {
-        $('#numberOfFamilyMembers').val(formData.number_of_family_members);
-        $('#numberOfElectors').val(formData.number_of_electors);
-      }
-    })
 
-    $('#nextPageBtn').click(function(event) {
+    $('#saveBeneficiarySchemeBtn').click(function () {
+      const schemeName = $('#scheme_name').val();
+      if (schemeName) {
+        beneficiarySchemes.push(schemeName);
+        displayBeneficiarySchemes();
+        $('#beneficiarySchemeModal').modal('hide');
+      }
+    });
+
+    function displayBeneficiarySchemes() {
+      const tableBody = $('#beneficiarySchemesTable tbody');
+      tableBody.empty();
+      beneficiarySchemes.forEach((scheme, index) => {
+        const row = `
+          <tr>
+            <td>${scheme}</td>
+            <td><button type="button" class="btn btn-sm btn-danger remove-beneficiary-scheme" data-index="${index}">&times;</button></td>
+          </tr>
+        `;
+        tableBody.append(row);
+      });
+    }
+
+    $(document).on('click', '.remove-beneficiary-scheme', function () {
+      const index = $(this).data('index');
+      beneficiarySchemes.splice(index, 1);
+      displayBeneficiarySchemes();
+    });
+
+    $('#nextPageBtn').click(function (event) {
       event.preventDefault();
-      console.log('clicked next page for information2');
       const formData = collectFormData();
       console.log(formData); // Debugging - see the collected data object
       $.ajax({
-        url: '/information2', // Change to your endpoint
+        url: '/information2',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(formData),
-        success: function(response) {
-          // Handle the response
+        success: function (response) {
           console.log(response);
           if (response.success) {
             window.location.href = response.redirect;
           }
         },
-        error: function(error) {
-          // Handle the error
+        error: function (error) {
           console.error(error);
         }
       });
@@ -390,42 +426,26 @@
 
     function collectFormData() {
       const form = $('#familyForm');
-      const familyDetails = {
+      return {
         number_of_electors: form.find('[name="number_of_electors"]').val(),
         number_of_family_members: form.find('[name="number_of_family_members"]').val(),
         family_information: {
           family_type: form.find('[name="family_type"]').val(),
-          family_members: [],
+          family_members: familyMembers,
+          beneficiary_schemes: beneficiarySchemes
         }
       };
-
-      $('#wrapper .f-card').each(function() {
-        const familyMember = {
-          first_name: $(this).find('[name="family_member__first_name"]').val(),
-          middle_name: $(this).find('[name="family_member__middle_name"]').val(),
-          last_name: $(this).find('[name="family_member__last_name"]').val(),
-          relationship: $(this).find(`[name="family_member__relationship"]`).val(),
-          is_student: $(this).find('[name="is_student"]').val(),
-          is_new_elector: $(this).find('[name="is_new_elector"]').val(),
-          age: $(this).find('[name="age"]').val(),
-          institution_information: {
-            name_of_institution: $(this).find('[name="name_of_institution"]').val(),
-            state_of_institution: $(this).find('[name="state_of_institution"]').val(),
-            club: $(this).find('[name="club"]').val(),
-            beneficiary_scheme: [] // Assign the collected beneficiary schemes
-          },
-          associated_association: {
-            association_name: $(this).find('[name="attached_association__name_of_organization"]').val(),
-            association_phone: $(this).find('[name="attached_association__association_phone"]').val(),
-            leadership_role: $(this).find('[name="attached_association__in_leadership_role"]').val()
-          }
-        };
-        familyMember.institution_information.beneficiary_schemes = getBeneficiaryScheme();
-        familyDetails.family_information.family_members.push(familyMember);
-      });
-
-      return familyDetails;
     }
+
+    // Prefill existing data
+    $.ajax({
+      url: '/session-data',
+      method: 'GET',
+      success: function (formData) {
+        $('#numberOfFamilyMembers').val(formData.number_of_family_members);
+        $('#numberOfElectors').val(formData.number_of_electors);
+      }
+    });
   });
 </script>
 

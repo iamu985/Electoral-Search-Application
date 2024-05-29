@@ -38,51 +38,78 @@ const createWindow = () => {
   mainWindow.loadURL(`http://localhost:3000/`);
 
   // Application Menu on the top bar
-  // Temmplate
+  // Temmplate 
 
-  const template = [
-    {
-      label: 'Goto',
-      submenu: [
+  const Debug = true;
+
+  function getMenuTemplate(){
+    if (Debug) {
+      return [
         {
-          label: 'DevTools',
-          click: () => {
-            mainWindow.webContents.openDevTools();
-          }
-        },
+          label: 'Menu',
+          submenu: [
+            {
+              label: 'DevTools',
+              click: () => {
+                mainWindow.webContents.openDevTools();
+              }
+            },
+            {
+              label: 'Form',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/enrollment')
+              }
+            },
+            {
+              label: 'Main Page',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/')
+              }
+            },
+            {
+              label: 'Second Form',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/information1')
+              }
+            },
+            {
+              label: 'Third Form',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/information2')
+              }
+            },
+            {
+              label: 'Final Form',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/evaluation')
+              }
+            }
+          ]
+        }
+      ]
+    } else {
+      return [
         {
-          label: 'Form',
-          click: () => {
-            mainWindow.loadURL('http://localhost:3000/enrollment')
-          }
-        },
-        {
-          label: 'Main Page',
-          click: () => {
-            mainWindow.loadURL('http://localhost:3000/')
-          }
-        },
-        {
-          label: 'Second Form',
-          click: () => {
-            mainWindow.loadURL('http://localhost:3000/information1')
-          }
-        },
-        {
-          label: 'Third Form',
-          click: () => {
-            mainWindow.loadURL('http://localhost:3000/information2')
-          }
-        },
-        {
-          label: 'Final Form',
-          click: () => {
-            mainWindow.loadURL('http://localhost:3000/evaluation')
-          }
+          label: 'Menu',
+          submenu: [
+            {
+              label: 'Search',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/')
+              }
+            },
+            {
+              label: 'Settings',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/settings')
+              }
+            }
+          ]
         }
       ]
     }
-  ]
+  }
+  const template = getMenuTemplate();
 
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)

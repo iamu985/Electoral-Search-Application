@@ -7,6 +7,7 @@ const TestModel = require('../../src/models/TestSchema');
 const DataModel = require('../../src/models/Schema');
 const Counter = require('../../src/models/Counter');
 const { Model } = require('mongoose');
+const { request } = require('http');
 
 
 const filepath = path.join(__dirname, '../.cache/blob.json');
@@ -86,5 +87,20 @@ const getNextSequenceValue = async (sequenceName) => {
   };
   
 
+const buildDbQuery = (requestQuery, fieldMapping) => {
+    console.log(`buildDbQuery utility function invoked.`);
+    console.log(requestQuery);
+    let query = {};
+    if (requestQuery.search_option === 'contains') {
+        query[fieldMapping[[requestQuery.search_field]]] = { $regex: requestQuery.search_value, $options: "i"};
+    } else if (requestQuery.search_option === 'is_ci') {
+        query[fieldMapping[[requestQuery.search_field]]] = { $regex : new RegExp(requestQuery.search_value, "i") };
+    } else if (requestQuery.searh_option == 'is_cs') {
+        query[fieldMapping[[requestQuery.search_field]]] = requestQuery.search_value;
+    }
+    console.log(`QueryGenerated: ${JSON.stringify(query, null, 2)}`)
+    return query
+}
 
-module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue }
+
+module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery }

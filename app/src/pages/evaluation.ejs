@@ -54,6 +54,9 @@
         success: function(response) {
           // Handle the response
           console.log(response);
+          if (response.success) {
+            window.location.href = response.redirect;
+          }
         },
         error: function(error) {
           // Handle the error

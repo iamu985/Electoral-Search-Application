@@ -1,0 +1,143 @@
+<%- include('partials/base.ejs') %>
+
+<body>
+  <div class="container mb-5">
+    <div class="d-flex justify-content-center my-3">
+      <h1 class="center">View Details</h1>
+    </div>
+
+    <!-- Primary Details Card -->
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Primary Details</h4>
+        <p><strong>Full Name:</strong> <%= data.fullname %></p>
+        <p><strong>Nick Name:</strong> <%= data.nickname %></p>
+        <p><strong>Date of Birth:</strong> <%= data.dob %></p>
+        <p><strong>Caste:</strong> <%= data.caste %></p>
+        <p><strong>Religion:</strong> <%= data.religion %></p>
+      </div>
+    </div>
+
+    <!-- Job Details Card -->
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Job Details</h4>
+        <p><strong>Designation:</strong> <%= data.job_details.designation %></p>
+        <p><strong>Date of Joining:</strong> <%= data.job_details.date_of_joining %></p>
+        <p><strong>Nature of Job:</strong> <%= data.job_details.nature_of_job %></p>
+        <p><strong>Employment Organization Name:</strong> <%= data.job_details.employment_organization_name %></p>
+        <p><strong>Status of Employment:</strong> <%= data.status_of_employment %></p>
+      </div>
+    </div>
+
+    <!-- Family Information Card -->
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Family Information</h4>
+        <p><strong>Family Type:</strong> <%= data.family_information.family_type %></p>
+        <p><strong>Number of Family Members:</strong> <%= data.number_of_family_members %></p>
+        <p><strong>Number of Electors:</strong> <%= data.number_of_electors %></p>
+    
+        <!-- Family Members Table -->
+        <h5>Family Members</h5>
+        <table class="table table-hover" id="fFamilyTable">
+          <thead>
+            <tr>
+              <th>First Name</th>
+              <th>Middle Name</th>
+              <th>Last Name</th>
+              <th>Relationship</th>
+              <th>Is Student</th>
+              <th>Is New Elector</th>
+              <th>Age</th>
+              <th>Details</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% data.family_information.family_members.forEach(function(member) { %>
+            <tr>
+              <td><%= member.firstname %></td>
+              <td><%= member.middlename %></td>
+              <td><%= member.lastname %></td>
+              <td><%= member.relationship %></td>
+              <td><%= member.is_student %></td>
+              <td><%= member.is_new_elector %></td>
+              <td><%= member.age %></td>
+              <td>
+                <% if (member.is_student === 'Yes') { %>
+                <div>
+                  <p><strong>Institution Name:</strong> <%= member.institution_information.name_of_institution %></p>
+                  <p><strong>State:</strong> <%= member.institution_information.state_of_institution %></p>
+                  <p><strong>Club:</strong> <%= member.institution_information.club %></p>
+                  <p><strong>Beneficiary Schemes:</strong></p>
+                  <ul>
+                    <% member.institution_information.beneficiary_scheme.forEach(function(scheme) { %>
+                    <li><%= scheme %></li>
+                    <% }); %>
+                  </ul>
+                </div>
+                <% } else { %>
+                <div>
+                  <p><strong>Association Name:</strong> <%= member.associated_association.name_of_organization %></p>
+                  <p><strong>Phone:</strong> <%= member.associated_association.phone %></p>
+                  <p><strong>Leadership Role:</strong> <%= member.associated_association.in_leadership_role %></p>
+                </div>
+                <% } %>
+              </td>
+            </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+      
+
+    <!-- Evaluation Card -->
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Evaluation</h4>
+        <h5>Role Play</h5>
+        <p><strong>Organization:</strong> <%= data.evaluation.role_play.organization %></p>
+        <p><strong>Working Area:</strong> <%= data.evaluation.role_play.working_area %></p>
+        <p><strong>Concern Association:</strong> <%= data.evaluation.role_play.concern_association %></p>
+        <p><strong>Regular Manner:</strong> <%= data.evaluation.role_play.regular_manner %></p>
+
+        <h5>Questions</h5>
+        <% data.evaluation.questions.forEach(function(question, index) { %>
+        <p><strong>Q<%= index + 1 %>:</strong> <%= question.question %></p>
+        <p><strong>Answer:</strong> <%= question.answer %></p>
+        <% }); %>
+
+        <h5>Compiler's Note</h5>
+        <p><%= data.evaluation.compilers_note %></p>
+      </div>
+    </div>
+  </div>
+</body>
+
+<style>
+  .f-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .f-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .f-card .card-title {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  #fFamilyTable tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+</style>
+
+<script>
+  $(document).ready(function() {
+    // You can add any interactive features for the table here
+  });
+</script>

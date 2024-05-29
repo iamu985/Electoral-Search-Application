@@ -1,6 +1,6 @@
-<%- include ('partials/base.ejs') %>
+<%- include('partials/base.ejs') %>
 <body>
-  <div class="container mb-5">
+  <div class="container mt-5">
     <div class="d-flex justify-content-center my-3">
       <div class="row">
         <div class="col-sm mx-4">
@@ -9,22 +9,25 @@
         <div class="col-sm">
           <a href="/settings" class="btn btn-outline-dark btn-lg">Settings</a>
         </div>
+        <div class="col-sm">
+          <a href="/search1" class="btn btn-outline-dark btn-lg">Search</a>
+        </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm">
-        <h2>Search Data</h2>
+    <div class="row d-flex justify-content-center mt-5">
+      <div class="col-sm-8">
+        <h2 class="text-center mb-4">Search Data</h2>
         <div class="form-group position-relative">
-          <input type="text" id="fSearchInput" class="form-control" placeholder="Search..." autocomplete="off">
+          <input type="text" id="fSearchInput" class="form-control form-control-lg" placeholder="Search..." autocomplete="off">
           <div id="fDropdown" class="f-dropdown f-hidden"></div>
         </div>
       </div>
     </div>
-    <div class="row">
-      <div class="col-sm my-3">
-        <h3>Search Results</h3>
-        <table class="table table-bordered f-hidden" id="fSearchResults">
-          <thead>
+    <div class="row d-flex justify-content-center mt-4">
+      <div class="col-sm-8 f-hidden" id="resultsContainer">
+        <h3 class="text-center mb-3">Search Results</h3>
+        <table class="table table-hover table-bordered f-hidden" id="fSearchResults">
+          <thead class="thead-dark">
             <tr>
               <th>FormId</th>
               <th>FirstName</th>
@@ -49,6 +52,10 @@
     border: 1px solid #ccc;
     width: 100%;
     z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .f-dropdown-item {
@@ -62,6 +69,19 @@
 
   .f-hidden {
     display: none;
+  }
+
+  .f-visible {
+    display: block;
+  }
+
+  .form-link {
+    color: #007bff;
+    text-decoration: none;
+  }
+
+  .form-link:hover {
+    text-decoration: underline;
   }
 </style>
 
@@ -81,7 +101,7 @@
     });
 
     $(document).on('click', '.f-dropdown-item', function() {
-      const [ , field, value] = $(this).text().split(': ').map(item => item.trim());
+      const [ssearch, field, value] = $(this).text().split(': ').map(item => item.trim());
       $('#fSearchInput').val($(this).text().replace('Search: ', ''));
       $('#fDropdown').addClass('f-hidden');
       triggerSearch(field.toLowerCase(), value);
@@ -94,16 +114,17 @@
     });
 
     function triggerSearch(field, value) {
+      console.log('Trigger search invoked for field:', field, 'with value:', value);
       $.ajax({
         url: '/search',
         method: 'GET',
         data: { field, value },
         success: async function(response) {
-          console.log('Successful to receive response.');
+          console.log('Successful to receive response:', response);
           await displayResults(response);
         },
         error: function(xhr, status, error) {
-          alert('Error: ' + error);
+          alert(`Exception Occurred: ${xhr} ${status} ${error}`);
         }
       });
     }
@@ -118,7 +139,7 @@
         results.forEach(result => {
           const row = `
             <tr>
-              <td>${result.id}</td>
+              <td><a href="/view/${result.id}" class="form-link">${result.id}</td>
               <td>${result.firstname}</td>
               <td>${result.middlename || ''}</td>
               <td>${result.lastname}</td>
@@ -126,10 +147,10 @@
           `;
           tbody.append(row);
         });
-        table.removeClass('f-hidden').closest('.col-sm').removeClass('f-hidden');
+        table.removeClass('f-hidden').closest('#resultsContainer').removeClass('f-hidden');
       } else {
         tbody.append('<tr><td colspan="4" class="text-center">No results found</td></tr>');
-        table.removeClass('f-hidden').closest('.col-sm').removeClass('f-hidden');
+        table.removeClass('f-hidden').closest('#resultsContainer').removeClass('f-hidden');
       }
     }
   });

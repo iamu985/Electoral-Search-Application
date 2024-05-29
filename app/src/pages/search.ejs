@@ -1,0 +1,146 @@
+<%- include('partials/base.ejs') %>
+
+<body>
+  <div class="container mb-5">
+    <div class="d-flex justify-content-center my-3">
+      <h1>Search</h1>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <form id="searchForm" method="post">
+          <div class="">
+            <div class="">
+              <% let fields = ['First Name', 'Middle Name', 'Last Name', 'Age', 'Form Number', 'Designation', 'Status Of Employment', 'Association', 'Religion', 'Caste', 'Mobile Number', 'Number Of Family Members', 'Number Of Electors', 'Number Of New Electors', 'Municipality', 'Block', 'Village/Para/Ward Number', 'Institution Name', 'State Of Institution', 'Club Name', "Beneficiary Scheme"]; %>
+              <div class="form-group row mb-3">
+                <div class="col">
+                  <select class="form-control" id="" name="search_field">
+                    <% fields.forEach(fieldname => { %>
+                    <option value="<%= fieldname %>"><%= fieldname %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col">
+                  <select class="form-control" id="" name="search_option">
+                    <option value="contains">contains</option>
+                    <option value="is_ci">is(case_insensitive)</option>
+                    <option value="is_cs">is(case_sensitive)</option>
+                  </select>
+                </div>
+                <div class="col">
+                  <input type="text" class="form-control" name="search_value" placeholder="Enter search Value here">
+                </div>
+              </div>
+              <!--  -->
+            </div>
+          </div>
+          <div class="d-flex justify-content-center my-3">
+            <button id="searchBtn" type="button" class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-secondary ms-2">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div id="searchResults"></div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+</style>
+<script>
+  let fieldMapping = {
+    "First Name": "firstname",
+    "Middle Name": "middlename",
+    "Last Name": "lastname",
+    "Age": "age",
+    "Form Number": "id",
+    "Designation": "designation",
+    "Status Of Employment": "status_of_employment",
+    "Association": "association_name",
+    "Religion": "religion",
+    "Caste": "caste",
+    "Mobile Number": "mobile_number",
+    "Number Of Family Members": "number_of_family_members",
+    "Number Of Electors": "number_of_electors",
+    "Number Of New Electors": "number_of_new_electors",
+    "Municipality": "municipality",
+    "Block": "block",
+    "Village Para Ward Number": "village",
+    "Institution Name": "name_of_institution",
+    "State Of Institution": "state_of_institution",
+    "Club Name": "club",
+    "Beneficiary Scheme": "beneficiary_scheme"
+  }
+  $(document).ready(function() {
+    // Written code
+    const searchForm = $("#searchForm");
+
+    function getSearchData() {
+      console.log('GetSearchData invoked.');
+      let searchOption = searchForm.find('[name="search_option"]').val(); 
+      let searchValue = searchForm.find('[name="search_value"]').val();
+      let searchField = searchForm.find('[name="search_field"]').val();
+      return {
+        search_field : fieldMapping[searchField],
+        search_option: searchOption,
+        search_value : searchValue
+      }
+    }
+
+    $('#searchBtn').click(function() {
+      const searchData = getSearchData(searchForm);
+      console.log(`SearchData: ${JSON.stringify(searchData)}`);
+
+      $.ajax({
+        url: '/api/search',
+        method: 'GET',
+        data: searchData,
+        success: function(response) {
+          if (response.success) {
+            displayResults(response.results);
+          } else {
+            alert('No results found');
+          }
+        },
+        error: function(err) {
+          alert('An error occurred while processing your request', err);
+        }
+      });
+    });
+
+    $('#clearBtn').click(function() {
+      $('#searchForm')[0].reset();
+      $('#searchResults').empty();
+    });
+
+    function displayResults(results) {
+      const resultsContainer = $('#searchResults');
+      resultsContainer.empty();
+
+      if (results.length > 0) {
+        const table = $('<table class="table table-bordered"><thead><tr><th>Id</th><th>First Name</th><th>Middle Name</th><th>Last Name</th></tr></thead><tbody></tbody></table>');
+        results.forEach(result => {
+          const row = `<tr>
+            <td><a href="/view/${result.id}" class="form-link">${result.id}</td>
+              <td>${result.firstname}</td>
+              <td>${result.middlename}</td>
+              <td>${result.lastname}</td>
+              
+            </tr>`;
+          table.find('tbody').append(row);
+        });
+        resultsContainer.append(table);
+      } else {
+        resultsContainer.append('<p>No results found</p>');
+      }
+    }
+  });
+</script>
+
+</html>
