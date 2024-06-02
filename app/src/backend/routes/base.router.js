@@ -2,7 +2,10 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const fs = require('fs');
+const XLSX = require('xlsx');
+
 const { saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery } = require('../../utils/utilities');
+const { generateDummyData, createExcelFile } = require('../../utils/dev-utilities');
 
 const ConfigPath = path.join(__dirname, '../../../config/conf.json'); // config directory
 
@@ -12,6 +15,8 @@ console.log(Config['configs']["evaluation"])
 
 // const TestModel = require('../../models/TestSchema');
 const DataModel = require('../../models/Schema');
+const SettingsModel = require('../../models/Settings');
+const uploadFile = require('../handlers');
 // const { error } = require('console');
 
 
@@ -49,54 +54,19 @@ const searchViewGetHandler = (req, res) => {
     res.render('search', { title: 'Search Page' });
 }
 
-const searchAPIRequestHandler = async (req, res) => {
-    console.log(`Method: GET | handler: searchAPIRequestHandler`);
-  try {
-    const searchFieldMapping = {
-        "firstname": "firstname",
-        "middlename": "middlename",
-        "lastname": "lastname",
-        "age": "family_information.family_members.age",
-        "id": "id",
-        "designation": "job_details.designation",
-        "status_of_employment": "status_of_employment",
-        "employment_organization_name": "job_details.employment_organization_name",
-        "association_name": "association_name",
-        "religion": "religion",
-        "caste": "caste",
-        "mobile_number": "mobile_number",
-        "number_of_family_members": "number_of_family_members",
-        "number_of_new_electors": "number_of_new_electors",
-        "number_of_electos": "number_of_electos",
-        "block": "address.block",
-        "municipality": "address.municipality",
-        "village": "address.village",
-        "district": "address.district",
-        "institution_name": "family_information.family_members.institution_information.name_of_institution",
-        "state_of_institution": "family_information.family_members.institution_information.state_of_institution",
-        "club_name": "family_information.family_members.institution_information.club"
-    }
-    const dbQuery = buildDbQuery(requestQuery=req.query, fieldMapping=searchFieldMapping);
-    console.log(`Received Query: ${JSON.stringify(req.query, null, 2)}`);
-    console.log(`BuildQuery: ${JSON.stringify(dbQuery, null, 2)}`);
 
-    // Execute the query
-    const results = await DataModel.find(dbQuery);
-    // console.log(JSON.stringify(results, null, 2));
-    res.json({ success: true, results });
-  } catch (err) {
-    res.status(500).json({ success: false, message: 'Server error', error: err.message });
-  }
-}
 
 const sessionDataGetHandler = (req, res) => {
     console.log(`method: GET | handler: sessionDataHandler`);
     res.json(req.session.data);
 };
 
-const settingsGetHandler = (req, res) => {
-    console.log(`method: GET | handler: settingshandler`);
-    res.render('settings', { title: 'Settings Page' });
+const settingsGetHandler = async (req, res) => {
+    console.log(`method: GET | handler: settingsedit`);
+    // Fetch all settings values
+    const settingsData = await SettingsModel.find();
+    console.log(`SettingsData: ${JSON.stringify(settingsData)}`);
+    res.render('settings', { title: 'Settings Configure', data: settingsData });
 }
 
 
@@ -119,10 +89,10 @@ const enrollmentPostHandler = async (req, res) => {
     const generateId = `${nextId}-${district}-${associationName}`;
 
     testData.id = generateId;
-    
+
     console.log('Saving it in session.');
     req.session.data = testData;
-    res.json({success: true, redirect: '/information1'});
+    res.json({ success: true, redirect: '/information1' });
 };
 
 
@@ -176,9 +146,9 @@ const evaluationPostHandler = async (req, res) => {
     let mergedData = deepMerge(sessionData, postData);
     console.log(mergedData);
 
-    var verdict = await saveToDatabase(mergedData, debug=false);
+    var verdict = await saveToDatabase(mergedData, debug = false);
     if (verdict.saved) {
-        res.json({success:true, title: 'Success', redirect: '/success'});
+        res.json({ success: true, title: 'Success', redirect: '/success' });
     } else {
         res.render('/evaluation', { title: "Evaluation Form" });
     }
@@ -202,33 +172,99 @@ router.get('/view/:id', async (req, res) => {
     }
 });
 
-router.get('/isUniqueMobileNumber/:mobileNumber', async (req, res) => {
-    console.log(`method: GET | handler: isUniquePhoneNumberHandler`);
-    // console.log(`phoneNumber: ${mobileNumber} from isUniquePhoneNumberHandler`);
-
+router.get('/generate-dummy', (req, res) => {
+    // dummy data generator
     try {
-        const query = { mobile_number: req.params.mobileNumber };
-        console.log(query); 
-        const results = await DataModel.find(query);
-        console.log(results);
-
-        if (results.length === 0) {
-            res.json({ success: true, isUnique: true });
-        } else {
-            res.json({ success: true, isUnique: false });
-        }
-    } catch (error) {
-        console.error('Error checking phone number uniqueness:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        const dummyData = generateDummyData();
+        createExcelFile(dummyData, 'dummy_data.xlsx');
+        console.log('Excel file with dummy data created successfully.');
+        res.json({ success: true});
+    } catch (err) {
+        res.json( {success: false, error: err });
     }
+    
 })
+
+router.get('/import', (req, res) => {
+    res.render('import', { title: 'Import Data' });
+})
+
+router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
+    console.log('Inside Import');
+    try {
+        const filePath = req.file.path;
+        console.log(`FilePath: ${filePath}`);
+        const workbook = XLSX.readFile(filePath);
+        const sheetName = workbook.SheetNames[0];
+        const worksheet = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
+
+        // Use a loop instead of map to handle async/await
+        const parsedData = [];
+        for (const row of worksheet) {
+            var data = {
+                firstname: row['First Name'],
+                middlename: row['Middle Name'],
+                lastname: row['Last Name'],
+                mobile_number: row['Mobile Number'],
+                dob: new Date(row['Date of Birth']),
+                caste: row['Caste'],
+                religion: row['Religion'],
+                status_of_employment: row['Status of Employment'],
+                number_of_family_members: row['Number of Family Members'],
+                number_of_electors: row['Number of Electors'],
+                number_of_new_electors: row['Number of New Electors'],
+                association_name: row['Association Name'],
+                job_details: {
+                    designation: row['Designation'],
+                    date_of_joining: new Date(row['Date of Joining']),
+                    nature_of_job: row['Nature of Job'],
+                    employment_organization_name: row['Employment Organization Name']
+                },
+                family_information: {
+                    family_type: row['Family Type'],
+                    family_members: JSON.parse(row['Family Members']) // Assuming Family Members is a JSON string
+                },
+                evaluation: {
+                    role_play: {
+                        organization: row['Role Play Organization'],
+                        working_area: row['Working Area'],
+                        concern_association: row['Concern Association'],
+                        regular_manner: row['Regular Manner']
+                    },
+                    questions: JSON.parse(row['Questions']) // Assuming Questions is a JSON string
+                }
+            };
+
+            const nextId = await getNextSequenceValue('enrollmentId');
+
+            // Generate the id based on the district, counterId and associationName
+            const district = data.family_information.family_members[0].district;
+            const associationName = data.association_name;
+            const generateId = `${nextId}-${district}-${associationName}`;
+
+            data.id = generateId;
+
+            parsedData.push(data);
+        }
+
+        const savedData = await DataModel.insertMany(parsedData);
+
+        fs.unlinkSync(filePath); // Remove the uploaded file
+
+        res.json({ success: true, id: savedData.map(data => data._id) });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error importing data', error: error.message });
+    }
+});
+
+
 
 
 router.get('/', indexGetHandler)
 router.get('/success', successGetHandler);
 router.get('/search', searchGetHandler);
 router.get('/search1', searchViewGetHandler);
-router.get('/api/search', searchAPIRequestHandler);
+
 router.get('/session-data', sessionDataGetHandler)
 router.get('/settings', settingsGetHandler)
 
@@ -251,6 +287,6 @@ router.route('/information2')
 router.route('/evaluation')
     .get(evaluationGetHandler)
     .post(evaluationPostHandler)
-    
+
 
 module.exports = router;

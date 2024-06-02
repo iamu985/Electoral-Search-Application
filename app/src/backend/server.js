@@ -4,6 +4,7 @@ const session = require('express-session');
 const path = require('path');
 const app =  express();
 const BaseRouter = require('./routes/base.router.js');
+const APIRouter = require('./routes/api.router.js');
 
 const port = 3000;
 const mongo_uri = 'mongodb://localhost:27017/test';
@@ -43,6 +44,7 @@ mongoose.connect(mongo_uri, {
 
 // Using Router
 app.use('/', BaseRouter);
+app.use('/webservice/api/v1', APIRouter);
 
 // Start server
 app.listen(port, () => {

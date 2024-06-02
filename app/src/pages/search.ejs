@@ -98,7 +98,7 @@
       console.log(`SearchData: ${JSON.stringify(searchData)}`);
 
       $.ajax({
-        url: '/api/search',
+        url: '/webservice/api/v1/search',
         method: 'GET',
         data: searchData,
         success: function(response) {

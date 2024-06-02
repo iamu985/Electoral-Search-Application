@@ -21,7 +21,7 @@
           </div>
           <div class="card-body">
             <div class="form-group mb-3">
-              <label for="fullName">Full Name</label>
+              <label for="fullName">Full Name <span class="text-danger">*</span></label>
               <input type="text" id="fullName" class="form-control" name="fullname" readonly value="<%= data.fullname %>">
             </div>
             <div class="form-group mb-3">
@@ -30,12 +30,12 @@
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="dob" class="py-1">Date Of Birth</label>
-                <input type="date" id="dob" class="form-control" name="dob">
+                <label for="dob" class="py-1">Date Of Birth <span class="text-danger">*</span></label>
+                <input type="date" id="dob" class="form-control" name="dob" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="py-1" for="caste">Caste</label>
-                <select name="caste" id="caste" class="form-control custom-select">
+                <label class="py-1" for="caste">Caste <span class="text-danger">*</span></label>
+                <select name="caste" id="caste" class="form-control custom-select" required>
                   <option value="SC">SC</option>
                   <option value="ST">ST</option>
                   <option value="OBC">OBC</option>
@@ -43,8 +43,8 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label class="py-1" for="religion">Religion</label>
-                <select name="religion" id="religion" class="form-control custom-select">
+                <label class="py-1" for="religion">Religion <span class="text-danger">*</span></label>
+                <select name="religion" id="religion" class="form-control custom-select" required>
                   <option value="SC">SC</option>
                   <option value="Hindi">Hindi</option>
                   <option value="Muslim">Muslim</option>
@@ -56,16 +56,16 @@
               </div>
             </div>
             <div class="form-group mb-3">
-              <label class="py-2" for="designation">Designation</label>
-              <select name="designation" id="designation" class="form-control custom-select">
+              <label class="py-2" for="designation">Designation <span class="text-danger">*</span></label>
+              <select name="designation" id="designation" class="form-control custom-select" required>
                 <% designations.forEach(designation => { %>
                 <option value="<%= designation %>"><%= designation %></option>
                 <% }) %>
               </select>
             </div>
             <div class="form-group mb-3">
-              <label class="py-2" for="natureOfJob">Nature of Employment</label>
-              <select name="nature_of_job" id="natureOfJob" class="form-control custom-select">
+              <label class="py-2" for="natureOfJob">Nature of Employment <span class="text-danger">*</span></label>
+              <select name="nature_of_job" id="natureOfJob" class="form-control custom-select" required>
                 <option value="Permanent">Permanent</option>
                 <option value="Contractual">Contractual</option>
               </select>
@@ -93,8 +93,8 @@
           </div>
           <div class="card-body">
             <div class="form-group mb-3">
-              <label for="associationName">Employment Organization Name</label>
-              <input type="text" id="employmentOrganizationName" class="form-control" name="employment_organization_name" value="">
+              <label for="associationName">Employment Organization Name <span class="text-danger">*</span></label>
+              <input type="text" id="employmentOrganizationName" class="form-control" name="employment_organization_name" required>
               <!-- <select name="employment_organization_name" id="associationName" class="form-control custom-select">
                 <option value="Kalimpong Association">Kalimpong Association</option>
                 <option value="Darjeeling Association">Darjeeling Association</option>
@@ -103,34 +103,34 @@
               </select> -->
             </div>
             <div class="form-group mb-3">
-              <label class="py-2" for="statusOfEmployment">Status of Employment</label>
+              <label class="py-2" for="statusOfEmployment">Status of Employment <span class="text-danger">*</span></label>
               <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select" disabled>
                 <option value="Working" <%= data.status_of_employment === 'Working' ? 'selected' : '' %>>Working</option>
                 <option value="Retired" <%= data.status_of_employment === 'Retired' ? 'selected' : '' %>>Retired</option>
               </select>
             </div>
             <div class="form-group mb-3" id="dateOfJoining">
-              <label for="dateOfJoining">Date Of Joining</label>
-              <input type="date" id="dateOfJoining" class="form-control" name="date_of_joining">
+              <label for="dateOfJoining">Date Of Joining <span class="text-danger">*</span></label>
+              <input type="date" id="dateOfJoining" class="form-control" name="date_of_joining" required>
             </div>
             <div id="retiredSection" class="f-hidden">
               <div class="form-group mb-3">
-                <label for="oppositionMembership">During service, did you take membership of any other opposition?</label>
-                <select name="had_taken_opposition_membership" id="oppositionMembership" class="form-control custom-select">
+                <label for="oppositionMembership">During service, did you take membership of any other opposition? <span class="text-danger">*</span></label>
+                <select name="had_taken_opposition_membership" id="oppositionMembership" class="form-control custom-select" required>
                   <option value="Yes">Yes</option>
                   <option value="No" selected>No</option>
                 </select>
               </div>
               <div class="form-group mb-3">
-                <label for="tradeUnionRight">Did Trade Union Rights exist at the time of your service?</label>
-                <select name="trade_union_right_on" id="tradeUnionRight" class="form-control custom-select">
+                <label for="tradeUnionRight">Did Trade Union Rights exist at the time of your service? <span class="text-danger">*</span></label>
+                <select name="trade_union_right_on" id="tradeUnionRight" class="form-control custom-select" required>
                   <option value="Yes">Yes</option>
                   <option value="No" selected>No</option>
                 </select>
               </div>
               <div class="form-group mb-3">
-                <label for="has_played_leadership_role">Did you play any leadership role during your service?</label>
-                <select name="has_played_leadership_role" id="hasPlayedLeadershipRole" class="form-control custom-select">
+                <label for="has_played_leadership_role">Did you play any leadership role during your service? <span class="text-danger">*</span></label>
+                <select name="has_played_leadership_role" id="hasPlayedLeadershipRole" class="form-control custom-select" required>
                   <option value="Yes">Yes</option>
                   <option value="No" selected>No</option>
                 </select>
@@ -154,8 +154,8 @@
           <div class="card-body">
             <div class="row">
               <div class="col-md-6 mb-3">
-                <label for="districtName">District</label>
-                <select name="district" id="districtName" class="form-control custom-select">
+                <label for="districtName">District <span class="text-danger">*</span></label>
+                <select name="district" id="districtName" class="form-control custom-select" required>
                   <option value="KPG">Kalimpong</option>
                   <option value="DRJ">Darjeeling</option>
                   <option value="KUR">Kurseong</option>
@@ -163,8 +163,8 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="municipalityName">Municipality</label>
-                <select name="municipality" id="municipalityName" class="form-control custom-select">
+                <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
+                <select name="municipality" id="municipalityName" class="form-control custom-select" required>
                   <option value="Pudung">Pudung</option>
                   <option value="Pedong">Pedong</option>
                   <option value="Eagles Den">Eagles Den</option>
@@ -172,8 +172,8 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="blockName">Block</label>
-                <select name="block" id="blockName" class="form-control custom-select">
+                <label for="blockName">Block <span class="text-danger">*</span></label>
+                <select name="block" id="blockName" class="form-control custom-select" required>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -181,8 +181,8 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="gp">Gram Panchayat</label>
-                <select name="gp" id="gp" class="form-control custom-select">
+                <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
+                <select name="gp" id="gp" class="form-control custom-select" required>
                   <option value="P1">P1</option>
                   <option value="P2">P2</option>
                   <option value="P3">P3</option>
@@ -190,12 +190,12 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="villageName">Village/Para/Ward Number</label>
-                <input type="text" name="village" id="villageName" class="form-control">
+                <label for="villageName">Village/Para/Ward Number <span class="text-danger">*</span></label>
+                <input type="text" name="village" id="villageName" class="form-control" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="landMark">Landmark</label>
-                <input type="text" name="landmark" id="landMark" class="form-control">
+                <label for="landMark">Landmark <span class="text-danger">*</span></label>
+                <input type="text" name="landmark" id="landMark" class="form-control" required>
               </div>
               <div class="col-md-12 mb-3">
                 <label for="remarksContent">Remarks</label>
@@ -284,8 +284,11 @@
     });
 
     $('#nextPageBtn').click(function(event) {
-      console.log('next page from information 1')
       event.preventDefault();
+      if (!validateForm()) {
+        alert.text('Please fill in all required fields.').removeClass('f-hidden');
+        return;
+      }
       const formData = collectFormData();
       console.log(formData); // Debugging - see the collected data object
       $.ajax({
@@ -306,6 +309,19 @@
         }
       });
     });
+
+    function validateForm() {
+      var isValid = true;
+      $('#detailForm [required]').each(function() {
+        if ($(this).val() === "") {
+          $(this).addClass('f-error');
+          isValid = false;
+        } else {
+          $(this).removeClass('f-error');
+        }
+      });
+      return isValid;
+    }
 
     function collectFormData() {
       const form = $('#detailForm');
@@ -340,7 +356,6 @@
 
       return formData;
     }
-
   });
 </script>
 </html>

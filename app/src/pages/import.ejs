@@ -1,0 +1,74 @@
+<%- include('partials/base.ejs') %>
+
+<body>
+  <div class="container mb-5">
+    <div class="d-flex justify-content-center my-3">
+      <h1>Import Data</h1>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <form id="importForm" enctype="multipart/form-data" class="mb-4">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <label for="file">Excel File</label>
+                <input type="file" class="form-control" id="excelFile" name="excelFile" accept=".xlsx, .xls" required>
+              </div>
+            </div>
+            <div class="col-md-4 my-3 d-flex align-items-end">
+              <button type="button" id="importBtn" class="btn btn-primary">Import</button>
+            </div>
+          </div>
+        </form>
+        <div id="importStatus" class="mt-4"></div>
+      </div>
+    </div>
+  </div>
+</body>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+</style>
+
+<script>
+  $(document).ready(function() {
+
+    function getSuccessNotification(ids) {
+        let idList = ids.map(id => `<li>${id}</li>`).join('');
+        return `
+        <div class="alert alert-success">
+            <div class="message">Data imported successfully.</div>
+            <div class="created-ids">
+                <ul>${idList}</ul>
+            </div>
+        </div>
+        `;
+    }
+
+    $('#importBtn').click(function() {
+      const formData = new FormData($('#importForm')[0]);
+
+      $.ajax({
+        url: '/import',
+        method: 'POST',
+        enctype: 'multipart/form-data',
+        data: formData,
+        processData: false,
+        contentType: false,
+        success: function(response) {
+          if (response.success) {
+            $('#importStatus').html(getSuccessNotification(response.id));
+          } else {
+            $('#importStatus').html(`<div class="alert alert-danger">Error importing data: ${response.message}</div>`);
+          }
+        },
+        error: function(err) {
+          $('#importStatus').html(`<div class="alert alert-danger">Error: ${err.responseText}</div>`);
+        }
+      });
+    });
+  });
+</script>
+</html>
