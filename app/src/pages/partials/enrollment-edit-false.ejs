@@ -170,7 +170,7 @@
       console.log(`POSTDATA: ${JSON.stringify(formData)}`);
       $.ajax({
         url: '/enrollment',
-        method: 'PUT',
+        method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(formData),
         success: function(response) {

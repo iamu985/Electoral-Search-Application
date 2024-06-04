@@ -9,7 +9,7 @@
     <!-- Primary Details Card -->
     <div class="row">
       <div class="col-sm-2 d-flex align-item-right">
-        <button class="btn btn-primary">Edit</button>
+        <a href="/enrollment?edit=true&id=<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</a>
       </div>
       <div class="col-sm-2">
         <a href="/search" class="btn btn-secondary">Go Back</a>
@@ -134,8 +134,8 @@
       </div>
     </div>
     <div class="d-flex justify-content-center my-3">
-        <a href="/enrollment?edit=true&id=<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</button>
-        <a href="/search" class="btn btn-secondary ms-2">Go Back</button>
+        <a href="/enrollment?edit=true&id=<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</a>
+        <a href="/search" class="btn btn-secondary ms-2">Go Back</a>
     </div>
   </div>
 </body>
