@@ -7,6 +7,14 @@
     </div>
 
     <!-- Primary Details Card -->
+    <div class="row">
+      <div class="col-sm-2 d-flex align-item-right">
+        <button class="btn btn-primary">Edit</button>
+      </div>
+      <div class="col-sm-2">
+        <a href="/search" class="btn btn-secondary">Go Back</a>
+      </div>
+    </div>
     <div class="card f-card my-3">
       <div class="card-body">
         <h4 class="card-title">Primary Details</h4>
@@ -69,12 +77,6 @@
                   <p><strong>Institution Name:</strong> <%= member.institution_information.name_of_institution %></p>
                   <p><strong>State:</strong> <%= member.institution_information.state_of_institution %></p>
                   <p><strong>Club:</strong> <%= member.institution_information.club %></p>
-                  <p><strong>Beneficiary Schemes:</strong></p>
-                  <ul>
-                    <% member.institution_information.beneficiary_scheme.forEach(function(scheme) { %>
-                    <li><%= scheme %></li>
-                    <% }); %>
-                  </ul>
                 </div>
                 <% } else { %>
                 <div>
@@ -85,7 +87,29 @@
                 <% } %>
               </td>
             </tr>
-            <% }); %>
+            <% }) %>
+            
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Beneficiary Schemes</h4>
+        <table class="table table-hover" id="fBeneficiarySchemes">
+          <thead>
+            <tr>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% data.family_information.beneficiary_scheme.forEach(function(scheme) { %>
+            <tr>
+              <td><%= scheme %></td>
+            </tr>
+            <% }) %>
+            
           </tbody>
         </table>
       </div>
@@ -107,10 +131,11 @@
         <p><strong>Q<%= index + 1 %>:</strong> <%= question.question %></p>
         <p><strong>Answer:</strong> <%= question.answer %></p>
         <% }); %>
-
-        <h5>Compiler's Note</h5>
-        <p><%= data.evaluation.compilers_note %></p>
       </div>
+    </div>
+    <div class="d-flex justify-content-center my-3">
+        <a href="/enrollment?edit=true&id=<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</button>
+        <a href="/search" class="btn btn-secondary ms-2">Go Back</button>
     </div>
   </div>
 </body>

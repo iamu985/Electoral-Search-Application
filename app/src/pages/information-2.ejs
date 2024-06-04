@@ -236,6 +236,17 @@
     let familyMembers = [];
     let beneficiarySchemes = [];
 
+    function collectBeneficiarySchemes() {
+      const schemes = [];
+      $('#beneficiarySchemesTable tbody tr').each(function() {
+        const schemeName = $(this).find('td').eq(0).text();
+        if (schemeName) {
+          schemes.push(schemeName);
+        }
+      });
+      return schemes;
+    }
+
     $('#addFamilyMemberBtn').click(function() {
       clearModalFields();
       $('#familyMemberModalLabel').text('Add Family Member');
@@ -273,26 +284,15 @@
         institution_information: {
           name_of_institution: $('#name_of_institution').val(),
           state_of_institution: $('#state_of_institution').val(),
-          club: $('#club').val(),
-          beneficiary_scheme: collectBeneficiarySchemes()
+          club: $('#club').val()
         },
         associated_association: {
           name_of_organization: $('#attached_association_name_of_organization').val(),
           phone: $('#attached_association_association_phone').val(),
           in_leadership_role: $('#attached_association_in_leadership_role').val(),
-        }
+        },
+        beneficiary_scheme: collectBeneficiarySchemes()
       };
-    }
-
-    function collectBeneficiarySchemes() {
-      const schemes = [];
-      $('#beneficiarySchemesTable tbody tr').each(function() {
-        const schemeName = $(this).find('td').eq(0).text();
-        if (schemeName) {
-          schemes.push(schemeName);
-        }
-      });
-      return schemes;
     }
 
     function displayFamilyMembers() {
@@ -449,7 +449,8 @@
         number_of_family_members: form.find('[name="number_of_family_members"]').val(),
         family_information: {
           family_type: form.find('[name="family_type"]').val(),
-          family_members: familyMembers
+          family_members: familyMembers,
+          beneficiary_scheme: collectBeneficiarySchemes()
         }
       };
     }

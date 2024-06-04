@@ -6,8 +6,8 @@ const SettingsModel = require('../../models/Settings');
 
 
 const apiIndex = (req, res) => {
-    console.log('API INDex');
-    res.json({'message': 'hello from api'});
+  console.log('API INDex');
+  res.json({ 'message': 'hello from api' });
 }
 
 const searchAPIRequestHandler = async (req, res) => {
@@ -37,23 +37,28 @@ const searchAPIRequestHandler = async (req, res) => {
       "state_of_institution": "family_information.family_members.institution_information.state_of_institution",
       "club_name": "family_information.family_members.institution_information.club"
     };
-    
-    const dbQuery = buildDbQuery(req.query, searchFieldMapping);
-    console.log(`Received Query: ${JSON.stringify(req.query, null, 2)}`);
-    console.log(`BuildQuery: ${JSON.stringify(dbQuery, null, 2)}`);
-    
-    const results = await DataModel.find(dbQuery);
-    res.json({ success: true, results });
+
+    const response = buildDbQuery(req.query.searchParams, searchFieldMapping);
+    if (!response.success) {
+      return res.status(400).json({ success: false, errorMessage: response.errorMessage });
+    } else {
+      console.log(`Received Query: ${JSON.stringify(req.query, null, 2)}`);
+      console.log(`BuildQuery: ${JSON.stringify(response.query, null, 2)}`);
+
+      const results = await DataModel.find(response.query);
+      res.json({ success: true, results });
+    }
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
+    
 }
 
 const isUniqueMobileNumberAPIHandler = async (req, res) => {
   console.log(`Method: GET | handler: isUniquePhoneNumberHandler`);
   try {
     const query = { mobile_number: req.params.mobileNumber };
-    console.log(query); 
+    console.log(query);
     const results = await DataModel.find(query);
     console.log(results);
 
@@ -73,11 +78,11 @@ const settingsSearchAPIRequestHandler = async (req, res) => {
   console.log(`method: GET | handler: apisettingssearchhandler`)
   try {
     let entityType = req.query.entity_type;
-    let query = { };
+    let query = {};
     let value = req.query.value;
 
     if (value !== null) {
-      query = { entity_type: entityType, value: { $regex: value, $options: "i"} }; 
+      query = { entity_type: entityType, value: { $regex: value, $options: "i" } };
     } else {
       query = { entity_type: entityType };
     }
@@ -95,17 +100,17 @@ const settingsAPIGetAllValues = async (req, res) => {
   try {
     let entityType = req.body.entity_type;
     let query = { entity_type: entityType };
-    
+
     const results = await SettingsModel.find(query);
     res.json({ success: true, data: results });
-  } catch(error) {
-    res.status(500).json({ success: false, message: 'Error fetching all values'});
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching all values' });
   }
 }
 
 const settingsPostAPIRequestHandler = async (req, res) => {
   try {
-    const {entityType, value} = req.body;
+    const { entityType, value } = req.body;
     const postData = {
       entity_type: entityType,
       value: value

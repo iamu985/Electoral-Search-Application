@@ -8,41 +8,65 @@
     <div class="row">
       <div class="col-md-12">
         <form id="searchForm" method="post">
-          <div class="">
-            <div class="">
-              <% let fields = ['First Name', 'Middle Name', 'Last Name', 'Age', 'Form Number', 'Designation', 'Status Of Employment', 'Association', 'Religion', 'Caste', 'Mobile Number', 'Number Of Family Members', 'Number Of Electors', 'Number Of New Electors', 'Municipality', 'Block', 'Village/Para/Ward Number', 'Institution Name', 'State Of Institution', 'Club Name', "Beneficiary Scheme"]; %>
-              <div class="form-group row mb-3">
-                <div class="col">
-                  <select class="form-control" id="" name="search_field">
-                    <% fields.forEach(fieldname => { %>
-                    <option value="<%= fieldname %>"><%= fieldname %></option>
-                    <% }) %>
-                  </select>
+          <div class="row">
+            <div class="col-md-6">
+              <% let fields = [
+                "first name", "middle name", "last name", "age", "form number", "designation",
+                "status of employment", "association", "religion", "caste", "mobile number",
+                "number of family members", "number of electors", "number of new electors",
+                "municipality", "block", "village/para/ward number", "institution name",
+                "state of institution", "beneficiary scheme", "club name"
+              ]; %>
+              <% fields.slice(0, Math.ceil(fields.length / 2)).forEach(function(field, index) { %>
+                <div class="form-group row mb-3">
+                  <label class="col-sm-4 col-form-label"><%= field.split(' ').map(word => {return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()}).join(' ') %></label>
+                  <div class="col-sm-4">
+                    <select class="form-control" id="<%= field.replace(/\s+/g, '_') %>Condition">
+                      <option value="ct">contains</option>
+                      <option value="iec">is equal to (case-sensitive)</option>
+                      <option value="ies">is equal to(case-insensitive)</option>
+                      <option value="sw">starts with</option>
+                      <option value="gt">is greater than</option>
+                      <option value="gte">is greater than and equal to</option>
+                      <option value="lt">is less than</option>
+                      <option value="lte">is less than and equal to</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" name="<%= field.replace(/\s+/g, '_') %>">
+                  </div>
                 </div>
-                <div class="col">
-                  <select class="form-control" id="" name="search_option">
-                    <option value="contains">contains</option>
-                    <option value="is_ci">is(case_insensitive)</option>
-                    <option value="is_cs">is(case_sensitive)</option>
-                  </select>
+              <% }); %>
+            </div>
+            <div class="col-md-6">
+              <% fields.slice(Math.ceil(fields.length / 2)).forEach(function(field, index) { %>
+                <div class="form-group row mb-3">
+                  <label class="col-sm-4 col-form-label"><%= field.split(' ').map(word => {return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()}).join(' ') %></label>
+                  <div class="col-sm-4">
+                    <select class="form-control" id="<%= field.replace(/\s+/g, '_') %>Condition">
+                      <option value="ct">contains</option>
+                      <option value="iec">is equal to (case-sensitive)</option>
+                      <option value="ies">is equal to(case-insensitive)</option>
+                      <option value="sw">starts with</option>
+                      <option value="gt">is greater than</option>
+                      <option value="gte">is greater than and equal to</option>
+                      <option value="lt">is less than</option>
+                      <option value="lte">is less than and equal to</option>
+                    </select>
+                  </div>
+                  <div class="col-sm-4">
+                    <input type="text" class="form-control" name="<%= field.replace(/\s+/g, '_') %>">
+                  </div>
                 </div>
-                <div class="col">
-                  <input type="text" class="form-control" name="search_value" placeholder="Enter search Value here">
-                </div>
-              </div>
-              <!--  -->
+              <% }); %>
             </div>
           </div>
           <div class="d-flex justify-content-center my-3">
-            <button id="searchBtn" type="button" class="btn btn-primary">Submit</button>
+            <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
             <button type="reset" class="btn btn-secondary ms-2">Reset</button>
           </div>
         </form>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
-        <div id="searchResults"></div>
+        <div id="searchResults" class="mt-4"></div>
       </div>
     </div>
   </div>
@@ -54,53 +78,52 @@
   }
 </style>
 <script>
-  let fieldMapping = {
-    "First Name": "firstname",
-    "Middle Name": "middlename",
-    "Last Name": "lastname",
-    "Age": "age",
-    "Form Number": "id",
-    "Designation": "designation",
-    "Status Of Employment": "status_of_employment",
-    "Association": "association_name",
-    "Religion": "religion",
-    "Caste": "caste",
-    "Mobile Number": "mobile_number",
-    "Number Of Family Members": "number_of_family_members",
-    "Number Of Electors": "number_of_electors",
-    "Number Of New Electors": "number_of_new_electors",
-    "Municipality": "municipality",
-    "Block": "block",
-    "Village Para Ward Number": "village",
-    "Institution Name": "name_of_institution",
-    "State Of Institution": "state_of_institution",
-    "Club Name": "club",
-    "Beneficiary Scheme": "beneficiary_scheme"
+  const fieldMapping = {
+    'first_name': 'firstname',
+    'middle_name': 'middlename',
+    'last_name': 'lastname',
+    'age': 'age',
+    'form_number': 'id',
+    'designation': 'designation',
+    'status_of_employment': 'status_of_employment',
+    'association': 'association',
+    'religion': 'religion',
+    'caste': 'caste',
+    'mobile_number': 'mobile_number',
+    'number_of_family_members': 'number_of_family_members',
+    'number_of_electors': 'number_of_electors',
+    'number_of_new_electors': 'number_of_new_electors',
+    'municipality': 'municipality',
+    'block': 'block',
+    'village/para/ward_number': 'village',
+    'institution_name': 'institution_name',
+    'state_of_institution': 'state_of_institution',
+    'beneficiary_scheme': 'beneficiary_scheme',
+    'club_name': 'club'
   }
+
   $(document).ready(function() {
-    // Written code
-    const searchForm = $("#searchForm");
-
-    function getSearchData() {
-      console.log('GetSearchData invoked.');
-      let searchOption = searchForm.find('[name="search_option"]').val(); 
-      let searchValue = searchForm.find('[name="search_value"]').val();
-      let searchField = searchForm.find('[name="search_field"]').val();
-      return {
-        search_field : fieldMapping[searchField],
-        search_option: searchOption,
-        search_value : searchValue
-      }
-    }
-
     $('#searchBtn').click(function() {
-      const searchData = getSearchData(searchForm);
-      console.log(`SearchData: ${JSON.stringify(searchData)}`);
+      const formData = $('#searchForm').serializeArray();
+      const searchParams = [];
+      
+      formData.forEach(field => {
+        if (field.value) {
+          const condition = $(`#${field.name}Condition`).val();
+          searchParams.push({
+            search_field: fieldMapping[field.name],
+            search_option: condition,
+            search_value: field.value
+          });
+        }
+      });
 
+      console.log(`SearchParams: ${JSON.stringify(searchParams)}`);
+      
       $.ajax({
         url: '/webservice/api/v1/search',
         method: 'GET',
-        data: searchData,
+        data: { searchParams: JSON.stringify(searchParams) },
         success: function(response) {
           if (response.success) {
             displayResults(response.results);
@@ -109,7 +132,7 @@
           }
         },
         error: function(err) {
-          alert('An error occurred while processing your request', err);
+          alert(`An error occurred while processing your request\nError: ${JSON.stringify(err)}`);
         }
       });
     });
@@ -124,15 +147,19 @@
       resultsContainer.empty();
 
       if (results.length > 0) {
-        const table = $('<table class="table table-bordered"><thead><tr><th>Id</th><th>First Name</th><th>Middle Name</th><th>Last Name</th></tr></thead><tbody></tbody></table>');
+        const table = $('<table class="table table-bordered"><thead><tr><th>Id</th><th>Full Name</th><th>Mobile Number</th><th>Association Name</th><th>Status Of Employment</th><th>Religion</th><th>Caste</th><th>Date Of Birth</th></tr></thead><tbody></tbody></table>');
         results.forEach(result => {
-          const row = `<tr>
-            <td><a href="/view/${result.id}" class="form-link">${result.id}</td>
-              <td>${result.firstname}</td>
-              <td>${result.middlename}</td>
-              <td>${result.lastname}</td>
-              
-            </tr>`;
+          const row = `
+          <tr>
+            <td><a href="/view/${result._id}">${result._id}</a></td>
+            <td>${result.fullname}</td>
+            <td>${result.mobile_number}</td>
+            <td>${result.association_name}</td>
+            <td>${result.status_of_employment}</td>
+            <td>${result.religion}</td>
+            <td>${result.caste}</td>
+            <td>${result.dob}</td>
+          </tr>`;
           table.find('tbody').append(row);
         });
         resultsContainer.append(table);
@@ -142,5 +169,4 @@
     }
   });
 </script>
-
 </html>

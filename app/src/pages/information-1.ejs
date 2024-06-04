@@ -93,14 +93,8 @@
           </div>
           <div class="card-body">
             <div class="form-group mb-3">
-              <label for="associationName">Employment Organization Name <span class="text-danger">*</span></label>
+              <label for="employmentOrganizationName">Employment Organization Name <span class="text-danger">*</span></label>
               <input type="text" id="employmentOrganizationName" class="form-control" name="employment_organization_name" required>
-              <!-- <select name="employment_organization_name" id="associationName" class="form-control custom-select">
-                <option value="Kalimpong Association">Kalimpong Association</option>
-                <option value="Darjeeling Association">Darjeeling Association</option>
-                <option value="Kurseong Association">Kurseong Association</option>
-                <option value="Sano Thimi Association">Sano Thimi Association</option>
-              </select> -->
             </div>
             <div class="form-group mb-3">
               <label class="py-2" for="statusOfEmployment">Status of Employment <span class="text-danger">*</span></label>
@@ -190,12 +184,12 @@
                 </select>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="villageName">Village/Para/Ward Number <span class="text-danger">*</span></label>
+                <label for="villageName">Village/Para/Ward Number</label>
                 <input type="text" name="village" id="villageName" class="form-control" required>
               </div>
               <div class="col-md-6 mb-3">
-                <label for="landMark">Landmark <span class="text-danger">*</span></label>
-                <input type="text" name="landmark" id="landMark" class="form-control" required>
+                <label for="landMark">Landmark</label>
+                <input type="text" name="landmark" id="landMark" class="form-control">
               </div>
               <div class="col-md-12 mb-3">
                 <label for="remarksContent">Remarks</label>
@@ -272,7 +266,8 @@
       url: '/session-data',
       method: 'GET',
       success: function(formData) {
-        var address = formData.addresses[0];
+        console.log(`FormData: ${JSON.stringify(formData)}`)
+        var address = formData.addresses;
         $('#districtName').val(address.district);
         $('#municipalityName').val(address.municipality);
         $('#blockName').val(address.block);
@@ -280,6 +275,9 @@
         $('#villageName').val(address.village);
         $('#landMark').val(address.landmark);
         $('#remarksContent').val(address.remarks);
+      },
+      error: function(err) {
+        alert('Error: ', err);
       }
     });
 
@@ -343,7 +341,7 @@
           date_of_joining: form.find('[name="date_of_joining"]').val(),
           employment_organization_name: form.find('[name="employment_organization_name"]').val()
         },
-        addresses: [{
+        addresses: {
           district: form.find('[name="district"]').val(),
           municipality: form.find('[name="municipality"]').val(),
           block: form.find('[name="block"]').val(),
@@ -351,7 +349,7 @@
           village: form.find('[name="village"]').val(),
           landmark: form.find('[name="landmark"]').val(),
           remarks: form.find('[name="remarks"]').val()
-        }]
+        }
       };
 
       return formData;

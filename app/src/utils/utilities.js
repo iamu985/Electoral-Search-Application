@@ -50,7 +50,7 @@ async function readData() {
     }
 }
 
-async function saveToDatabase(jsondata, debug=true) {
+async function saveToDatabase(jsondata, debug = true) {
     console.warn('Initiating saving to database. Make sure the data is cleaned and validated.');
     let Model, modelInstance;
     if (debug) {
@@ -79,28 +79,66 @@ function deepMerge(target, source) {
 
 const getNextSequenceValue = async (sequenceName) => {
     const counter = await Counter.findOneAndUpdate(
-      { name: sequenceName },
-      { $inc: { sequence_value: 1 } },
-      { new: true, upsert: true }
+        { name: sequenceName },
+        { $inc: { sequence_value: 1 } },
+        { new: true, upsert: true }
     );
     return counter.sequence_value;
-  };
-  
+};
+
 
 const buildDbQuery = (requestQuery, fieldMapping) => {
     console.log(`buildDbQuery utility function invoked.`);
-    console.log(requestQuery);
+    let parsedRequest = JSON.parse(requestQuery);
+    console.log('RequestQuery: ' + JSON.stringify(parsedRequest, null, 2));
     let query = {};
-    if (requestQuery.search_option === 'contains') {
-        query[fieldMapping[[requestQuery.search_field]]] = { $regex: requestQuery.search_value, $options: "i"};
-    } else if (requestQuery.search_option === 'is_ci') {
-        query[fieldMapping[[requestQuery.search_field]]] = { $regex : new RegExp(requestQuery.search_value, "i") };
-    } else if (requestQuery.searh_option == 'is_cs') {
-        query[fieldMapping[[requestQuery.search_field]]] = requestQuery.search_value;
-    }
-    console.log(`QueryGenerated: ${JSON.stringify(query, null, 2)}`)
-    return query
-}
+
+    parsedRequest.forEach(element => {
+        const field = fieldMapping[element.search_field];
+        const value = element.search_value;
+        console.log(`SearchField: ${field} | SearchValue: ${value}`);
+
+        if (!field || !value) {
+            console.warn(`Skipping invalid search parameter: field=${field}, value=${value}`);
+            return { success: false, errorMessage: `Skipping invalid search parameter: field=${field}, value=${value}`}; // Skip invalid entries
+        }
+
+        switch (element.search_option) {
+            case 'ct':
+                query[field] = { $regex: value, $options: "i" };
+                break;
+            case 'ies':
+                query[field] = { $regex: new RegExp(`^${value}$`, "i") };
+                break;
+            case 'iec':
+                query[field] = value;
+                break;
+            case 'sw':
+                query[field] = { $regex: '^' + value, $options: "i" };
+                break;
+            case 'gt':
+                query[field] = { $gt: value };
+                break;
+            case 'gte':
+                query[field] = { $gte: value };
+                break;
+            case 'lt':
+                query[field] = { $lt: value };
+                break;
+            case 'lte':
+                query[field] = { $lte: value };
+                break;
+            default:
+                console.warn(`Unknown search option: ${element.search_option}`);
+                return { success: false, errorMessage: `Unknown search option: ${element.search_option}` }
+        }
+    });
+
+    console.log(`Query built: ${JSON.stringify(query, null, 2)}`);
+    return { success: true, query: query };
+};
+
+
 
 
 module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery }

@@ -2,3 +2,5 @@ node_modules
 out
 .eslintrc
 .compilerc
+*/src/uploads
+./dummy_data.xlsx

@@ -10,7 +10,7 @@ const { generateDummyData, createExcelFile } = require('../../utils/dev-utilitie
 const ConfigPath = path.join(__dirname, '../../../config/conf.json'); // config directory
 
 const Config = JSON.parse(fs.readFileSync(ConfigPath, 'utf8')); // config file
-console.log(Config['configs']["evaluation"])
+// console.log(Config['configs']["evaluation"])
 
 
 // const TestModel = require('../../models/TestSchema');
@@ -55,10 +55,11 @@ const searchViewGetHandler = (req, res) => {
 }
 
 
-
 const sessionDataGetHandler = (req, res) => {
     console.log(`method: GET | handler: sessionDataHandler`);
-    res.json(req.session.data);
+    const sessionData = req.session.data;
+    console.log(sessionData);
+    res.json(sessionData);
 };
 
 const settingsGetHandler = async (req, res) => {
@@ -70,10 +71,31 @@ const settingsGetHandler = async (req, res) => {
 }
 
 
-const enrollmentGetHandler = (req, res) => {
+const enrollmentGetHandler = async (req, res) => {
     console.log(`method: GET | handler: enrollmenthandler`);
-    res.render('enrollment', { title: 'Enrollment Form', status: "success" });
-}
+    let options = { title: 'Enrollment Form', success: true, edit: false };
+    
+    if (req.query.edit) {
+        console.log(`Form is in edit mode`);
+        let formId = req.query.id;
+        console.log(`Received FormId: ${formId}`);
+        let data = await DataModel.findById(formId);
+        console.log(`RetrievedData: ${JSON.stringify(data)}`);
+        if (!data) {
+            console.log(`Data not found`);
+            res.json({ message: 'Data not found' });
+        } else {
+            options.edit = true;
+            options.data = data;
+            res.render('enrollment', options);
+        }
+    } else {
+        res.render('enrollment', options);
+    }
+};
+
+
+
 
 const enrollmentPostHandler = async (req, res) => {
     console.log(`method: POST | handler: enrollmenthandler`);
@@ -84,7 +106,7 @@ const enrollmentPostHandler = async (req, res) => {
     const nextId = await getNextSequenceValue('enrollmentId');
 
     // Generate the id based on the district, counterId and associationName
-    const district = testData.addresses[0].district;
+    const district = testData.addresses.district;
     const associationName = testData.association_name;
     const generateId = `${nextId}-${district}-${associationName}`;
 
@@ -132,9 +154,8 @@ const information2PostHandler = (req, res) => {
     res.json({ success: true, redirect: '/evaluation' })
 }
 
-const evaluationGetHandler = (req, res) => {
+const evaluationGetHandler = async (req, res) => {
     console.log(`method: GET | handler: evaluationhandler`);
-
     let evaluationConfigObject = Config['configs']["evaluation"];
     res.render('evaluation', { title: 'Evaluation Form', options: evaluationConfigObject });
 }
@@ -144,7 +165,7 @@ const evaluationPostHandler = async (req, res) => {
     let postData = req.body;
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
-    console.log(mergedData);
+    console.log(JSON.stringify(mergedData));
 
     var verdict = await saveToDatabase(mergedData, debug = false);
     if (verdict.saved) {
@@ -161,7 +182,7 @@ const successGetHandler = (req, res) => {
 
 router.get('/view/:id', async (req, res) => {
     try {
-        const formData = await DataModel.findOne({ id: req.params.id });
+        const formData = await DataModel.findOne({ _id: req.params.id });
         if (!formData) {
             return res.status(404).render('404', { message: 'Form not found' });
         }
@@ -178,11 +199,11 @@ router.get('/generate-dummy', (req, res) => {
         const dummyData = generateDummyData();
         createExcelFile(dummyData, 'dummy_data.xlsx');
         console.log('Excel file with dummy data created successfully.');
-        res.json({ success: true});
+        res.json({ success: true });
     } catch (err) {
-        res.json( {success: false, error: err });
+        res.json({ success: false, error: err });
     }
-    
+
 })
 
 router.get('/import', (req, res) => {
@@ -235,6 +256,12 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
                 }
             };
 
+            if (data.middlename !== '') {
+                data.fullname = data.firstname + ' ' + data.middlename + ' ' + data.lastname;
+            } else {
+                data.fullname = data.firstname + ' ' + data.lastname;
+            }
+
             const nextId = await getNextSequenceValue('enrollmentId');
 
             // Generate the id based on the district, counterId and associationName
@@ -262,8 +289,8 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
 
 router.get('/', indexGetHandler)
 router.get('/success', successGetHandler);
-router.get('/search', searchGetHandler);
-router.get('/search1', searchViewGetHandler);
+// router.get('/search', searchGetHandler);
+router.get('/search', searchViewGetHandler);
 
 router.get('/session-data', sessionDataGetHandler)
 router.get('/settings', settingsGetHandler)

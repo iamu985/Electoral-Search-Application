@@ -13,7 +13,6 @@ const familyMemberSchema = new Schema({
     name_of_institution: String,
     state_of_institution: String,
     club: String,
-    beneficiary_scheme: [String]
   },
   associated_association: {
     name_of_organization: String,
@@ -27,6 +26,7 @@ const SchemaObject = {
   firstname: { type: String, required: true },
   middlename: String,
   lastname: { type: String, required: true },
+  fullname: { type: String },
   mobile_number: { type: String, required: true, unique: true },
   dob: { type: Date, required: true },
   caste: String,
@@ -42,7 +42,7 @@ const SchemaObject = {
     nature_of_job: { type: String },
     employment_organization_name: String
   },
-  address: {
+  addresses: {
     block: String,
     district: String,
     municipality: String,
@@ -53,7 +53,8 @@ const SchemaObject = {
   },
   family_information: {
     family_type: String,
-    family_members: [familyMemberSchema]
+    family_members: [familyMemberSchema],
+    beneficiary_scheme: [String]
   },
   additional_details: {
     trade_union_right_on: String,
@@ -81,19 +82,6 @@ const SchemaObject = {
 };
 
 const schema = new Schema(SchemaObject);
-
-// Define the virtual property 'fullname'
-schema.virtual('fullname').get(function() {
-  if (this.middlename) {
-    return `${this.firstname} ${this.middlename} ${this.lastname}`;
-  } else {
-    return `${this.firstname} ${this.lastname}`;
-  }
-});
-
-// Ensure virtual fields are serialized.
-schema.set('toJSON', { virtuals: true });
-schema.set('toObject', { virtuals: true });
 
 const DataModel = mongoose.model('DataModel', schema);
 
