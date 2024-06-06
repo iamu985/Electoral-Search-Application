@@ -83,6 +83,12 @@ const createWindow = () => {
               click: () => {
                 mainWindow.loadURL('http://localhost:3000/evaluation')
               }
+            },
+            {
+              label: 'View Edit',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/view/edit');
+              }
             }
           ]
         }

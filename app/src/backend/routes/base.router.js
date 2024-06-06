@@ -5,7 +5,7 @@ const fs = require('fs');
 const XLSX = require('xlsx');
 
 const { saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery } = require('../../utils/utilities');
-const { generateDummyData, createExcelFile } = require('../../utils/dev-utilities');
+const { createExcelFile } = require('../../utils/dev-utilities');
 
 const ConfigPath = path.join(__dirname, '../../../config/conf.json'); // config directory
 
@@ -25,6 +25,13 @@ const uploadFile = require('../handlers');
 const indexGetHandler = (req, res) => {
     console.log(`method: GET | handler: indexhandler`);
     res.render('index', { title: 'Index Page' });
+}
+
+const viewEditHandler = async (req, res) => {
+    console.log(`method: EDIT | handler: viewedithandler`);
+    const formId = req.params.id;
+    const data = await DataModel.findById(formId);
+    return res.render('view-edit', { title: 'View Edit', data: data });
 }
 
 const searchGetHandler = async (req, res) => {
@@ -95,8 +102,6 @@ const enrollmentGetHandler = async (req, res) => {
 };
 
 
-
-
 const enrollmentPostHandler = async (req, res) => {
     console.log(`method: POST | handler: enrollmenthandler`);
     let testData = req.body;
@@ -118,9 +123,49 @@ const enrollmentPostHandler = async (req, res) => {
 };
 
 
+const enrollmentPutHandler = async (req, res) => {
+    console.log('method: PUT | handler: enrollmentPutHandler');
+    const designations = Config.configs.designations;
+    const updateData = req.body;
+    const formId = req.params.id;
+    console.log(`ReceivedFormID: ${formId}`);
+    console.log(`UpdateData: ${JSON.stringify(updateData)}`);
+
+    try {
+        // Update the data and return the updated document
+        const response = await DataModel.findByIdAndUpdate(formId, updateData, { new: true });
+        console.log(`UpdatedResponse: ${JSON.stringify(response)}`);
+        if (!response) {
+            res.status(404).render('enrollment', { title: 'Enrollment Form', success: false, message: 'Could not find the ID.' });
+        } else {
+            req.session.data = response;
+            console.log('Saved in session');
+            res.status(200).render('information-1', { title: 'Detailed Information I', data: req.session.data, designations: designations, status: 'success' });
+        }
+    } catch (err) {
+        console.error(`Received Error: ${err}`);
+        res.status(500).render('enrollment', { title: 'Enrollment Form', success: false, message: `Received Error: ${err.message}` });
+    }
+};
+
+
+
+
 const information1GetHandler = (req, res) => {
     console.log(`method: GET | handler: information1handler`);
     let designations = Config.configs.designations;
+    options = { 
+        title: 'Detailed Information I',
+        designations: designations,
+        status: "success"
+    }
+
+    if (req.query.edit) {
+        console.log(`Information 1 form is in edit mode`);
+        let formId = req.query.id;
+        console.log(`Received FormId: ${formId}`);
+    }
+    
     if (req.session.data) {
         res.render('information-1', { title: 'Detailed Information I', data: req.session.data, designations: designations, status: "success" })
     } else {
@@ -180,6 +225,8 @@ const successGetHandler = (req, res) => {
     res.render('success', { title: 'Success' });
 }
 
+
+router.get('/view/edit/:id', viewEditHandler);
 router.get('/view/:id', async (req, res) => {
     try {
         const formData = await DataModel.findOne({ _id: req.params.id });
@@ -299,6 +346,7 @@ router.get('/settings', settingsGetHandler)
 router.route('/enrollment')
     .get(enrollmentGetHandler)
     .post(enrollmentPostHandler)
+router.put('/enrollment/:id', enrollmentPutHandler);
 
 
 router.route('/information1')

@@ -51,7 +51,7 @@ const searchAPIRequestHandler = async (req, res) => {
   } catch (err) {
     res.status(500).json({ success: false, message: 'Server error', error: err.message });
   }
-    
+
 }
 
 const isUniqueMobileNumberAPIHandler = async (req, res) => {
@@ -149,6 +149,35 @@ const settingsDeleteAPIRequestHandler = async (req, res) => {
   }
 }
 
+const getFormDataByIdAPIHandler = async (req, res) => {
+  console.log(`method: GET | handler: apigetfromdatabyid`);
+  try {
+    let formId = req.params.id;
+    console.log(`ReceivedFormID: ${formId}`);
+    const returnData = await DataModel.findById(formId);
+    res.status(200).json({ data: returnData });
+  } catch (err) {
+    res.status(400).json({ data: { detail: err } });
+  }
+}
+
+const updateDataByIdAPIHandler = async (req, res) => {
+  console.log(`method: POST | handler: updatedatabyidapihandler`);
+  const formId = req.params.id;
+  const updateData = req.body;
+  try {
+    const response = await DataModel.findByIdAndUpdate(formId, updateData);
+    if (response) {
+      res.status(200).json({ success: true, data: response });
+    } else {
+      res.status(400).json({success: false, detail: {message: 'Could not find the data', formId: formId, requestData: updateData}});
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({success:false, details: err});
+  }
+}
+
 // API Routes
 apiRouter.get('/', apiIndex);
 apiRouter.get('/search', searchAPIRequestHandler);
@@ -159,5 +188,7 @@ apiRouter.get('/settings/search', settingsSearchAPIRequestHandler);
 apiRouter.patch('/settings/edit/:id', settingsEditAPIRequestHandler);
 apiRouter.delete('/settings/delete/:id', settingsDeleteAPIRequestHandler);
 apiRouter.get('/settings/getall', settingsAPIGetAllValues);
+apiRouter.get('/getDataById/:id', getFormDataByIdAPIHandler);
+apiRouter.post('/updateDataById/:id', updateDataByIdAPIHandler);
 
 module.exports = apiRouter;
