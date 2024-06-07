@@ -139,6 +139,25 @@ const buildDbQuery = (requestQuery, fieldMapping) => {
 };
 
 
+const splitFullName = (fullname) => {
+    const parts = fullname.split(' ');
+    switch (parts.length) {
+        case 1:
+            return { firstname: parts[0], middlename: '', lastname: '' };
+            break;
+        case 2:
+            return { firstname: parts[0], middlename: '', lastname: parts[1]};
+            break;
+        case 3:
+            return { firstname: parts[0], middlename: parts[1], lastname: parts[2]};
+            break;
+        default:
+            console.error(`Received more than three parts as fullname for ${fullname}`);
+            throw 'Cannot parse fullname';
+    }
+}
 
 
-module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery }
+
+
+module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery, splitFullName }

@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const XLSX = require('xlsx');
 
-const { saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery } = require('../../utils/utilities');
+const { saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery, splitFullName } = require('../../utils/utilities');
 const { createExcelFile } = require('../../utils/dev-utilities');
 
 const ConfigPath = path.join(__dirname, '../../../config/conf.json'); // config directory
@@ -240,38 +240,26 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
 
         // Use a loop instead of map to handle async/await
         const parsedData = [];
+        let parsedNameData;
         for (const row of worksheet) {
+            try {
+                parsedNameData = splitFullName(row['Full Name']);
+            } catch (err) {
+                console.error(err);
+                res.status(400).json({success: false, error: err})
+            }
             var data = {
-                firstname: row['First Name'],
-                middlename: row['Middle Name'],
-                lastname: row['Last Name'],
+                firstname: parsedNameData.firstname,
+                middlename: parsedNameData.middlename,
+                lastname: parsedNameData.lastname,
                 mobile_number: row['Mobile Number'],
-                dob: new Date(row['Date of Birth']),
-                caste: row['Caste'],
-                religion: row['Religion'],
                 status_of_employment: row['Status of Employment'],
-                number_of_family_members: row['Number of Family Members'],
-                number_of_electors: row['Number of Electors'],
-                number_of_new_electors: row['Number of New Electors'],
                 association_name: row['Association Name'],
                 job_details: {
-                    designation: row['Designation'],
-                    date_of_joining: new Date(row['Date of Joining']),
                     nature_of_job: row['Nature of Job'],
-                    employment_organization_name: row['Employment Organization Name']
                 },
-                family_information: {
-                    family_type: row['Family Type'],
-                    family_members: JSON.parse(row['Family Members']) // Assuming Family Members is a JSON string
-                },
-                evaluation: {
-                    role_play: {
-                        organization: row['Role Play Organization'],
-                        working_area: row['Working Area'],
-                        concern_association: row['Concern Association'],
-                        regular_manner: row['Regular Manner']
-                    },
-                    questions: JSON.parse(row['Questions']) // Assuming Questions is a JSON string
+                addresses: {
+                    landmark: row['Landmark']
                 }
             };
 
@@ -284,9 +272,8 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
             const nextId = await getNextSequenceValue('enrollmentId');
 
             // Generate the id based on the district, counterId and associationName
-            const district = data.family_information.family_members[0].district;
             const associationName = data.association_name;
-            const generateId = `${nextId}-${district}-${associationName}`;
+            const generateId = `${nextId}-${associationName}`;
 
             data.id = generateId;
 
