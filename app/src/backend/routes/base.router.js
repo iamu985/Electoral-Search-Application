@@ -123,34 +123,6 @@ const enrollmentPostHandler = async (req, res) => {
 };
 
 
-const enrollmentPutHandler = async (req, res) => {
-    console.log('method: PUT | handler: enrollmentPutHandler');
-    const designations = Config.configs.designations;
-    const updateData = req.body;
-    const formId = req.params.id;
-    console.log(`ReceivedFormID: ${formId}`);
-    console.log(`UpdateData: ${JSON.stringify(updateData)}`);
-
-    try {
-        // Update the data and return the updated document
-        const response = await DataModel.findByIdAndUpdate(formId, updateData, { new: true });
-        console.log(`UpdatedResponse: ${JSON.stringify(response)}`);
-        if (!response) {
-            res.status(404).render('enrollment', { title: 'Enrollment Form', success: false, message: 'Could not find the ID.' });
-        } else {
-            req.session.data = response;
-            console.log('Saved in session');
-            res.status(200).render('information-1', { title: 'Detailed Information I', data: req.session.data, designations: designations, status: 'success' });
-        }
-    } catch (err) {
-        console.error(`Received Error: ${err}`);
-        res.status(500).render('enrollment', { title: 'Enrollment Form', success: false, message: `Received Error: ${err.message}` });
-    }
-};
-
-
-
-
 const information1GetHandler = (req, res) => {
     console.log(`method: GET | handler: information1handler`);
     let designations = Config.configs.designations;
@@ -346,7 +318,6 @@ router.get('/settings', settingsGetHandler)
 router.route('/enrollment')
     .get(enrollmentGetHandler)
     .post(enrollmentPostHandler)
-router.put('/enrollment/:id', enrollmentPutHandler);
 
 
 router.route('/information1')
