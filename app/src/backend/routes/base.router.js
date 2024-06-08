@@ -56,9 +56,14 @@ const searchGetHandler = async (req, res) => {
     }
 }
 
-const searchViewGetHandler = (req, res) => {
+const searchViewGetHandler = async (req, res) => {
     console.log(`method: GET | handler: searchViewGetHandler`);
-    res.render('search', { title: 'Search Page' });
+    const alldata = await DataModel.find();
+    if (alldata) {
+        res.render('search', { title: 'Search Page', data: alldata });
+    } else {
+        res.render('search', { title: 'Search Page'})
+    }
 }
 
 

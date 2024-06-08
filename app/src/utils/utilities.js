@@ -87,56 +87,31 @@ const getNextSequenceValue = async (sequenceName) => {
 };
 
 
-const buildDbQuery = (requestQuery, fieldMapping) => {
-    console.log(`buildDbQuery utility function invoked.`);
-    let parsedRequest = JSON.parse(requestQuery);
-    console.log('RequestQuery: ' + JSON.stringify(parsedRequest, null, 2));
-    let query = {};
-
-    parsedRequest.forEach(element => {
-        const field = fieldMapping[element.search_field];
-        const value = element.search_value;
-        console.log(`SearchField: ${field} | SearchValue: ${value}`);
-
-        if (!field || !value) {
-            console.warn(`Skipping invalid search parameter: field=${field}, value=${value}`);
-            return { success: false, errorMessage: `Skipping invalid search parameter: field=${field}, value=${value}`}; // Skip invalid entries
-        }
-
-        switch (element.search_option) {
-            case 'ct':
-                query[field] = { $regex: value, $options: "i" };
-                break;
-            case 'ies':
-                query[field] = { $regex: new RegExp(`^${value}$`, "i") };
-                break;
-            case 'iec':
-                query[field] = value;
-                break;
-            case 'sw':
-                query[field] = { $regex: '^' + value, $options: "i" };
-                break;
-            case 'gt':
-                query[field] = { $gt: value };
-                break;
-            case 'gte':
-                query[field] = { $gte: value };
-                break;
-            case 'lt':
-                query[field] = { $lt: value };
-                break;
-            case 'lte':
-                query[field] = { $lte: value };
-                break;
-            default:
-                console.warn(`Unknown search option: ${element.search_option}`);
-                return { success: false, errorMessage: `Unknown search option: ${element.search_option}` }
-        }
-    });
-
-    console.log(`Query built: ${JSON.stringify(query, null, 2)}`);
-    return { success: true, query: query };
-};
+const buildQueryCondition = (field, option, value) => {
+    console.log(`BuildQueryCondition Invoked:\nField:${field}, Option: ${option}, Value: ${value}`);
+    switch (option) {
+      case 'ct':
+        return { [field]: { $regex: value, $options: 'i' } };
+      case 'iec':
+        return { [field]: value };
+      case 'ies':
+        return { [field]: { $regex: `${value}$`, $options: 'i' } };
+      case 'sw':
+        return { [field]: { $regex: `^${value}`, $options: 'i' } };
+      case 'gt':
+        return { [field]: { $gt: value } };
+      case 'gte':
+        return { [field]: { $gte: value } };
+      case 'lt':
+        return { [field]: { $lt: value } };
+      case 'lte':
+        return { [field]: { $lte: value } };
+      case 'ne':
+        return { [field]: { $ne: value } };
+      default:
+        return {};
+    }
+  };
 
 
 const splitFullName = (fullname) => {
@@ -160,4 +135,4 @@ const splitFullName = (fullname) => {
 
 
 
-module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery, splitFullName }
+module.exports = { saveData, readData, saveToDatabase, deepMerge, getNextSequenceValue, buildQueryCondition, splitFullName }
