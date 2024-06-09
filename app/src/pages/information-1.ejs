@@ -58,7 +58,7 @@
             <div class="form-group mb-3">
               <label class="py-2" for="designation">Designation <span class="text-danger">*</span></label>
               <select name="designation" id="designation" class="form-control custom-select" required>
-                <% designations.forEach(designation => { %>
+                <% options.designations.forEach(designation => { %>
                 <option value="<%= designation %>"><%= designation %></option>
                 <% }) %>
               </select>

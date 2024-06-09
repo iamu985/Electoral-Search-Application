@@ -76,160 +76,193 @@ const searchAPIRequestHandler = async (req, res) => {
 
   } catch (err) {
     console.error(`Error Received: ${err}`);
-    res.json({success: false, error: err});
+    res.json({ success: false, error: err });
   }
 }
 
 const isUniqueMobileNumberAPIHandler = async (req, res) => {
-    console.log(`Method: GET | handler: isUniquePhoneNumberHandler`);
-    try {
-      const query = { mobile_number: req.params.mobileNumber };
-      console.log(query);
-      const results = await DataModel.find(query);
-      console.log(results);
+  console.log(`Method: GET | handler: isUniquePhoneNumberHandler`);
+  try {
+    const query = { mobile_number: req.params.mobileNumber };
+    console.log(query);
+    const results = await DataModel.find(query);
+    console.log(results);
 
-      if (results.length === 0) {
-        res.json({ success: true, isUnique: true });
-      } else {
-        res.json({ success: true, isUnique: false });
+    if (results.length === 0) {
+      res.json({ success: true, isUnique: true });
+    } else {
+      res.json({ success: true, isUnique: false });
+    }
+  } catch (error) {
+    console.error('Error checking phone number uniqueness:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
+// Settings API Handlers
+const settingsSearchAPIRequestHandler = async (req, res) => {
+  console.log(`method: GET | handler: apisettingssearchhandler`)
+  try {
+    let entityType = req.query.entity_type;
+    let query = {};
+    let value = req.query.value;
+
+    if (value !== null) {
+      query = { entity_type: entityType, value: { $regex: value, $options: "i" } };
+    } else {
+      query = { entity_type: entityType };
+    }
+
+    console.log(`Query: ${JSON.stringify(query)}`);
+    const results = await SettingsModel.find(query);
+    console.log(`Results: ${JSON.stringify(results)}`);
+    res.json({ success: true, data: results });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error searching values', error: error.message });
+  }
+}
+
+const settingsAPIGetAllValues = async (req, res) => {
+  try {
+    let entityType = req.body.entity_type;
+    let query = { entity_type: entityType };
+
+    const results = await SettingsModel.find(query);
+    res.json({ success: true, data: results });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error fetching all values' });
+  }
+}
+
+const settingsPostAPIRequestHandler = async (req, res) => {
+  try {
+    const { entityType, value } = req.body;
+    const postData = {
+      entity_type: entityType,
+      value: value
+    }
+    const newSetting = new SettingsModel(postData);
+    await newSetting.save();
+
+    // get all entity values
+    const query = { entity_type: entityType };
+    const results = await SettingsModel.find(query);
+    res.json({ success: true, data: results });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error adding value', error: error.message });
+  }
+}
+
+const settingsEditAPIRequestHandler = async (req, res) => {
+  console.log('Method: PATCH | handler: apisettingsedithandler')
+  try {
+    const id = req.params.id;
+    const value = req.body;
+    console.log(`ValueReceived: ${value}`);
+    await SettingsModel.findByIdAndUpdate(id, value);
+    res.json({ success: true, return: { id: id, value: value } });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error updating value', error: error.message });
+  }
+}
+
+const settingsDeleteAPIRequestHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await SettingsModel.findByIdAndDelete(id);
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error deleting value', error: error.message });
+  }
+}
+
+const getFormDataByIdAPIHandler = async (req, res) => {
+  console.log(`method: GET | handler: apigetfromdatabyid`);
+  try {
+    let formId = req.params.id;
+    console.log(`ReceivedFormID: ${formId}`);
+    const returnData = await DataModel.findById(formId);
+    res.status(200).json({ data: returnData });
+  } catch (err) {
+    res.status(400).json({ data: { detail: err } });
+  }
+}
+
+const updateDataByIdAPIHandler = async (req, res) => {
+  console.log(`method: POST | handler: updatedatabyidapihandler`);
+  const formId = req.params.id;
+  const updateData = req.body;
+  try {
+    const response = await DataModel.findByIdAndUpdate(formId, updateData);
+    if (response) {
+      res.status(200).json({ success: true, data: response });
+    } else {
+      res.status(400).json({ success: false, detail: { message: 'Could not find the data', formId: formId, requestData: updateData } });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ success: false, details: err });
+  }
+}
+
+const getAllDataAPIHandler = async (req, res) => {
+  console.log(`method: GET | handler: getalldataapihandler`);
+  try {
+    const data = await DataModel.find();
+    if (data) {
+      res.status(200).json({ success: true, data: data });
+    } else {
+      res.status(400).json({ success: false, error: 'No data found' });
+    }
+  } catch (err) {
+    res.status(400).json({ success: false, details: err });
+  }
+}
+const settingsImportAPIHandler = async (req, res) => {
+  console.log(`method: POST | handler: settingsImportAPIHandler`);
+  try {
+    const data = req.body.data;
+    let bulkOps = [];
+
+    data.forEach(item => {
+      for (const key in item) {
+        if (item.hasOwnProperty(key)) {
+          const entityType = key.toLowerCase();
+          const value = item[key];
+          bulkOps.push({
+            updateOne: {
+              filter: { entity_type: entityType, value },
+              update: { entity_type: entityType, value },
+              upsert: true
+            }
+          });
+        }
       }
-    } catch (error) {
-      console.error('Error checking phone number uniqueness:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
+    });
+
+    // Assuming you have a Mongoose model called 'Setting'
+    await SettingsModel.bulkWrite(bulkOps);
+
+    res.status(200).json({ success: true, message: 'Data imported successfully' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
   }
+};
 
-  // Settings API Handlers
-  const settingsSearchAPIRequestHandler = async (req, res) => {
-    console.log(`method: GET | handler: apisettingssearchhandler`)
-    try {
-      let entityType = req.query.entity_type;
-      let query = {};
-      let value = req.query.value;
 
-      if (value !== null) {
-        query = { entity_type: entityType, value: { $regex: value, $options: "i" } };
-      } else {
-        query = { entity_type: entityType };
-      }
+apiRouter.post('/settings/import', settingsImportAPIHandler);
+// API Routes
+apiRouter.get('/', apiIndex);
+apiRouter.get('/search', searchAPIRequestHandler);
+apiRouter.get('/isUniqueMobileNumber/:mobileNumber', isUniqueMobileNumberAPIHandler);
 
-      console.log(`Query: ${JSON.stringify(query)}`);
-      const results = await SettingsModel.find(query);
-      console.log(`Results: ${JSON.stringify(results)}`);
-      res.json({ success: true, data: results });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error searching values', error: error.message });
-    }
-  }
+apiRouter.post('/settings/add', settingsPostAPIRequestHandler);
+apiRouter.get('/settings/search', settingsSearchAPIRequestHandler);
+apiRouter.patch('/settings/edit/:id', settingsEditAPIRequestHandler);
+apiRouter.delete('/settings/delete/:id', settingsDeleteAPIRequestHandler);
+apiRouter.get('/settings/getall', settingsAPIGetAllValues);
+apiRouter.get('/getDataById/:id', getFormDataByIdAPIHandler);
+apiRouter.post('/updateDataById/:id', updateDataByIdAPIHandler);
+apiRouter.get('/getAllData', getAllDataAPIHandler);
 
-  const settingsAPIGetAllValues = async (req, res) => {
-    try {
-      let entityType = req.body.entity_type;
-      let query = { entity_type: entityType };
-
-      const results = await SettingsModel.find(query);
-      res.json({ success: true, data: results });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error fetching all values' });
-    }
-  }
-
-  const settingsPostAPIRequestHandler = async (req, res) => {
-    try {
-      const { entityType, value } = req.body;
-      const postData = {
-        entity_type: entityType,
-        value: value
-      }
-      const newSetting = new SettingsModel(postData);
-      await newSetting.save();
-
-      // get all entity values
-      const query = { entity_type: entityType };
-      const results = await SettingsModel.find(query);
-      res.json({ success: true, data: results });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error adding value', error: error.message });
-    }
-  }
-
-  const settingsEditAPIRequestHandler = async (req, res) => {
-    console.log('Method: PATCH | handler: apisettingsedithandler')
-    try {
-      const id = req.params.id;
-      const value = req.body.value;
-      await SettingsModel.findByIdAndUpdate(id, value);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error updating value', error: error.message });
-    }
-  }
-
-  const settingsDeleteAPIRequestHandler = async (req, res) => {
-    try {
-      const { id } = req.params;
-      await SettingsModel.findByIdAndDelete(id);
-      res.json({ success: true });
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error deleting value', error: error.message });
-    }
-  }
-
-  const getFormDataByIdAPIHandler = async (req, res) => {
-    console.log(`method: GET | handler: apigetfromdatabyid`);
-    try {
-      let formId = req.params.id;
-      console.log(`ReceivedFormID: ${formId}`);
-      const returnData = await DataModel.findById(formId);
-      res.status(200).json({ data: returnData });
-    } catch (err) {
-      res.status(400).json({ data: { detail: err } });
-    }
-  }
-
-  const updateDataByIdAPIHandler = async (req, res) => {
-    console.log(`method: POST | handler: updatedatabyidapihandler`);
-    const formId = req.params.id;
-    const updateData = req.body;
-    try {
-      const response = await DataModel.findByIdAndUpdate(formId, updateData);
-      if (response) {
-        res.status(200).json({ success: true, data: response });
-      } else {
-        res.status(400).json({ success: false, detail: { message: 'Could not find the data', formId: formId, requestData: updateData } });
-      }
-    } catch (err) {
-      console.log(err);
-      res.status(400).json({ success: false, details: err });
-    }
-  }
-
-  const getAllDataAPIHandler = async (req, res) => {
-    console.log(`method: GET | handler: getalldataapihandler`);
-    try {
-      const data = await DataModel.find();
-      if (data) {
-        res.status(200).json({ success: true, data: data });
-      } else {
-        res.status(400).json({ success: false, error: 'No data found' });
-      }
-    } catch (err) {
-      res.status(400).json({ success: false, details: err });
-    }
-  }
-
-  // API Routes
-  apiRouter.get('/', apiIndex);
-  apiRouter.get('/search', searchAPIRequestHandler);
-  apiRouter.get('/isUniqueMobileNumber/:mobileNumber', isUniqueMobileNumberAPIHandler);
-
-  apiRouter.post('/settings/add', settingsPostAPIRequestHandler);
-  apiRouter.get('/settings/search', settingsSearchAPIRequestHandler);
-  apiRouter.patch('/settings/edit/:id', settingsEditAPIRequestHandler);
-  apiRouter.delete('/settings/delete/:id', settingsDeleteAPIRequestHandler);
-  apiRouter.get('/settings/getall', settingsAPIGetAllValues);
-  apiRouter.get('/getDataById/:id', getFormDataByIdAPIHandler);
-  apiRouter.post('/updateDataById/:id', updateDataByIdAPIHandler);
-  apiRouter.get('/getAllData', getAllDataAPIHandler);
-
-  module.exports = apiRouter;
+module.exports = apiRouter;

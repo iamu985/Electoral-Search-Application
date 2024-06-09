@@ -62,7 +62,7 @@ const searchViewGetHandler = async (req, res) => {
     if (alldata) {
         res.render('search', { title: 'Search Page', data: alldata });
     } else {
-        res.render('search', { title: 'Search Page'})
+        res.render('search', { title: 'Search Page' })
     }
 }
 
@@ -85,25 +85,22 @@ const settingsGetHandler = async (req, res) => {
 
 const enrollmentGetHandler = async (req, res) => {
     console.log(`method: GET | handler: enrollmenthandler`);
-    let options = { title: 'Enrollment Form', success: true, edit: false };
+    let options = { title: 'Enrollment Form', success: true };
+
+    let associations = await SettingsModel.find({ entity_type: 'association' });
+    let districts = await SettingsModel.find({ entity_type: 'district' });
+    let blocks = await SettingsModel.find({ entity_type: 'block' });
+    let municipalities = await SettingsModel.find({ entity_type: 'municipality' });
+    let gps = await SettingsModel.find({ entity_type: 'gp' });
+
+    options.associations = associations;
+    options.districts = districts;
+    options.blocks = blocks;
+    options.municipalities = municipalities
+    options.gps = gps;
+
+    res.render('enrollment', { options: options });
     
-    if (req.query.edit) {
-        console.log(`Form is in edit mode`);
-        let formId = req.query.id;
-        console.log(`Received FormId: ${formId}`);
-        let data = await DataModel.findById(formId);
-        console.log(`RetrievedData: ${JSON.stringify(data)}`);
-        if (!data) {
-            console.log(`Data not found`);
-            res.json({ message: 'Data not found' });
-        } else {
-            options.edit = true;
-            options.data = data;
-            res.render('enrollment', options);
-        }
-    } else {
-        res.render('enrollment', options);
-    }
 };
 
 
@@ -128,10 +125,10 @@ const enrollmentPostHandler = async (req, res) => {
 };
 
 
-const information1GetHandler = (req, res) => {
+const information1GetHandler = async (req, res) => {
     console.log(`method: GET | handler: information1handler`);
-    let designations = Config.configs.designations;
-    options = { 
+    let designations = await SettingsModel.find({ entity_type: 'designation' });
+    options = {
         title: 'Detailed Information I',
         designations: designations,
         status: "success"
@@ -142,7 +139,7 @@ const information1GetHandler = (req, res) => {
         let formId = req.query.id;
         console.log(`Received FormId: ${formId}`);
     }
-    
+
     if (req.session.data) {
         res.render('information-1', { title: 'Detailed Information I', data: req.session.data, designations: designations, status: "success" })
     } else {
@@ -251,7 +248,7 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
                 parsedNameData = splitFullName(row['Full Name']);
             } catch (err) {
                 console.error(err);
-                res.status(400).json({success: false, error: err})
+                res.status(400).json({ success: false, error: err })
             }
             var data = {
                 firstname: parsedNameData.firstname,
@@ -294,6 +291,8 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
         res.status(500).json({ success: false, message: 'Error importing data', error: error.message });
     }
 });
+
+
 
 
 
