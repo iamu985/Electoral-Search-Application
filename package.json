@@ -5,7 +5,8 @@
     "express": "^4.19.2",
     "express-session": "^1.18.0",
     "mongoose": "^8.3.3",
-    "parsleyjs": "^2.9.2"
+    "parsleyjs": "^2.9.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "nodemon": "^3.1.0"

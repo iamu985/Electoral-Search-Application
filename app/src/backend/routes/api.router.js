@@ -1,6 +1,6 @@
 const express = require('express');
 const apiRouter = express.Router();
-const { buildQueryCondition } = require('../../utils/utilities');
+const { buildQueryCondition, generateExcel } = require('../../utils/utilities');
 const DataModel = require('../../models/Schema');
 const SettingsModel = require('../../models/Settings');
 
@@ -249,6 +249,28 @@ const settingsImportAPIHandler = async (req, res) => {
   }
 };
 
+
+apiRouter.post('/download-excel', (req, res) => {
+  console.log('method: POST | handler: downloadexcel');
+  const data = req.body;
+
+  try {
+    const filePath = generateExcel(data);
+    console.log(`File generated at: ${filePath}`);
+    res.download(filePath, (err) => {
+      if (err) {
+        console.error('Error while sending the file:', err);
+        res.status(500).send('Error while downloading the file');
+      } else {
+        // Remove the file after download
+        fs.unlinkSync(filePath);
+      }
+    });
+  } catch (error) {
+    console.error('Error generating Excel file:', error);
+    res.status(500).send('Error generating Excel file');
+  }
+});
 
 apiRouter.post('/settings/import', settingsImportAPIHandler);
 // API Routes

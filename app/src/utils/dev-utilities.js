@@ -1,5 +1,4 @@
 const XLSX = require('xlsx');
-const { faker } = require('@faker-js/faker');
 const fs = require('fs');
 
 function generateDummyData(number=10) {

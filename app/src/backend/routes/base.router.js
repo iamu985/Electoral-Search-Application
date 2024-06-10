@@ -148,6 +148,7 @@ const information1GetHandler = async (req, res) => {
 
     if (req.query.edit) {
         console.log(`Information 1 form is in edit mode`);
+        
         let formId = req.query.id;
         console.log(`Received FormId: ${formId}`);
     }
