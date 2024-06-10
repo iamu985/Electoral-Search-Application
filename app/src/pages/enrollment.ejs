@@ -52,8 +52,8 @@
               <div class="mt-1">
                 <label class="py-2" for="associationName">Name of the Association <span class="text-danger">*</span></label>
                 <select name="association_name" id="associationName" class="form-control custom-select" required>
-                  <% options.association.forEach(association => { %>
-                    <option value="<%= association %>"><%= association %></option>
+                  <% options.associations.forEach(association => { %>
+                    <option value="<%= association.value %>"><%= association.value %></option>
                   <% }) %>
                 </select>
               </div>
@@ -76,7 +76,7 @@
                   <label for="districtName">District <span class="text-danger">*</span></label>
                   <select name="district" id="districtName" class="form-control mx-3 custom-select" required>
                     <% options.districts.forEach(district => { %>
-                      <option value="<%= district %>"><%= district %></option>
+                      <option value="<%= district.value %>"><%= district.value %></option>
                     <% }) %>
                   </select>
                 </div>
@@ -84,7 +84,7 @@
                   <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
                   <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select" required>
                     <% options.municipalities.forEach(municipality => {%>
-                      <option value="<%= municipality %>"><%= municipality %></option>
+                      <option value="<%= municipality.value %>"><%= municipality.value %></option>
                     <% }) %>
                   </select>
                 </div>
@@ -92,7 +92,7 @@
                   <label for="blockName">Block <span class="text-danger">*</span></label>
                   <select name="block" id="blockName" class="form-control mx-3 custom-select" required>
                     <% options.blocks.forEach(block => { %>
-                      <option value="<%= block %>"><%= block %></option>
+                      <option value="<%= block.value %>"><%= block.value %></option>
                     <% }) %>
                   </select>
                 </div>
@@ -100,7 +100,7 @@
                   <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
                   <select name="gp" id="gp" class="form-control mx-3 custom-select" required>
                     <% options.gps.forEach(gp => { %>
-                      <option value="<%= gp %>"><%= gp %></option>
+                      <option value="<%= gp.value %>"><%= gp.value %></option>
                     <% }) %>
                   </select>
                 </div>

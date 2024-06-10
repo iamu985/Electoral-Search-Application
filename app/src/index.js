@@ -40,7 +40,7 @@ const createWindow = () => {
   // Application Menu on the top bar
   // Temmplate 
 
-  const Debug = true;
+  const Debug = false;
 
   function getMenuTemplate(){
     if (Debug) {
@@ -99,9 +99,15 @@ const createWindow = () => {
           label: 'Menu',
           submenu: [
             {
-              label: 'Search',
+              label: 'Start Page',
               click: () => {
                 mainWindow.loadURL('http://localhost:3000/')
+              }
+            },
+            {
+              label: 'Search',
+              click: () => {
+                mainWindow.loadURL('http://localhost:3000/search')
               }
             },
             {

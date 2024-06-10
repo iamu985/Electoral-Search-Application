@@ -85,10 +85,10 @@ const settingsGetHandler = async (req, res) => {
 
 const enrollmentGetHandler = async (req, res) => {
     console.log(`method: GET | handler: enrollmenthandler`);
-    let options = { title: 'Enrollment Form', success: true };
+    let options = { success: true };
 
     let associations = await SettingsModel.find({ entity_type: 'association' });
-    let districts = await SettingsModel.find({ entity_type: 'district' });
+    let districts = await SettingsModel.find({ entity_type: 'districts' });
     let blocks = await SettingsModel.find({ entity_type: 'block' });
     let municipalities = await SettingsModel.find({ entity_type: 'municipality' });
     let gps = await SettingsModel.find({ entity_type: 'gp' });
@@ -98,8 +98,9 @@ const enrollmentGetHandler = async (req, res) => {
     options.blocks = blocks;
     options.municipalities = municipalities
     options.gps = gps;
+    console.log(JSON.stringify(options, null, 2));
 
-    res.render('enrollment', { options: options });
+    res.render('enrollment', { title: 'Enrollment Form', options: options });
     
 };
 
@@ -128,10 +129,21 @@ const enrollmentPostHandler = async (req, res) => {
 const information1GetHandler = async (req, res) => {
     console.log(`method: GET | handler: information1handler`);
     let designations = await SettingsModel.find({ entity_type: 'designation' });
+    let associations = await SettingsModel.find({ entity_type: 'association' });
+    let districts = await SettingsModel.find({ entity_type: 'districts' });
+    let blocks = await SettingsModel.find({ entity_type: 'block' });
+    let municipalities = await SettingsModel.find({ entity_type: 'municipality' });
+    let gps = await SettingsModel.find({ entity_type: 'gp' });
+
+
     options = {
-        title: 'Detailed Information I',
         designations: designations,
-        status: "success"
+        status: "success",
+        associations: associations,
+        districts: districts,
+        blocks: blocks,
+        municipalities: municipalities,
+        gps: gps
     }
 
     if (req.query.edit) {
@@ -141,7 +153,7 @@ const information1GetHandler = async (req, res) => {
     }
 
     if (req.session.data) {
-        res.render('information-1', { title: 'Detailed Information I', data: req.session.data, designations: designations, status: "success" })
+        res.render('information-1', { title: 'Detailed Information I', data: req.session.data, options: options });
     } else {
         res.redirect('/enrollment');
     }

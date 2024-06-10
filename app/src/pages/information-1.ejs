@@ -2,11 +2,6 @@
 
 <body>
   <div class="container mb-5">
-    <% if (status === 'error') { %>
-    <div class="alert alert-danger">
-      <%= errorMessage %>
-    </div>
-    <% } %>
 
     <div id="header-title" class="d-flex justify-content-center my-3">
       <h1 class="center">Detail Information</h1>
@@ -59,7 +54,7 @@
               <label class="py-2" for="designation">Designation <span class="text-danger">*</span></label>
               <select name="designation" id="designation" class="form-control custom-select" required>
                 <% options.designations.forEach(designation => { %>
-                <option value="<%= designation %>"><%= designation %></option>
+                <option value="<%= designation.value %>"><%= designation.value %></option>
                 <% }) %>
               </select>
             </div>
@@ -149,38 +144,34 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="districtName">District <span class="text-danger">*</span></label>
-                <select name="district" id="districtName" class="form-control custom-select" required>
-                  <option value="KPG">Kalimpong</option>
-                  <option value="DRJ">Darjeeling</option>
-                  <option value="KUR">Kurseong</option>
-                  <option value="TIM">Sano Thimi</option>
+                <select name="district" id="districtName" class="form-control mx-3 custom-select" required>
+                  <% options.districts.forEach(district => { %>
+                    <option value="<%= district.value %>"><%= district.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
-                <select name="municipality" id="municipalityName" class="form-control custom-select" required>
-                  <option value="Pudung">Pudung</option>
-                  <option value="Pedong">Pedong</option>
-                  <option value="Eagles Den">Eagles Den</option>
-                  <option value="Thimi">Thimi</option>
+                <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select" required>
+                  <% options.municipalities.forEach(municipality => {%>
+                    <option value="<%= municipality.value %>"><%= municipality.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="blockName">Block <span class="text-danger">*</span></label>
-                <select name="block" id="blockName" class="form-control custom-select" required>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
+                <select name="block" id="blockName" class="form-control mx-3 custom-select" required>
+                  <% options.blocks.forEach(block => { %>
+                    <option value="<%= block.value %>"><%= block.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
-                <select name="gp" id="gp" class="form-control custom-select" required>
-                  <option value="P1">P1</option>
-                  <option value="P2">P2</option>
-                  <option value="P3">P3</option>
-                  <option value="P4">P4</option>
+                <select name="gp" id="gp" class="form-control mx-3 custom-select" required>
+                  <% options.gps.forEach(gp => { %>
+                    <option value="<%= gp.value %>"><%= gp.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
@@ -268,6 +259,7 @@
       success: function(formData) {
         console.log(`FormData: ${JSON.stringify(formData)}`)
         var address = formData.addresses;
+        console.log(`Address: ${JSON.stringify(address), null, 2}`)
         $('#districtName').val(address.district);
         $('#municipalityName').val(address.municipality);
         $('#blockName').val(address.block);
