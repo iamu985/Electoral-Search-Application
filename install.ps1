@@ -23,9 +23,9 @@ if ($?) {
             Write-Output "run.ps1 converted to run.exe successfully."
 
             # Create a shortcut to run the Electron application
-            $shortcutPath = "$env:USERPROFILE\Desktop\Run-Coffee.lnk"
+            $shortcutPath = "$env:USERPROFILE\Desktop\Coffee.lnk"
             $workingDirectory = (Get-Location).Path
-            $iconPath = (Resolve-Path .\resources\logo\Coffee.png).Path
+            $iconPath = (Resolve-Path .\resources\logo\Coffee.ico).Path
 
             if (Test-Path $iconPath) {
                 $wScriptShell = New-Object -ComObject WScript.Shell
