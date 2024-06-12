@@ -16,7 +16,7 @@ if ($?) {
         # Convert run.ps1 to run.exe
         Write-Output "Converting run.ps1 to run.exe..."
         $runPs1Path = (Resolve-Path .\run.ps1).Path
-        $runExePath = (Resolve-Path .\run.exe).Path
+        $runExePath = (Resolve-Path .\Coffee.exe).Path
         Invoke-PS2EXE $runPs1Path $runExePath
 
         if ($?) {
