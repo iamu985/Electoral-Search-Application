@@ -15,13 +15,13 @@ let mainWindow;
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 1200,
   });
 
   // Start backend server as a child process
   console.log(`Spawing backend server as child process.`)
-  const backendServer = spawn('node', ['src/backend/server.js', {cwd: __dirname}]);
+  const backendServer = spawn('node', ['app/src/backend/server.js', {cwd: __dirname}]);
 
   backendServer.stdout.on('data', (data) => {
     console.log(`Server stdout: ${data}`);

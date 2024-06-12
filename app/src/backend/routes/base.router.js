@@ -37,7 +37,7 @@ const viewEditHandler = async (req, res) => {
 const searchGetHandler = async (req, res) => {
     console.log(`method: GET | handler: searchHandler`);
     const { field, value } = req.query;
-    console.log(`field: ${field} | value: ${value} from searchGetHandler`);
+    // console.log(`field: ${field} | value: ${value} from searchGetHandler`);
 
     if (!field || !value) {
         return res.status(400).json({ message: 'Missing field or value for search' });
@@ -46,9 +46,9 @@ const searchGetHandler = async (req, res) => {
     try {
         const query = {};
         query[field] = value;
-        console.log(query);
+        // console.log(query);
         const results = await DataModel.find(query, 'id firstname middlename lastname'); // Adjust the fields as needed
-        console.log('Returning from inside the handler: ', results);
+        // console.log('Returning from inside the handler: ', results);
         res.json(results);
     } catch (error) {
         console.error(error);
@@ -84,7 +84,7 @@ const settingsGetHandler = async (req, res) => {
 
 
 const enrollmentGetHandler = async (req, res) => {
-    console.log(`method: GET | handler: enrollmenthandler`);
+    console.log(`method: GET | handler: enrollmentgethandler`);
     let options = { success: true };
 
     let associations = await SettingsModel.find({ entity_type: 'association' });
@@ -98,7 +98,7 @@ const enrollmentGetHandler = async (req, res) => {
     options.blocks = blocks;
     options.municipalities = municipalities
     options.gps = gps;
-    console.log(JSON.stringify(options, null, 2));
+    // console.log(JSON.stringify(options, null, 2));
 
     res.render('enrollment', { title: 'Enrollment Form', options: options });
     
@@ -106,9 +106,9 @@ const enrollmentGetHandler = async (req, res) => {
 
 
 const enrollmentPostHandler = async (req, res) => {
-    console.log(`method: POST | handler: enrollmenthandler`);
+    console.log(`method: POST | handler: enrollmentposthandler`);
     let testData = req.body;
-    console.log(testData);
+    // console.log(testData);
 
     // Get Next Id
     const nextId = await getNextSequenceValue('enrollmentId');
@@ -166,7 +166,7 @@ const information1PostHandler = (req, res) => {
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
     req.session.data = mergedData;
-    console.log(mergedData);
+    // console.log(mergedData);
     res.json({ success: true, redirect: '/information2' });
 }
 
@@ -182,7 +182,7 @@ const information2PostHandler = (req, res) => {
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
     req.session.data = mergedData;
-    console.log(mergedData);
+    // console.log(mergedData);
     res.json({ success: true, redirect: '/evaluation' })
 }
 
@@ -197,7 +197,7 @@ const evaluationPostHandler = async (req, res) => {
     let postData = req.body;
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
-    console.log(JSON.stringify(mergedData));
+    // console.log(JSON.stringify(mergedData));
 
     var verdict = await saveToDatabase(mergedData, debug = false);
     if (verdict.saved) {

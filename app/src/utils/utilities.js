@@ -1,6 +1,3 @@
-const { json } = require('express');
-const { read } = require('fs');
-const fs = require('fs/promises');
 const path = require('path');
 
 const TestModel = require('../../src/models/TestSchema');

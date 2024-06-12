@@ -41,13 +41,13 @@ const searchAPIRequestHandler = async (req, res) => {
 
     const { queryData } = req.query;
     const parsedQueryData = JSON.parse(queryData);
-    console.log(`ParsedQuery: ${JSON.stringify(parsedQueryData, null, 2)}`);
+    // console.log(`ParsedQuery: ${JSON.stringify(parsedQueryData, null, 2)}`);
 
     const queryConditions = [];
     let currentConditionGroup = [];
 
     parsedQueryData.forEach((query, index) => {
-      console.log(JSON.stringify(query));
+      // console.log(JSON.stringify(query));
       const condition = buildQueryCondition(searchFieldMapping[query.field], query.option, query.value);
       currentConditionGroup.push(condition);
 
@@ -65,7 +65,7 @@ const searchAPIRequestHandler = async (req, res) => {
 
     // Combine all query conditions with $or
     const finalQuery = queryConditions.length > 1 ? { $or: queryConditions } : queryConditions[0];
-    console.log(`FinalQuery: ${JSON.stringify(finalQuery)}`);
+    // console.log(`FinalQuery: ${JSON.stringify(finalQuery)}`);
 
     try {
       const results = await DataModel.find(finalQuery);
@@ -84,9 +84,9 @@ const isUniqueMobileNumberAPIHandler = async (req, res) => {
   console.log(`Method: GET | handler: isUniquePhoneNumberHandler`);
   try {
     const query = { mobile_number: req.params.mobileNumber };
-    console.log(query);
+    // console.log(query);
     const results = await DataModel.find(query);
-    console.log(results);
+    // console.log(results);
 
     if (results.length === 0) {
       res.json({ success: true, isUnique: true });
@@ -113,9 +113,9 @@ const settingsSearchAPIRequestHandler = async (req, res) => {
       query = { entity_type: entityType };
     }
 
-    console.log(`Query: ${JSON.stringify(query)}`);
+    // console.log(`Query: ${JSON.stringify(query)}`);
     const results = await SettingsModel.find(query);
-    console.log(`Results: ${JSON.stringify(results)}`);
+    // console.log(`Results: ${JSON.stringify(results)}`);
     res.json({ success: true, data: results });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error searching values', error: error.message });
@@ -158,7 +158,7 @@ const settingsEditAPIRequestHandler = async (req, res) => {
   try {
     const id = req.params.id;
     const value = req.body;
-    console.log(`ValueReceived: ${value}`);
+    // console.log(`ValueReceived: ${value}`);
     await SettingsModel.findByIdAndUpdate(id, value);
     res.json({ success: true, return: { id: id, value: value } });
   } catch (error) {

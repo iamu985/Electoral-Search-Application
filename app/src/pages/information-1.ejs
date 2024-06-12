@@ -257,9 +257,9 @@
       url: '/session-data',
       method: 'GET',
       success: function(formData) {
-        console.log(`FormData: ${JSON.stringify(formData)}`)
+        // console.log(`FormData: ${JSON.stringify(formData)}`)
         var address = formData.addresses;
-        console.log(`Address: ${JSON.stringify(address), null, 2}`)
+        // console.log(`Address: ${JSON.stringify(address), null, 2}`)
         $('#districtName').val(address.district);
         $('#municipalityName').val(address.municipality);
         $('#blockName').val(address.block);
@@ -280,7 +280,7 @@
         return;
       }
       const formData = collectFormData();
-      console.log(formData); // Debugging - see the collected data object
+      // console.log(formData); // Debugging - see the collected data object
       $.ajax({
         url: '/information1', // Change to your endpoint
         method: 'POST',
@@ -288,7 +288,7 @@
         data: JSON.stringify(formData),
         success: function(response) {
           // Handle the response
-          console.log(response);
+          // console.log(response);
           if (response.success) {
             window.location.href = response.redirect;
           }
