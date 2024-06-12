@@ -8,7 +8,7 @@ To run this application, you will need:
 
 Please follow the official MongoDB and Node.js installation guides to properly set up the required software on Windows:
 
-- [Install MongoDB on Windows](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-windows/)
+- [Install MongoDB on Windows](https://www.mongodb.com/try/download/community)
 - [Node Version Manager (NVM)](https://github.com/coreybutler/nvm/releases)
 
 ### Using NVM
