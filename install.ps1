@@ -38,9 +38,9 @@ Start-Process powershell -ArgumentList '-NoLogo -NoProfile -ExecutionPolicy Bypa
     }
 
     # Create a shortcut to run.exe on Desktop
-    $shortcutPath = "$env:USERPROFILE\Desktop\Run-Coffee.lnk"
+    $shortcutPath = "$env:USERPROFILE\Desktop\Coffee.lnk"
     $targetPath = (Get-Location).Path + "\run.exe"
-    $iconLocation = (Get-Location).Path + "\resources\logo\Coffee.png"
+    $iconLocation = (Get-Location).Path + "\resources\logo\Coffee.ico"
 
     $wScriptShell = New-Object -ComObject WScript.Shell
     $shortcutObject = $wScriptShell.CreateShortcut($shortcutPath)
