@@ -13,14 +13,14 @@ if ($?) {
     if ($?) {
         Write-Output "PS2EXE module installed successfully."
 
-        # Convert run.ps1 to run.exe
-        Write-Output "Converting run.ps1 to run.exe..."
+        # Convert run.ps1 to coffee.exe
+        Write-Output "Converting run.ps1 to coffee.exe..."
         $runPs1Path = (Resolve-Path .\run.ps1).Path
-        $runExePath = (Resolve-Path .\run.exe).Path
-        Invoke-PS2EXE $runPs1Path $runExePath
+        $coffeeExePath = (Join-Path -Path (Get-Location).Path -ChildPath "coffee.exe")
+        Invoke-PS2EXE $runPs1Path $coffeeExePath
 
         if ($?) {
-            Write-Output "run.ps1 converted to run.exe successfully."
+            Write-Output "run.ps1 converted to coffee.exe successfully."
 
             # Create a shortcut to run the Electron application
             $shortcutPath = "$env:USERPROFILE\Desktop\Coffee.lnk"
@@ -30,7 +30,7 @@ if ($?) {
             if (Test-Path $iconPath) {
                 $wScriptShell = New-Object -ComObject WScript.Shell
                 $shortcutObject = $wScriptShell.CreateShortcut($shortcutPath)
-                $shortcutObject.TargetPath = $runExePath
+                $shortcutObject.TargetPath = $coffeeExePath
                 $shortcutObject.WorkingDirectory = $workingDirectory
                 $shortcutObject.IconLocation = $iconPath
                 $shortcutObject.Save()
@@ -43,8 +43,9 @@ if ($?) {
             } else {
                 Write-Error "Icon file not found at $iconPath"
             }
+
         } else {
-            Write-Error "Failed to convert run.ps1 to run.exe."
+            Write-Error "Failed to convert run.ps1 to coffee.exe."
         }
     } else {
         Write-Error "Failed to install PS2EXE module."
