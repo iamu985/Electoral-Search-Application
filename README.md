@@ -5,6 +5,7 @@ To run this application, you will need:
 
 - **Node.js** version `16.20.2`
 - **Mongosh** version `2.2.5`
+- **Git** version `2.45.2.windows.1`
 
 Please follow the official MongoDB and Node.js installation guides to properly set up the required software on Windows:
 
@@ -30,7 +31,13 @@ Install ResourceHacker.exe and set it in PATH to set icon for coffee.exe if not 
 3. Open Windows Powershell in Administrator mode, cd into the app directory and paste the following command
 ```ps
 Install-Module ps2exe
+```
+
+```ps
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+```
+
+```ps
 .\install.ps1
 ```
 This script will install all the required packages and dependencies for the application and create an executable file in the Desktop.
