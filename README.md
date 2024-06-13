@@ -32,10 +32,12 @@ Install ResourceHacker.exe and set it in PATH to set icon for coffee.exe if not 
 ```ps
 Install-Module ps2exe
 ```
+It will also ask for a prompt just enter 'A' to select Yes to All, additionally it might ask to download Nugget to fetch the module.
 
 ```ps
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 ```
+It will ask you for a prompt just type 'A' to select Yes to All.
 
 ```ps
 .\install.ps1
