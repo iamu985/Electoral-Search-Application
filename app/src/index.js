@@ -40,7 +40,7 @@ const createWindow = () => {
   // Application Menu on the top bar
   // Temmplate 
 
-  const Debug = false;
+  const Debug = true;
 
   function getMenuTemplate(){
     if (Debug) {

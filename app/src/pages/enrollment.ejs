@@ -1,6 +1,4 @@
 <%- include('partials/base.ejs') %>
-
-
 <body>
   <div class="container mb-5">
     <div id="fValidationNotif" class="alert alert-danger f-hidden">
@@ -41,25 +39,25 @@
                   <input name="number_of_family_members" type="number" min="0" max="10" class="form-control" value="4" required>
                 </div>
                 <div class="col-sm my-1">
-                  <label for="number_of_electors">Number of Electors <span class="text-danger">*</span></label>
-                  <input name="number_of_electors" type="number" min="0" max="10" class="form-control" value="4" required>
+                  <label for="number_of_electors">Number of Electors</label>
+                  <input name="number_of_electors" type="number" min="0" max="10" class="form-control" value="4">
                 </div>
                 <div class="col-sm my-1">
-                  <label for="number_of_new_electors">Number of New Electors <span class="text-danger">*</span></label>
-                  <input name="number_of_new_electors" type="number" min="0" max="10" class="form-control" value="4" required>
+                  <label for="number_of_new_electors">Number of New Electors</label>
+                  <input name="number_of_new_electors" type="number" min="0" max="10" class="form-control" value="4">
                 </div>
               </div>
               <div class="mt-1">
-                <label class="py-2" for="associationName">Name of the Association <span class="text-danger">*</span></label>
-                <select name="association_name" id="associationName" class="form-control custom-select" required>
+                <label class="py-2" for="associationName">Name of the Association</label>
+                <select name="association_name" id="associationName" class="form-control custom-select">
                   <% options.associations.forEach(association => { %>
                     <option value="<%= association.value %>"><%= association.value %></option>
                   <% }) %>
                 </select>
               </div>
               <div class="mt-2">
-                <label class="py-2" for="statusOfEmployment">Status of Employment <span class="text-danger">*</span></label>
-                <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select" required>
+                <label class="py-2" for="statusOfEmployment">Status of Employment</label>
+                <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select">
                   <option value="Working">Working</option>
                   <option value="Retired">Retired</option>
                 </select>
@@ -73,39 +71,39 @@
             <div class="row card input-group mb-3 py-3 px-3">
               <div class="row card-body" id="f-ra-p1">
                 <div class="col-sm">
-                  <label for="districtName">District <span class="text-danger">*</span></label>
-                  <select name="district" id="districtName" class="form-control mx-3 custom-select" required>
+                  <label for="districtName">District</label>
+                  <select name="district" id="districtName" class="form-control mx-3 custom-select">
                     <% options.districts.forEach(district => { %>
                       <option value="<%= district.value %>"><%= district.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
-                  <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select" required>
+                  <label for="municipalityName">Municipality</label>
+                  <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select">
                     <% options.municipalities.forEach(municipality => {%>
                       <option value="<%= municipality.value %>"><%= municipality.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="blockName">Block <span class="text-danger">*</span></label>
-                  <select name="block" id="blockName" class="form-control mx-3 custom-select" required>
+                  <label for="blockName">Block</label>
+                  <select name="block" id="blockName" class="form-control mx-3 custom-select">
                     <% options.blocks.forEach(block => { %>
                       <option value="<%= block.value %>"><%= block.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
-                  <select name="gp" id="gp" class="form-control mx-3 custom-select" required>
+                  <label for="gp">Gram Panchayat</label>
+                  <select name="gp" id="gp" class="form-control mx-3 custom-select">
                     <% options.gps.forEach(gp => { %>
                       <option value="<%= gp.value %>"><%= gp.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="villageName">Village/Para/Ward Number <span class="text-danger">*</span></label>
+                  <label for="villageName">Village/Para/Ward Number</label>
                   <input type="text" name="village" id="villageName" class="form-control mx-3">
                 </div>
               </div>
