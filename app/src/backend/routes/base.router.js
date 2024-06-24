@@ -4,8 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const XLSX = require('xlsx');
 
-const { saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery } = require('../../utils/utilities');
-const { generateDummyData, createExcelFile } = require('../../utils/dev-utilities');
+const { saveToDatabase, deepMerge, getNextSequenceValue, buildDbQuery, splitFullName } = require('../../utils/utilities');
+const { createExcelFile } = require('../../utils/dev-utilities');
 
 const ConfigPath = path.join(__dirname, '../../../config/conf.json'); // config directory
 
@@ -27,10 +27,17 @@ const indexGetHandler = (req, res) => {
     res.render('index', { title: 'Index Page' });
 }
 
+const viewEditHandler = async (req, res) => {
+    console.log(`method: EDIT | handler: viewedithandler`);
+    const formId = req.params.id;
+    const data = await DataModel.findById(formId);
+    return res.render('view-edit', { title: 'View Edit', data: data });
+}
+
 const searchGetHandler = async (req, res) => {
     console.log(`method: GET | handler: searchHandler`);
     const { field, value } = req.query;
-    console.log(`field: ${field} | value: ${value} from searchGetHandler`);
+    // console.log(`field: ${field} | value: ${value} from searchGetHandler`);
 
     if (!field || !value) {
         return res.status(400).json({ message: 'Missing field or value for search' });
@@ -39,9 +46,9 @@ const searchGetHandler = async (req, res) => {
     try {
         const query = {};
         query[field] = value;
-        console.log(query);
+        // console.log(query);
         const results = await DataModel.find(query, 'id firstname middlename lastname'); // Adjust the fields as needed
-        console.log('Returning from inside the handler: ', results);
+        // console.log('Returning from inside the handler: ', results);
         res.json(results);
     } catch (error) {
         console.error(error);
@@ -49,9 +56,14 @@ const searchGetHandler = async (req, res) => {
     }
 }
 
-const searchViewGetHandler = (req, res) => {
+const searchViewGetHandler = async (req, res) => {
     console.log(`method: GET | handler: searchViewGetHandler`);
-    res.render('search', { title: 'Search Page' });
+    const alldata = await DataModel.find();
+    if (alldata) {
+        res.render('search', { title: 'Search Page', data: alldata });
+    } else {
+        res.render('search', { title: 'Search Page' })
+    }
 }
 
 
@@ -72,35 +84,31 @@ const settingsGetHandler = async (req, res) => {
 
 
 const enrollmentGetHandler = async (req, res) => {
-    console.log(`method: GET | handler: enrollmenthandler`);
-    let options = { title: 'Enrollment Form', success: true, edit: false };
+    console.log(`method: GET | handler: enrollmentgethandler`);
+    let options = { success: true };
+
+    let associations = await SettingsModel.find({ entity_type: 'association' });
+    let districts = await SettingsModel.find({ entity_type: 'districts' });
+    let blocks = await SettingsModel.find({ entity_type: 'block' });
+    let municipalities = await SettingsModel.find({ entity_type: 'municipality' });
+    let gps = await SettingsModel.find({ entity_type: 'gp' });
+
+    options.associations = associations;
+    options.districts = districts;
+    options.blocks = blocks;
+    options.municipalities = municipalities
+    options.gps = gps;
+    // console.log(JSON.stringify(options, null, 2));
+
+    res.render('enrollment', { title: 'Enrollment Form', options: options });
     
-    if (req.query.edit) {
-        console.log(`Form is in edit mode`);
-        let formId = req.query.id;
-        console.log(`Received FormId: ${formId}`);
-        let data = await DataModel.findById(formId);
-        console.log(`RetrievedData: ${JSON.stringify(data)}`);
-        if (!data) {
-            console.log(`Data not found`);
-            res.json({ message: 'Data not found' });
-        } else {
-            options.edit = true;
-            options.data = data;
-            res.render('enrollment', options);
-        }
-    } else {
-        res.render('enrollment', options);
-    }
 };
 
 
-
-
 const enrollmentPostHandler = async (req, res) => {
-    console.log(`method: POST | handler: enrollmenthandler`);
+    console.log(`method: POST | handler: enrollmentposthandler`);
     let testData = req.body;
-    console.log(testData);
+    // console.log(testData);
 
     // Get Next Id
     const nextId = await getNextSequenceValue('enrollmentId');
@@ -118,11 +126,35 @@ const enrollmentPostHandler = async (req, res) => {
 };
 
 
-const information1GetHandler = (req, res) => {
+const information1GetHandler = async (req, res) => {
     console.log(`method: GET | handler: information1handler`);
-    let designations = Config.configs.designations;
+    let designations = await SettingsModel.find({ entity_type: 'designation' });
+    let associations = await SettingsModel.find({ entity_type: 'association' });
+    let districts = await SettingsModel.find({ entity_type: 'districts' });
+    let blocks = await SettingsModel.find({ entity_type: 'block' });
+    let municipalities = await SettingsModel.find({ entity_type: 'municipality' });
+    let gps = await SettingsModel.find({ entity_type: 'gp' });
+
+
+    options = {
+        designations: designations,
+        status: "success",
+        associations: associations,
+        districts: districts,
+        blocks: blocks,
+        municipalities: municipalities,
+        gps: gps
+    }
+
+    if (req.query.edit) {
+        console.log(`Information 1 form is in edit mode`);
+        
+        let formId = req.query.id;
+        console.log(`Received FormId: ${formId}`);
+    }
+
     if (req.session.data) {
-        res.render('information-1', { title: 'Detailed Information I', data: req.session.data, designations: designations, status: "success" })
+        res.render('information-1', { title: 'Detailed Information I', data: req.session.data, options: options });
     } else {
         res.redirect('/enrollment');
     }
@@ -134,7 +166,7 @@ const information1PostHandler = (req, res) => {
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
     req.session.data = mergedData;
-    console.log(mergedData);
+    // console.log(mergedData);
     res.json({ success: true, redirect: '/information2' });
 }
 
@@ -150,7 +182,7 @@ const information2PostHandler = (req, res) => {
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
     req.session.data = mergedData;
-    console.log(mergedData);
+    // console.log(mergedData);
     res.json({ success: true, redirect: '/evaluation' })
 }
 
@@ -165,7 +197,7 @@ const evaluationPostHandler = async (req, res) => {
     let postData = req.body;
     let sessionData = req.session.data;
     let mergedData = deepMerge(sessionData, postData);
-    console.log(JSON.stringify(mergedData));
+    // console.log(JSON.stringify(mergedData));
 
     var verdict = await saveToDatabase(mergedData, debug = false);
     if (verdict.saved) {
@@ -180,6 +212,8 @@ const successGetHandler = (req, res) => {
     res.render('success', { title: 'Success' });
 }
 
+
+router.get('/view/edit/:id', viewEditHandler);
 router.get('/view/:id', async (req, res) => {
     try {
         const formData = await DataModel.findOne({ _id: req.params.id });
@@ -221,38 +255,26 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
 
         // Use a loop instead of map to handle async/await
         const parsedData = [];
+        let parsedNameData;
         for (const row of worksheet) {
+            try {
+                parsedNameData = splitFullName(row['Full Name']);
+            } catch (err) {
+                console.error(err);
+                res.status(400).json({ success: false, error: err })
+            }
             var data = {
-                firstname: row['First Name'],
-                middlename: row['Middle Name'],
-                lastname: row['Last Name'],
+                firstname: parsedNameData.firstname,
+                middlename: parsedNameData.middlename,
+                lastname: parsedNameData.lastname,
                 mobile_number: row['Mobile Number'],
-                dob: new Date(row['Date of Birth']),
-                caste: row['Caste'],
-                religion: row['Religion'],
                 status_of_employment: row['Status of Employment'],
-                number_of_family_members: row['Number of Family Members'],
-                number_of_electors: row['Number of Electors'],
-                number_of_new_electors: row['Number of New Electors'],
                 association_name: row['Association Name'],
                 job_details: {
-                    designation: row['Designation'],
-                    date_of_joining: new Date(row['Date of Joining']),
                     nature_of_job: row['Nature of Job'],
-                    employment_organization_name: row['Employment Organization Name']
                 },
-                family_information: {
-                    family_type: row['Family Type'],
-                    family_members: JSON.parse(row['Family Members']) // Assuming Family Members is a JSON string
-                },
-                evaluation: {
-                    role_play: {
-                        organization: row['Role Play Organization'],
-                        working_area: row['Working Area'],
-                        concern_association: row['Concern Association'],
-                        regular_manner: row['Regular Manner']
-                    },
-                    questions: JSON.parse(row['Questions']) // Assuming Questions is a JSON string
+                addresses: {
+                    landmark: row['Landmark']
                 }
             };
 
@@ -265,9 +287,8 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
             const nextId = await getNextSequenceValue('enrollmentId');
 
             // Generate the id based on the district, counterId and associationName
-            const district = data.family_information.family_members[0].district;
             const associationName = data.association_name;
-            const generateId = `${nextId}-${district}-${associationName}`;
+            const generateId = `${nextId}-${associationName}`;
 
             data.id = generateId;
 
@@ -283,6 +304,8 @@ router.post('/import', uploadFile.single('excelFile'), async (req, res) => {
         res.status(500).json({ success: false, message: 'Error importing data', error: error.message });
     }
 });
+
+
 
 
 

@@ -1,0 +1,597 @@
+<%- include('partials/base.ejs') %>
+
+<body>
+  <div class="container mb-5">
+    <div class="d-flex justify-content-center my-3">
+      <h1 class="center">Edit Details</h1>
+    </div>
+
+    <form id="editForm" action="/update-details" method="post" data-form-id="<%= data._id %>">
+      <input type="hidden" name="id" value="<%= data._id %>">
+
+      <!-- Primary Details Card -->
+      <div class="card f-card my-3">
+        <div class="card-body">
+          <h4 class="card-title">Primary Details</h4>
+          <div class="form-group">
+            <label for="fullname">Full Name:</label>
+            <input type="text" id="fullname" name="fullname" class="form-control" value="<%= data.fullname %>" required>
+          </div>
+          <div class="form-group">
+            <label for="nickname">Nick Name:</label>
+            <input type="text" id="nickname" name="nickname" class="form-control" value="<%= data.nickname %>">
+          </div>
+          <div class="form-group">
+            <label for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" class="form-control" value="<%= new Date(data.dob).toISOString().substr(0, 10) %>" required>
+          </div>
+          <div class="form-group">
+            <label for="caste">Caste:</label>
+            <input type="text" id="caste" name="caste" class="form-control" value="<%= data.caste %>" required>
+          </div>
+          <div class="form-group">
+            <label for="religion">Religion:</label>
+            <input type="text" id="religion" name="religion" class="form-control" value="<%= data.religion %>" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Residential Address Card -->
+      <div class="card f-card my-3">
+        <div class="card-body">
+          <h4 class="card-title">Residential Address</h4>
+          <div class="form-group">
+            <label for="district">District:</label>
+            <input type="text" id="district" name="district" class="form-control" value="<%= data.addresses.district %>" required>
+          </div>
+          <div class="form-group">
+            <label for="municipality">Municipality:</label>
+            <input type="text" id="municipality" name="municipality" class="form-control" value="<%= data.addresses.municipality %>" required>
+          </div>
+          <div class="form-group">
+            <label for="block">Block:</label>
+            <input type="text" id="block" name="block" class="form-control" value="<%= data.addresses.block %>" required>
+          </div>
+          <div class="form-group">
+            <label for="gp">Gram Panchayat:</label>
+            <input type="text" id="gp" name="gp" class="form-control" value="<%= data.addresses.gp %>" required>
+          </div>
+          <div class="form-group">
+            <label for="village">Village/Para/Ward Number:</label>
+            <input type="text" id="village" name="village" class="form-control" value="<%= data.addresses.village %>" required>
+          </div>
+          <div class="form-group">
+            <label for="landmark">Landmark:</label>
+            <input type="text" id="landmark" name="landmark" class="form-control" value="<%= data.addresses.landmark %>" required>
+          </div>
+          <div class="form-group">
+            <label for="remarks">Remarks:</label>
+            <input type="text" id="remarks" name="remarks" class="form-control" value="<%= data.addresses.remarks %>">
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Details Card -->
+      <div class="card f-card my-3">
+        <div class="card-body">
+          <h4 class="card-title">Job Details</h4>
+          <div class="form-group">
+            <label for="designation">Designation:</label>
+            <input type="text" id="designation" name="designation" class="form-control" value="<%= data.job_details.designation %>" required>
+          </div>
+          <div class="form-group">
+            <label for="date_of_joining">Date of Joining:</label>
+            <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= new Date(data.job_details.date_of_joining).toISOString().substr(0, 10) %>" required>
+          </div>
+          <div class="form-group">
+            <label for="nature_of_job">Nature of Job:</label>
+            <input type="text" id="nature_of_job" name="nature_of_job" class="form-control" value="<%= data.job_details.nature_of_job %>" required>
+          </div>
+          <div class="form-group">
+            <label for="employment_organization_name">Employment Organization Name:</label>
+            <input type="text" id="employment_organization_name" name="employment_organization_name" class="form-control" value="<%= data.job_details.employment_organization_name %>" required>
+          </div>
+          <div class="form-group">
+            <label for="status_of_employment">Status of Employment:</label>
+            <input type="text" id="status_of_employment" name="status_of_employment" class="form-control" value="<%= data.status_of_employment %>" required>
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Details Card -->
+      <div class="card f-card my-3">
+        <div class="card-body">
+          <h4 class="card-title">Additional Details</h4>
+          <div class="form-group">
+            <label for="contact_leader_name">Contact Leader Name:</label>
+            <input type="text" id="contact_leader_name" name="contact_leader_name" class="form-control" value="<%= data.additional_details.contact_leader_name %>" required>
+          </div>
+          <% if (data.status_of_employment === 'Retired') { %>
+          <div id="retiredSection">
+            <div class="form-group mb-3">
+              <label for="oppositionMembership">During service, did you take membership of any other opposition?</label>
+              <select name="had_taken_opposition_membership" id="oppositionMembership" class="form-control custom-select" required>
+                <option value="Yes" <%= data.additional_details.had_taken_opposition_membership === 'Yes' ? 'selected' : '' %>>Yes</option>
+                <option value="No" <%= data.additional_details.had_taken_opposition_membership === 'No' ? 'selected' : '' %>>No</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="tradeUnionRight">Did Trade Union Rights exist at the time of your service?</label>
+              <select name="trade_union_right_on" id="tradeUnionRight" class="form-control custom-select" required>
+                <option value="Yes" <%= data.additional_details.trade_union_right_on === 'Yes' ? 'selected' : '' %>>Yes</option>
+                <option value="No" <%= data.additional_details.trade_union_right_on === 'No' ? 'selected' : '' %>>No</option>
+              </select>
+            </div>
+            <div class="form-group mb-3">
+              <label for="has_played_leadership_role">Did you play any leadership role during your service?</label>
+              <select name="has_played_leadership_role" id="hasPlayedLeadershipRole" class="form-control custom-select" required>
+                <option value="Yes" <%= data.additional_details.has_played_leadership_role === 'Yes' ? 'selected' : '' %>>Yes</option>
+                <option value="No" <%= data.additional_details.has_played_leadership_role === 'No' ? 'selected' : '' %>>No</option>
+              </select>
+            </div>
+            <% if (data.additional_details.has_played_leadership_role === 'Yes') { %>
+            <div class="form-group mb-3">
+              <label for="whichStage">If yes, at which stage?</label>
+              <select name="played_leadership_role_stage" id="whichStage" class="form-control custom-select">
+                <option value="SCC" <%= data.additional_details.played_leadership_role_stage === 'SCC' ? 'selected' : '' %>>SCC</option>
+                <option value="Samiti" <%= data.additional_details.played_leadership_role_stage === 'Samiti' ? 'selected' : '' %>>Samiti</option>
+              </select>
+            </div>
+            <% } %>
+          </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Family Information Card -->
+      <div class="card f-card my-3">
+        <div class="card-body">
+          <h4 class="card-title">Family Information</h4>
+          <div class="form-group">
+            <label for="family_type">Family Type:</label>
+            <input type="text" id="family_type" name="family_type" class="form-control" value="<%= data.family_information.family_type %>" required>
+          </div>
+          <div class="form-group">
+            <label for="number_of_family_members">Number of Family Members:</label>
+            <input type="number" id="number_of_family_members" name="number_of_family_members" class="form-control" value="<%= data.number_of_family_members %>" required>
+          </div>
+          <div class="form-group">
+            <label for="number_of_electors">Number of Electors:</label>
+            <input type="number" id="number_of_electors" name="number_of_electors" class="form-control" value="<%= data.number_of_electors %>" required>
+          </div>
+
+          <!-- Family Members Table -->
+          <h5>Family Members</h5>
+          <table class="table table-hover" id="fFamilyTable">
+            <thead>
+              <tr>
+                <th>Actions</th>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Relationship</th>
+                <th>Is Student</th>
+                <th>Is New Elector</th>
+                <th>Age</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.family_information.family_members.forEach(function(member, index) { %>
+              <tr>
+                <td>
+                  <button type="button" class="btn btn-warning edit-member" data-index="<%= index %>">Edit</button>
+                  <button type="button" class="btn btn-danger delete-member" data-index="<%= index %>">Delete</button>
+                </td>
+                <td><%= member.firstname %></td>
+                <td><%= member.middlename %></td>
+                <td><%= member.lastname %></td>
+                <td><%= member.relationship %></td>
+                <td><%= member.is_student %></td>
+                <td><%= member.is_new_elector %></td>
+                <td><%= member.age %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card f-card my-3">
+        <div class="card-body">
+          <h4 class="card-title">Beneficiary Schemes</h4>
+          <table class="table table-hover" id="fBeneficiarySchemes">
+            <thead>
+              <tr>
+                <th>Actions</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% data.family_information.beneficiary_scheme.forEach(function(scheme, index) { %>
+              <tr>
+                <td>
+                  <button type="button" class="btn btn-warning edit-scheme" data-index="<%= index %>">Edit</button>
+                  <button type="button" class="btn btn-danger delete-scheme" data-index="<%= index %>">Delete</button>
+                </td>
+                <td><%= scheme %></td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Evaluation Card -->
+      <div class="card f-card my-3">
+        <div class="card-body" id="evaluationFormSection">
+          <h4 class="card-title">Evaluation</h4>
+          <div class="form-group">
+            <label for="organization">Organization:</label>
+            <input type="text" id="organization" name="organization" class="form-control" value="<%= data.evaluation.role_play.organization %>" required>
+          </div>
+          <div class="form-group">
+            <label for="working_area">Working Area:</label>
+            <input type="text" id="working_area" name="working_area" class="form-control" value="<%= data.evaluation.role_play.working_area %>" required>
+          </div>
+          <div class="form-group">
+            <label for="concern_association">Concern Association:</label>
+            <input type="text" id="concern_association" name="concern_association" class="form-control" value="<%= data.evaluation.role_play.concern_association %>" required>
+          </div>
+          <div class="form-group">
+            <label for="regular_manner">Regular Manner:</label>
+            <input type="text" id="regular_manner" name="regular_manner" class="form-control" value="<%= data.evaluation.role_play.regular_manner %>" required>
+          </div>
+
+          <h5>Questions</h5>
+          <% data.evaluation.questions.forEach(function(question, index) { %>
+          <div class="form-group">
+            <label for="question_<%= index %>">Q<%= index + 1 %>:</label>
+            <input type="text" id="question_<%= index %>" name="questions[<%= index %>].question" class="form-control" value="<%= question.question %>" required>
+          </div>
+          <div class="form-group">
+            <label for="answer_<%= index %>">Answer:</label>
+            <input type="text" id="answer_<%= index %>" name="questions[<%= index %>].answer" class="form-control" value="<%= question.answer %>" required>
+          </div>
+          <% }); %>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-center my-3">
+        <button type="button" class="btn btn-primary mx-3" id="saveViewData">Save Changes</button>
+        <a href="/search" class="btn btn-secondary ms-2">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal for Editing Family Member -->
+  <div class="modal fade" id="editMemberModal" tabindex="-1" role="dialog" aria-labelledby="editMemberModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editMemberModalLabel">Edit Family Member</h5>
+        </div>
+        <div class="modal-body">
+          <form id="editMemberForm">
+            <input type="hidden" id="editMemberIndex">
+            <div class="form-group">
+              <label for="edit_firstname">First Name:</label>
+              <input type="text" id="edit_firstname" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_middlename">Middle Name:</label>
+              <input type="text" id="edit_middlename" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_lastname">Last Name:</label>
+              <input type="text" id="edit_lastname" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_relationship">Relationship:</label>
+              <input type="text" id="edit_relationship" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_is_student">Is Student:</label>
+              <input type="text" id="edit_is_student" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_is_new_elector">Is New Elector:</label>
+              <input type="text" id="edit_is_new_elector" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="edit_age">Age:</label>
+              <input type="number" id="edit_age" class="form-control">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modalFamilyClose" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveMemberChanges">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Editing Beneficiary Scheme -->
+  <div class="modal fade" id="editSchemeModal" tabindex="-1" role="dialog" aria-labelledby="editSchemeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editSchemeModalLabel">Edit Beneficiary Scheme</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="editSchemeForm">
+            <input type="hidden" id="editSchemeIndex">
+            <div class="form-group">
+              <label for="edit_scheme_name">Scheme Name:</label>
+              <input type="text" id="edit_scheme_name" class="form-control">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="saveSchemeChanges">Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for displaying success message -->
+  <div class="modal fade" id="displaySuccessMessageModal" tabindex="-1" role="dialog" aria-labelledby="editSchemeModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header f-success-header">
+          <h5 class="modal-title">Success</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <h1>Successfully Saved the updated data!</h1>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary modalBeneficiaryClose" data-dismiss="modal">Close</button>
+          <a href="/view/<%= data._id %>" class="btn btn-primary" id="saveSchemeChanges">View</a>
+          <a href="/search" class="btn btn-primary" id="saveSchemeChanges">Go Back</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Function to get data from the backend
+      function getData(formId) {
+        $.ajax({
+          url: `/webservice/api/v1/getDataById/${formId}`,
+          method: 'GET',
+          success: function(data) {
+            console.log(`ReceivedData: ${JSON.stringify(data)}`);
+            sessionStorage.setItem('data', JSON.stringify(data.data));
+            initializeClickHandler(); // Initialize the click handler after data is set
+          },
+          error: function(xhr, status, err) {
+            alert(`Error Occurred: ${err}\nStatusCode: ${status}`);
+          }
+        });
+      }
+  
+      // Function to initialize click handlers
+      function initializeClickHandler() {
+        const data = JSON.parse(sessionStorage.getItem('data'));
+        $('.edit-member').click(function() {
+          console.log(`FromGetData: ${JSON.stringify(data)}`);
+          const index = $(this).data('index');
+          const member = data.family_information.family_members[index];
+          $('#editMemberIndex').val(index);
+          $('#edit_firstname').val(member.firstname);
+          $('#edit_middlename').val(member.middlename);
+          $('#edit_lastname').val(member.lastname);
+          $('#edit_relationship').val(member.relationship);
+          $('#edit_is_student').val(member.is_student);
+          $('#edit_is_new_elector').val(member.is_new_elector);
+          $('#edit_age').val(member.age);
+          $('#editMemberModal').modal('show');
+        });
+  
+        // Handle save changes for family member
+        $('#saveMemberChanges').click(function() {
+          const index = $('#editMemberIndex').val();
+          const updatedMember = {
+            firstname: $('#edit_firstname').val(),
+            middlename: $('#edit_middlename').val(),
+            lastname: $('#edit_lastname').val(),
+            relationship: $('#edit_relationship').val(),
+            is_student: $('#edit_is_student').val(),
+            is_new_elector: $('#edit_is_new_elector').val(),
+            age: $('#edit_age').val()
+          };
+          data.family_information.family_members[index] = updatedMember;
+          sessionStorage.setItem('data', JSON.stringify(data));
+          $('#editMemberModal').modal('hide');
+          updateFamilyTable(data.family_information.family_members);
+        });
+  
+        // Handle modal close for family member
+        $('.modalFamilyClose').click(function() {
+          $('#editMemberModal').modal('hide');
+        });
+  
+        // Handle beneficiary scheme edit button click
+        $('.edit-scheme').click(function() {
+          const index = $(this).data('index');
+          const scheme = data.family_information.beneficiary_scheme[index];
+          $('#editSchemeIndex').val(index);
+          $('#edit_scheme_name').val(scheme);
+          $('#editSchemeModal').modal('show');
+        });
+  
+        // Handle save changes for beneficiary scheme
+        $('#saveSchemeChanges').click(function() {
+          const index = $('#editSchemeIndex').val();
+          const updatedScheme = $('#edit_scheme_name').val();
+          data.family_information.beneficiary_scheme[index] = updatedScheme;
+          sessionStorage.setItem('data', JSON.stringify(data));
+          $('#editSchemeModal').modal('hide');
+          updateSchemeTable(data.family_information.beneficiary_scheme);
+        });
+  
+        // Handle modal close for beneficiary scheme
+        $('.modalBeneficiaryClose').click(function() {
+          $('#editSchemeModal').modal('hide');
+        });
+  
+        // Handle saving final data
+        $('#saveViewData').click(function() {
+          const formData = collectFormData();
+          console.log('Saving view data', formData);
+          $.ajax({
+            url: `/webservice/api/v1/updateDataById/${formData._id}`,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(updatedData) {
+              sessionStorage.setItem('updatedData', JSON.stringify(updatedData));
+              $('#displaySuccessMessageModal').modal('show');
+            },
+            error: function(xhr, status, err) {
+              alert(`Error: ${err}\nStatus: ${status}\nXHR: ${JSON.stringify(xhr)}`);
+            }
+          });
+        });
+      }
+  
+      const formId = $('#editForm').data('form-id');
+      getData(formId);
+  
+      // Function to collect form data
+      function collectFormData() {
+        const form = $('#editForm');
+        const data = JSON.parse(sessionStorage.getItem('data'));
+  
+        const updatedData = {
+          _id: data._id,
+          fullname: form.find('[name="fullname"]').val(),
+          nickname: form.find('[name="nickname"]').val(),
+          dob: form.find('[name="dob"]').val(),
+          caste: form.find('[name="caste"]').val(),
+          religion: form.find('[name="religion"]').val(),
+          job_details: {
+            designation: form.find('[name="designation"]').val(),
+            date_of_joining: form.find('[name="date_of_joining"]').val(),
+            nature_of_job: form.find('[name="nature_of_job"]').val(),
+            employment_organization_name: form.find('[name="employment_organization_name"]').val()
+          },
+          status_of_employment: form.find('[name="status_of_employment"]').val(),
+          addresses: {
+            district: form.find('[name="district"]').val(),
+            municipality: form.find('[name="municipality"]').val(),
+            block: form.find('[name="block"]').val(),
+            gp: form.find('[name="gp"]').val(),
+            village: form.find('[name="village"]').val(),
+            landmark: form.find('[name="landmark"]').val(),
+            remarks: form.find('[name="remarks"]').val()
+          },
+          additional_details: {
+            contact_leader_name: form.find('[name="contact_leader_name"]').val(),
+            had_taken_opposition_membership: form.find('[name="had_taken_opposition_membership"]').val(),
+            trade_union_right_on: form.find('[name="trade_union_right_on"]').val(),
+            has_played_leadership_role: form.find('[name="has_played_leadership_role"]').val(),
+            played_leadership_role_stage: form.find('[name="played_leadership_role_stage"]').val()
+          },
+          family_information: {
+            family_type: form.find('[name="family_type"]').val(),
+            number_of_family_members: form.find('[name="number_of_family_members"]').val(),
+            number_of_electors: form.find('[name="number_of_electors"]').val(),
+            family_members: data.family_information.family_members,
+            beneficiary_scheme: data.family_information.beneficiary_scheme
+          },
+          evaluation: {
+            role_play: {
+              organization: form.find('[name="organization"]').val(),
+              working_area: form.find('[name="working_area"]').val(),
+              concern_association: form.find('[name="concern_association"]').val(),
+              regular_manner: form.find('[name="regular_manner"]').val()
+            },
+            questions: data.evaluation.questions.map((question, index) => ({
+              question: form.find(`[name="questions[${index}].question"]`).val(),
+              answer: form.find(`[name="questions[${index}].answer"]`).val()
+            }))
+          }
+        };
+  
+        return updatedData;
+      }
+  
+      // Function to update family table
+      function updateFamilyTable(familyMembers) {
+        const tableBody = $('#fFamilyTable tbody');
+        tableBody.empty();
+        familyMembers.forEach((member, index) => {
+          tableBody.append(`
+            <tr>
+              <td>
+                <button type="button" class="btn btn-warning edit-member" data-index="${index}">Edit</button>
+                <button type="button" class="btn btn-danger delete-member" data-index="${index}">Delete</button>
+              </td>
+              <td>${member.firstname}</td>
+              <td>${member.middlename}</td>
+              <td>${member.lastname}</td>
+              <td>${member.relationship}</td>
+              <td>${member.is_student}</td>
+              <td>${member.is_new_elector}</td>
+              <td>${member.age}</td>
+            </tr>
+          `);
+        });
+        initializeClickHandler(); // Reinitialize click handlers after updating the DOM
+      }
+  
+      // Function to update scheme table
+      function updateSchemeTable(beneficiarySchemes) {
+        const tableBody = $('#fBeneficiarySchemes tbody');
+        tableBody.empty();
+        beneficiarySchemes.forEach((scheme, index) => {
+          tableBody.append(`
+            <tr>
+              <td>
+                <button type="button" class="btn btn-warning edit-scheme" data-index="${index}">Edit</button>
+                <button type="button" class="btn btn-danger delete-scheme" data-index="${index}">Delete</button>
+              </td>
+              <td>${scheme}</td>
+            </tr>
+          `);
+        });
+        initializeClickHandler(); // Reinitialize click handlers after updating the DOM
+      }
+    });
+  </script>
+</body>
+
+<style>
+  .f-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .f-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  .f-card .card-title {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+
+  .f-success-header {
+    background: rgb(27, 169, 169);
+  }
+
+  #fFamilyTable tbody tr:hover,
+  #fBeneficiarySchemes tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+</style>

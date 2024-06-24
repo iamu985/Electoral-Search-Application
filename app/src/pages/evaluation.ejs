@@ -45,7 +45,7 @@
       event.preventDefault();
       
       const formData = collectFormData();
-      console.log(formData); // Debugging - see the collected data object
+      // console.log(formData); // Debugging - see the collected data object
       $.ajax({
         url: '/evaluation', // Change to your endpoint
         method: 'POST',
@@ -53,7 +53,7 @@
         data: JSON.stringify(formData),
         success: function(response) {
           // Handle the response
-          console.log(response);
+          // console.log(response);
           if (response.success) {
             window.location.href = response.redirect;
           }

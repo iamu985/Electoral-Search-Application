@@ -5,7 +5,7 @@ const SettingsSchema = new Schema({
   entity_type: {
     type: String,
     required: true,
-    enum: ['association', 'districts', 'block', 'municipality', 'designation']
+    enum: ['association', 'districts', 'block', 'gp', 'municipality', 'designation']
   },
   value: {
     type: String,

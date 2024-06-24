@@ -5,126 +5,190 @@
     <div class="d-flex justify-content-center my-3">
       <h1>Search</h1>
     </div>
+    <div class="d-flex justify-content-start mb-3">
+      <button id="queryBuilderBtn" class="btn btn-primary">Query Builder</button>
+      <button id="goBackBtn" class="btn btn-secondary ms-2">Go Back</button>
+    </div>
     <div class="row">
       <div class="col-md-12">
-        <form id="searchForm" method="post">
-          <div class="row">
-            <div class="col-md-6">
-              <% let fields = [
-                "first name", "middle name", "last name", "age", "form number", "designation",
-                "status of employment", "association", "religion", "caste", "mobile number",
-                "number of family members", "number of electors", "number of new electors",
-                "municipality", "block", "village/para/ward number", "institution name",
-                "state of institution", "beneficiary scheme", "club name"
-              ]; %>
-              <% fields.slice(0, Math.ceil(fields.length / 2)).forEach(function(field, index) { %>
-                <div class="form-group row mb-3">
-                  <label class="col-sm-4 col-form-label"><%= field.split(' ').map(word => {return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()}).join(' ') %></label>
-                  <div class="col-sm-4">
-                    <select class="form-control" id="<%= field.replace(/\s+/g, '_') %>Condition">
-                      <option value="ct">contains</option>
-                      <option value="iec">is equal to (case-sensitive)</option>
-                      <option value="ies">is equal to(case-insensitive)</option>
-                      <option value="sw">starts with</option>
-                      <option value="gt">is greater than</option>
-                      <option value="gte">is greater than and equal to</option>
-                      <option value="lt">is less than</option>
-                      <option value="lte">is less than and equal to</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" name="<%= field.replace(/\s+/g, '_') %>">
-                  </div>
-                </div>
-              <% }); %>
-            </div>
-            <div class="col-md-6">
-              <% fields.slice(Math.ceil(fields.length / 2)).forEach(function(field, index) { %>
-                <div class="form-group row mb-3">
-                  <label class="col-sm-4 col-form-label"><%= field.split(' ').map(word => {return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()}).join(' ') %></label>
-                  <div class="col-sm-4">
-                    <select class="form-control" id="<%= field.replace(/\s+/g, '_') %>Condition">
-                      <option value="ct">contains</option>
-                      <option value="iec">is equal to (case-sensitive)</option>
-                      <option value="ies">is equal to(case-insensitive)</option>
-                      <option value="sw">starts with</option>
-                      <option value="gt">is greater than</option>
-                      <option value="gte">is greater than and equal to</option>
-                      <option value="lt">is less than</option>
-                      <option value="lte">is less than and equal to</option>
-                    </select>
-                  </div>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" name="<%= field.replace(/\s+/g, '_') %>">
-                  </div>
-                </div>
-              <% }); %>
-            </div>
-          </div>
-          <div class="d-flex justify-content-center my-3">
-            <button id="searchBtn" type="button" class="btn btn-primary">Search</button>
-            <button type="reset" class="btn btn-secondary ms-2">Reset</button>
-          </div>
-        </form>
         <div id="searchResults" class="mt-4"></div>
+      </div>
+    </div>
+    <nav>
+      <ul class="pagination justify-content-center">
+        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item"><a class="page-link" href="#">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Query Builder Modal -->
+  <div class="modal fade" id="queryBuilderModal" tabindex="-1" aria-labelledby="queryBuilderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="queryBuilderModalLabel">Query Builder</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="queryBuilderForm">
+            <div id="queryContainer"></div>
+            <div class="d-flex justify-content-start mb-3">
+              <button type="button" class="btn btn-success me-2" id="addQueryBtn">Add</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" id="executeQueryBtn">Execute</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
       </div>
     </div>
   </div>
 </body>
 
-<style>
-  .form-group {
-    margin-bottom: 1rem;
-  }
-</style>
 <script>
-  const fieldMapping = {
-    'first_name': 'firstname',
-    'middle_name': 'middlename',
-    'last_name': 'lastname',
-    'age': 'age',
-    'form_number': 'id',
-    'designation': 'designation',
-    'status_of_employment': 'status_of_employment',
-    'association': 'association',
-    'religion': 'religion',
-    'caste': 'caste',
-    'mobile_number': 'mobile_number',
-    'number_of_family_members': 'number_of_family_members',
-    'number_of_electors': 'number_of_electors',
-    'number_of_new_electors': 'number_of_new_electors',
-    'municipality': 'municipality',
-    'block': 'block',
-    'village/para/ward_number': 'village',
-    'institution_name': 'institution_name',
-    'state_of_institution': 'state_of_institution',
-    'beneficiary_scheme': 'beneficiary_scheme',
-    'club_name': 'club'
-  }
-
   $(document).ready(function() {
-    $('#searchBtn').click(function() {
-      const formData = $('#searchForm').serializeArray();
-      const searchParams = [];
-      
-      formData.forEach(field => {
-        if (field.value) {
-          const condition = $(`#${field.name}Condition`).val();
-          searchParams.push({
-            search_field: fieldMapping[field.name],
-            search_option: condition,
-            search_value: field.value
-          });
+    const fieldMapping = {
+      'firstname': 'First Name',
+      'middlename': 'Middle Name',
+      'lastname': 'Last Name',
+      'age': 'Age',
+      'id': 'Form Number',
+      'designation': 'Designation',
+      'status_of_employment': 'Status of Employment',
+      'association': 'Association',
+      'religion': 'Religion',
+      'caste': 'Caste',
+      'mobile_number': 'Mobile Number',
+      'number_of_family_members': 'Number of Family Members',
+      'number_of_electors': 'Number of Electors',
+      'number_of_new_electors': 'Number of New Electors',
+      'municipality': 'Municipality',
+      'block': 'Block',
+      'village': 'Village/Para/Ward Number',
+      'institution_name': 'Institution Name',
+      'state_of_institution': 'State of Institution',
+      'beneficiary_scheme': 'Beneficiary Scheme',
+      'club_name': 'Club Name',
+      'dob': 'Date of Birth'
+    };
+
+    const searchOptions = {
+      'contains': 'ct',
+      'is equal to (case-sensitive)': 'iec',
+      'is equal to (case-insensitive)': 'ies',
+      'starts with': 'sw',
+      'is greater than': 'gt',
+      'is greater than or equal to': 'gte',
+      'is less than': 'lt',
+      'is less than or equal to': 'lte',
+      'not equal to': 'ne'
+    };
+
+    $.ajax({
+      url: '/webservice/api/v1/getAllData',
+      method: 'GET',
+      success: function(response) {
+        if (response.success) {
+          displayResults(response.data);
+        }
+      },
+      error: function(xhr, status, err) {
+        alert(`Error Occurred: \nStatus: ${status}\nErrorDetail: ${err}\nHeaderNote: ${xhr}`);
+      }
+    })
+
+    let queryIndex = 0;
+
+    function createQueryFields(index) {
+      const queryField = `
+    <div class="row mb-3 query-group" data-index="${index}">
+      <div class="col">
+        <select class="form-control query-field" name="field_${index}">
+          ${Object.keys(fieldMapping).map(key => `<option value="${key}">${fieldMapping[key]}</option>`).join('')}
+        </select>
+      </div>
+      <div class="col">
+        <select class="form-control query-option" name="option_${index}">
+          ${Object.keys(searchOptions).map(option => `<option value="${searchOptions[option]}">${option}</option>`).join('')}
+        </select>
+      </div>
+      <div class="col">
+        <input type="text" class="form-control query-value" name="value_${index}" placeholder="Enter value">
+      </div>
+      <div class="col d-flex align-items-center">
+        <button type="button" class="btn btn-secondary mx-1 query-and" data-index="${index}">AND</button>
+        <button type="button" class="btn btn-secondary mx-1 query-or" data-index="${index}">OR</button>
+        <button type="button" class="btn btn-danger mx-1 query-delete" data-index="${index}">Delete</button>
+      </div>
+    </div>`;
+
+      const queryElement = $(queryField);
+      queryElement.find('.query-field').on('change', function() {
+        const selectedField = $(this).val();
+        const queryValueInput = queryElement.find('.query-value');
+        if (selectedField === 'dob' || selectedField === 'date_of_birth') {
+          queryValueInput.attr('type', 'date');
+        } else {
+          queryValueInput.attr('type', 'text');
         }
       });
 
-      console.log(`SearchParams: ${JSON.stringify(searchParams)}`);
-      
+      return queryElement;
+    }
+
+    function addQueryField() {
+      $('#queryContainer').append(createQueryFields(queryIndex));
+      queryIndex++;
+    }
+
+    $('#queryBuilderBtn').click(function() {
+      $('#queryBuilderModal').modal('show');
+      addQueryField();
+    });
+
+    $('#addQueryBtn').click(function() {
+      addQueryField();
+    });
+
+    $('#queryContainer').on('click', '.query-and, .query-or', function() {
+      const index = $(this).data('index');
+      $(this).siblings('.query-and, .query-or').prop('disabled', true).hide();
+      $(this).prop('disabled', true);
+      addQueryField();
+    });
+
+    $('#queryContainer').on('click', '.query-delete', function() {
+      const index = $(this).data('index');
+      $(`.query-group[data-index="${index}"]`).remove();
+    });
+
+    $('#executeQueryBtn').click(function() {
+      const queryData = [];
+      $('.query-group').each(function() {
+        const index = $(this).data('index');
+        const field = $(this).find('.query-field').val();
+        const option = $(this).find('.query-option').val();
+        const value = $(this).find('.query-value').val();
+        queryData.push({
+          field,
+          option,
+          value
+        });
+      });
+
       $.ajax({
         url: '/webservice/api/v1/search',
         method: 'GET',
-        data: { searchParams: JSON.stringify(searchParams) },
+        data: {
+          queryData: JSON.stringify(queryData)
+        },
         success: function(response) {
+          $('#queryBuilderModal').modal('hide');
           if (response.success) {
             displayResults(response.results);
           } else {
@@ -137,9 +201,8 @@
       });
     });
 
-    $('#clearBtn').click(function() {
-      $('#searchForm')[0].reset();
-      $('#searchResults').empty();
+    $('#goBackBtn').click(function() {
+      window.location.href = '/';
     });
 
     function displayResults(results) {
@@ -169,4 +232,11 @@
     }
   });
 </script>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+</style>
+
 </html>

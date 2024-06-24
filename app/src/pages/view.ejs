@@ -7,12 +7,16 @@
     </div>
 
     <!-- Primary Details Card -->
+    <div class="d-flex justify-content-start mb-3" id="btnContainer" data-datamodel="<%= JSON.stringify(data) %>">
+      <a href="/view/edit/<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</a>
+      <a href="/search" class="btn btn-secondary">Go Back</a>
+      <button id="downloadExcelBtn" class="btn btn-success ms-2">Download Excel</button>
+    </div>
+
     <div class="row">
       <div class="col-sm-2 d-flex align-item-right">
-        <a href="/enrollment?edit=true&id=<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</a>
       </div>
       <div class="col-sm-2">
-        <a href="/search" class="btn btn-secondary">Go Back</a>
       </div>
     </div>
     <div class="card f-card my-3">
@@ -23,6 +27,20 @@
         <p><strong>Date of Birth:</strong> <%= data.dob %></p>
         <p><strong>Caste:</strong> <%= data.caste %></p>
         <p><strong>Religion:</strong> <%= data.religion %></p>
+      </div>
+    </div>
+
+    <!-- Residential Address Card -->
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Residential Address</h4>
+        <p><strong>District:</strong> <%= data.addresses.district %></p>
+        <p><strong>Municipality:</strong> <%= data.addresses.municipality %></p>
+        <p><strong>Block:</strong> <%= data.addresses.block %></p>
+        <p><strong>Gram Panchayat:</strong> <%= data.addresses.gp %></p>
+        <p><strong>Village/Para/Ward Number:</strong> <%= data.addresses.village %></p>
+        <p><strong>Landmark:</strong> <%= data.addresses.landmark %></p>
+        <p><strong>Remarks:</strong> <%= data.addresses.remarks %></p>
       </div>
     </div>
 
@@ -38,6 +56,32 @@
       </div>
     </div>
 
+    <!-- Additional Details Card -->
+    <div class="card f-card my-3">
+      <div class="card-body">
+        <h4 class="card-title">Additional Details</h4>
+        <p><strong>Contact Leader Name:</strong> <%= data.additional_details.contact_leader_name %></p>
+        <% if (data.status_of_employment === 'Retired') { %>
+        <div id="retiredSection">
+          <div class="form-group mb-3">
+            <p><strong>During service, did you take membership of any other opposition?:</strong> <%= data.additional_details.had_taken_opposition_membership %></p>
+          </div>
+          <div class="form-group mb-3">
+            <p><strong>Did Trade Union Rights exist at the time of your service?:</strong> <%= data.additional_details.trade_union_right_on %></p>
+          </div>
+          <div class="form-group mb-3">
+            <p><strong>Did you play any leadership role during your service?:</strong> <%= data.additional_details.has_played_leadership_role %></p>
+          </div>
+          <% if (data.additional_details.has_played_leadership_role === 'Yes') { %>
+          <div class="form-group mb-3">
+            <p><strong>If yes, at which stage?:</strong> <%= data.additional_details.played_leadership_role_stage %></p>
+          </div>
+          <% } %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+
     <!-- Family Information Card -->
     <div class="card f-card my-3">
       <div class="card-body">
@@ -45,7 +89,7 @@
         <p><strong>Family Type:</strong> <%= data.family_information.family_type %></p>
         <p><strong>Number of Family Members:</strong> <%= data.number_of_family_members %></p>
         <p><strong>Number of Electors:</strong> <%= data.number_of_electors %></p>
-    
+
         <!-- Family Members Table -->
         <h5>Family Members</h5>
         <table class="table table-hover" id="fFamilyTable">
@@ -88,7 +132,7 @@
               </td>
             </tr>
             <% }) %>
-            
+
           </tbody>
         </table>
       </div>
@@ -109,12 +153,12 @@
               <td><%= scheme %></td>
             </tr>
             <% }) %>
-            
+
           </tbody>
         </table>
       </div>
     </div>
-      
+
 
     <!-- Evaluation Card -->
     <div class="card f-card my-3">
@@ -134,8 +178,8 @@
       </div>
     </div>
     <div class="d-flex justify-content-center my-3">
-        <a href="/enrollment?edit=true&id=<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</a>
-        <a href="/search" class="btn btn-secondary ms-2">Go Back</a>
+      <a href="/view/edit/<%= data._id %>" id="editBtn" class="btn btn-primary mx-3">Edit</a>
+      <a href="/search" class="btn btn-secondary ms-2">Go Back</a>
     </div>
   </div>
 </body>
@@ -160,9 +204,38 @@
     background-color: #f9f9f9;
   }
 </style>
-
+<script lang="javascript" src="dist/xlsx.full.min.js"></script>
 <script>
   $(document).ready(function() {
-    // You can add any interactive features for the table here
+    $('#downloadExcelBtn').click(function() {
+      const data = $('#btnContainer').data('datamodel');
+      console.log(`Data to send: ${JSON.stringify(data)}`);
+      $.ajax({
+        url: '/webservice/api/v1/download-excel',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(data),
+        xhrFields: {
+          responseType: 'blob'
+        },
+        success: function(response) {
+          const blob = new Blob([response], {
+            type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+          });
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = 'view-details.xlsx';
+          document.body.appendChild(a);
+          a.click();
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        },
+        error: function(error) {
+          alert('Error generating Excel file');
+          console.error('Error:', error);
+        }
+      });
+    });
   });
 </script>

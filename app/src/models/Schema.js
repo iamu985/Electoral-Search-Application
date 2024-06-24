@@ -27,13 +27,14 @@ const SchemaObject = {
   middlename: String,
   lastname: { type: String, required: true },
   fullname: { type: String },
-  mobile_number: { type: String, required: true, unique: true },
-  dob: { type: Date, required: true },
+  nickname: String,
+  mobile_number: { type: String, required: true },
+  dob: { type: Date },
   caste: String,
   religion: String,
   status_of_employment: { type: String, default: "working" },
-  number_of_family_members: { type: Number, default: 2, required: true, min: 2, max: 10 },
-  number_of_electors: { type: Number, default: 0, required: true, min: 1, max: 10 },
+  number_of_family_members: { type: Number, default: 2, required: true, min: 0, max: 10 },
+  number_of_electors: { type: Number, default: 0, required: true, min: 0, max: 10 },
   number_of_new_electors: { type: Number, default: 0, required: true, min: 0, max: 10 },
   association_name: String,
   job_details: {
@@ -58,7 +59,6 @@ const SchemaObject = {
   },
   additional_details: {
     trade_union_right_on: String,
-    other_front: String,
     contact_leader_name: String,
     had_taken_opposition_membership: String,
     has_played_leadership_role: String,
@@ -82,6 +82,7 @@ const SchemaObject = {
 };
 
 const schema = new Schema(SchemaObject);
+
 
 const DataModel = mongoose.model('DataModel', schema);
 

@@ -9,7 +9,7 @@
       <div class="col-md-12">
         <form id="addSettingsForm" method="post" class="mb-4">
           <div class="row justify-content-center">
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="entityType">EntityType</label>
                 <select class="form-control" id="entityType" name="entityType" required>
@@ -18,17 +18,22 @@
                   <option value="block">Block</option>
                   <option value="municipality">Municipality</option>
                   <option value="designation">Designation</option>
+                  <option value="gp">Grampachayat</option>
                 </select>
               </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
               <div class="form-group">
                 <label for="value">Value</label>
                 <input type="text" class="form-control" id="value" name="value" required>
               </div>
             </div>
-            <div class="col-md-2 my-3 align-self-end">
+            <div class="col-md-3 my-3 align-self-end">
               <button type="button" id="addBtn" class="btn btn-primary">Add</button>
+            </div>
+            <div class="col-md-3 my-3 align-self-end">
+              <label for="importFile" class="btn btn-secondary">Import Excel</label>
+              <input type="file" id="importFile" class="d-none" accept=".xlsx, .xls">
             </div>
           </div>
         </form>
@@ -64,7 +69,7 @@
                 <tr>
                   <td><%= result.entity_type %></td>
                   <td>
-                    <input type="text" class="form-control-plaintext" value="<%= result.value %>" data-id="<%= result._id %>" readonly>
+                    <input type="text" class="form-control" value="<%= result.value %>" data-id="<%= result._id %>" readonly>
                   </td>
                   <td>
                     <button class="btn btn-sm btn-primary edit-btn" data-id="<%= result._id %>">Edit</button>
@@ -86,6 +91,7 @@
     margin-bottom: 1rem;
   }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
 <script>
   $(document).ready(function() {
     function searchSettings(entityType) {
@@ -136,7 +142,7 @@
             <tr>
               <td>${result.entity_type}</td>
               <td>
-                <input type="text" class="form-control-plaintext" value="${result.value}" data-id="${result._id}" readonly>
+                <input type="text" class="form-control" value="${result.value}" data-id="${result._id}" readonly>
               </td>
               <td>
                 <button class="btn btn-sm btn-primary edit-btn" data-id="${result._id}">Edit</button>
@@ -169,6 +175,7 @@
               alert('Value added successfully');
               $('#value').val('');
               displayResults(response.data);
+              return;
             } else {
               alert('Error adding value');
             }
@@ -183,7 +190,7 @@
     });
 
     $('#searchBtn').click(function() {
-      searchSettings($('#entityType').val(), $('#settingsSearchValue').val());
+      settingsSearchAndDisplay($('#settingsSearchValue').val());
     });
 
     $('#entityType').change(function() {
@@ -197,6 +204,7 @@
     $(document).on('click', '.edit-btn', function() {
       const id = $(this).data('id');
       const inputField = $(`input[data-id="${id}"]`);
+      const entityType = $('#entityType').val();
       if ($(this).text() === 'Edit') {
         inputField.prop('readonly', false).focus();
         $(this).text('Save');
@@ -204,9 +212,9 @@
         const newValue = inputField.val();
         $.ajax({
           url: `/webservice/api/v1/settings/edit/${id}`,
-          method: 'PUT',
+          method: 'PATCH',
           contentType: 'application/json',
-          data: JSON.stringify({ value: newValue }),
+          data: JSON.stringify({ entity_type: entityType, value: newValue }),
           success: function(response) {
             if (response.success) {
               alert('Value updated successfully');
@@ -242,6 +250,39 @@
             alert('Error: ' + err.responseText);
           }
         });
+      }
+    });
+
+    $('#importFile').change(function(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const data = new Uint8Array(event.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+          const json = XLSX.utils.sheet_to_json(worksheet);
+
+          $.ajax({
+            url: '/webservice/api/v1/settings/import',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ data: json }),
+            success: function(response) {
+              if (response.success) {
+                alert('Data imported successfully');
+                searchSettings($('#entityType').val());
+              } else {
+                alert('Error importing data');
+              }
+            },
+            error: function(err) {
+              alert('Error: ' + err.responseText);
+            }
+          });
+        };
+        reader.readAsArrayBuffer(file);
       }
     });
 

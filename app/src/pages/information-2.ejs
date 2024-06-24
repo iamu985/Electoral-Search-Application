@@ -411,14 +411,14 @@
         return;
       }
       const formData = collectFormData();
-      console.log(formData); // Debugging - see the collected data object
+      // console.log(formData); // Debugging - see the collected data object
       $.ajax({
         url: '/information2',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(formData),
         success: function(response) {
-          console.log(response);
+          // console.log(response);
           if (response.success) {
             window.location.href = response.redirect;
           }

@@ -1,8 +1,278 @@
 <%- include('partials/base.ejs') %>
 
-<% if (edit) { %>
-  <% console.log('Data being passed to template:', data); %>
-  <%- include('partials/enrollment-edit-true.ejs', { data: data }) %>
-<% } else { %>
-  <%- include('partials/enrollment-edit-false.ejs') %>
-<% } %>
+
+<body>
+  <div class="container mb-5">
+    <div id="fValidationNotif" class="alert alert-danger f-hidden">
+      <!-- Validation Message Goes here -->
+    </div>
+    
+    <div id="header-title" class="d-flex justify-content-center my-3">
+      <h1 class="center">Enrollment Form</h1>
+    </div>
+    <div class="row d-flex justify-content-left">
+      <!-- Form begins here -->
+      <form id="enrollmentForm" action="" method="post">
+        <div class="form-group">
+          <h4>Details</h4>
+          <div class="row input-group mb-3 card" id="details">
+            <div class="card-body px-3 pb-4">
+              <div class="my-1">
+                <label for="firstName">First Name <span class="text-danger">*</span></label>
+                <input type="text" id="firstName" class="form-control" name="first_name" data-fName="First Name" required>
+              </div>
+              <div class="my-3">
+                <label for="middleName">Middle Name</label>
+                <input type="text" id="middleName" class="form-control" name="middle_name" placeholder="optional">
+              </div>
+              <div class="my-3">
+                <label for="lastName">Last Name <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="lastName" name="last_name" required>
+              </div>
+              <div class="input-group mt-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="basic-addon1">+91</span>
+                </div>
+                <input type="tel" pattern="[0-9]{10}" class="form-control" id="phoneNumber" name="mobile_number" placeholder="Mobile or Whatsapp Number" required>
+              </div>
+              <div class="row mt-3">
+                <div class="col-sm my-1">
+                  <label for="number_of_family_members">Number of Family Members <span class="text-danger">*</span></label>
+                  <input name="number_of_family_members" type="number" min="0" max="10" class="form-control" value="4" required>
+                </div>
+                <div class="col-sm my-1">
+                  <label for="number_of_electors">Number of Electors <span class="text-danger">*</span></label>
+                  <input name="number_of_electors" type="number" min="0" max="10" class="form-control" value="4" required>
+                </div>
+                <div class="col-sm my-1">
+                  <label for="number_of_new_electors">Number of New Electors <span class="text-danger">*</span></label>
+                  <input name="number_of_new_electors" type="number" min="0" max="10" class="form-control" value="4" required>
+                </div>
+              </div>
+              <div class="mt-1">
+                <label class="py-2" for="associationName">Name of the Association <span class="text-danger">*</span></label>
+                <select name="association_name" id="associationName" class="form-control custom-select" required>
+                  <% options.associations.forEach(association => { %>
+                    <option value="<%= association.value %>"><%= association.value %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="mt-2">
+                <label class="py-2" for="statusOfEmployment">Status of Employment <span class="text-danger">*</span></label>
+                <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select" required>
+                  <option value="Working">Working</option>
+                  <option value="Retired">Retired</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2 Residential Address -->
+          <h4>Residential Address</h4>
+          <div class="my-3" id="residentialAddress">
+            <div class="row card input-group mb-3 py-3 px-3">
+              <div class="row card-body" id="f-ra-p1">
+                <div class="col-sm">
+                  <label for="districtName">District <span class="text-danger">*</span></label>
+                  <select name="district" id="districtName" class="form-control mx-3 custom-select" required>
+                    <% options.districts.forEach(district => { %>
+                      <option value="<%= district.value %>"><%= district.value %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-sm">
+                  <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
+                  <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select" required>
+                    <% options.municipalities.forEach(municipality => {%>
+                      <option value="<%= municipality.value %>"><%= municipality.value %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-sm">
+                  <label for="blockName">Block <span class="text-danger">*</span></label>
+                  <select name="block" id="blockName" class="form-control mx-3 custom-select" required>
+                    <% options.blocks.forEach(block => { %>
+                      <option value="<%= block.value %>"><%= block.value %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-sm">
+                  <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
+                  <select name="gp" id="gp" class="form-control mx-3 custom-select" required>
+                    <% options.gps.forEach(gp => { %>
+                      <option value="<%= gp.value %>"><%= gp.value %></option>
+                    <% }) %>
+                  </select>
+                </div>
+                <div class="col-sm">
+                  <label for="villageName">Village/Para/Ward Number <span class="text-danger">*</span></label>
+                  <input type="text" name="village" id="villageName" class="form-control mx-3">
+                </div>
+              </div>
+              <div class="row card-body" id="f-ra-p2">
+                <div class="col-sm">
+                  <label for="landMark">Landmark</label>
+                  <input type="text" name="landmark" id="landMark" class="form-control">
+                </div>
+              </div>
+              <div class="row card-body" id="f-ra-p3">
+                <div class="col-sm">
+                  <label for="remarksContent">Remarks</label>
+                  <textarea name="remarks" id="remarksContent" class="form-control"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-warning rounded" id="nextPage">Next Page</button>
+      </form>
+    </div>
+  </div>
+</body>
+<style>
+  .f-error {
+    display: block;
+    border: 1px solid red;
+  }
+
+  .f-hidden {
+    display: none;
+  }
+</style>
+
+<script>
+  $(document).ready(function() {
+    var alert = $('#fValidationNotif');
+    alert.addClass('f-hidden');
+
+    $('#firstName, #lastName, #phoneNumber, #number_of_family_members, #number_of_electors, #number_of_new_electors, #associationName, #statusOfEmployment, #districtName, #municipalityName, #blockName, #gp, #villageName').blur(function() {
+      var input = $(this);
+      if (input.val() === "") {
+        input.addClass('f-error');
+        alert.removeClass('f-hidden');
+        alert.text('Please fill out all required fields.');
+      } else {
+        input.removeClass('f-error');
+        alert.addClass('f-hidden');
+      }
+    });
+
+    $('#nextPage').click(function(e) {
+      e.preventDefault();
+      if (!validateForm()) {
+        alert.text('Please fill out all required fields.').removeClass('f-hidden');
+        return;
+      }
+      var formData = collectFormData();
+      // console.log(`POSTDATA: ${JSON.stringify(formData)}`);
+      $.ajax({
+        url: '/enrollment',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+          if (response.success) {
+            window.location.href = response.redirect;
+          }
+        },
+        error: function(xhr, status, error) {
+          console.log('Error: ' + error);
+        }
+      });
+    });
+
+    function validateForm() {
+      var isValid = true;
+      $('#enrollmentForm [required]').each(function() {
+        if ($(this).val() === "") {
+          $(this).addClass('f-error');
+          isValid = false;
+        } else {
+          $(this).removeClass('f-error');
+        }
+      });
+      return isValid;
+    }
+
+    $('#phoneNumber').change(function(e) {
+      e.preventDefault();
+      var mobileNumber = $(this).val();
+      var isUnique = isMobileNumberUnique(mobileNumber);
+      if (!isUnique) {
+        console.log('Mobile Number already exists!');
+      }
+    });
+
+    function isMobileNumberUnique(mobileNumber) {
+      $.ajax({
+        url: `/webservice/api/v1/isUniqueMobileNumber/${mobileNumber}`,
+        method: 'GET',
+        contentType: 'application/json',
+        success: function(response) {
+          if (response.success) {
+            if (!response.isUnique) {
+              alert.text('Mobile number already exists.').removeClass('f-hidden');
+            } else {
+              alert.addClass('f-hidden');
+            }
+          } else {
+            console.log('Error: ' + response.error);
+          }
+        }
+      });
+    }
+
+    function getFullName(firstname, middlename, lastname) {
+      if (middlename !== '') {
+        return firstname + ' ' + middlename + ' ' + lastname;
+      } else {
+        return firstname + ' ' + lastname;
+      }
+    }
+
+    function toggleValidationAlert(validationMessage, validationState) {
+      if (validationState) {
+        $('#fValidationNotif').addClass('f-hidden');
+      } else {
+        var validationAlert = getValidationAlertDiv(validationMessage);
+        $('#fValidationNotif').removeClass('f-hidden');
+        $('#fValidationNotif').append(validationAlert);
+      }
+    }
+
+    function getValidationAlertDiv(validationMessage) {
+      return `
+        <div id="f-notif-container">
+          ${validationMessage}
+        </div>
+      `;
+    }
+
+    function collectFormData() {
+      const form = $('#enrollmentForm');
+      const formData = {
+        firstname: form.find('[name="first_name"]').val(),
+        middlename: form.find('[name="middle_name"]').val(),
+        lastname: form.find('[name="last_name"]').val(),
+        mobile_number: form.find('[name="mobile_number"]').val(),
+        status_of_employment: form.find('[name="status_of_employment"]').val(),
+        number_of_family_members: form.find('[name="number_of_family_members"]').val(),
+        number_of_electors: form.find('[name="number_of_electors"]').val(),
+        number_of_new_electors: form.find('[name="number_of_new_electors"]').val(),
+        association_name: form.find('[name="association_name"]').val(),
+        addresses: {
+          district: form.find('[name="district"]').val(),
+          municipality: form.find('[name="municipality"]').val(),
+          block: form.find('[name="block"]').val(),
+          gp: form.find('[name="gp"]').val(),
+          village: form.find('[name="village"]').val(),
+          landmark: form.find('[name="landmark"]').val(),
+          remarks: form.find('[name="remarks"]').val()
+        }
+      };
+      formData.fullname = getFullName(formData.firstname, formData.middlename, formData.lastname);
+      return formData;
+    }
+  });
+</script>
+

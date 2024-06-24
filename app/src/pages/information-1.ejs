@@ -2,11 +2,6 @@
 
 <body>
   <div class="container mb-5">
-    <% if (status === 'error') { %>
-    <div class="alert alert-danger">
-      <%= errorMessage %>
-    </div>
-    <% } %>
 
     <div id="header-title" class="d-flex justify-content-center my-3">
       <h1 class="center">Detail Information</h1>
@@ -31,7 +26,7 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="dob" class="py-1">Date Of Birth <span class="text-danger">*</span></label>
-                <input type="date" id="dob" class="form-control" name="dob" required>
+                <input type="date" id="dob" class="form-control" name="dob">
               </div>
               <div class="col-md-6 mb-3">
                 <label class="py-1" for="caste">Caste <span class="text-danger">*</span></label>
@@ -58,8 +53,8 @@
             <div class="form-group mb-3">
               <label class="py-2" for="designation">Designation <span class="text-danger">*</span></label>
               <select name="designation" id="designation" class="form-control custom-select" required>
-                <% designations.forEach(designation => { %>
-                <option value="<%= designation %>"><%= designation %></option>
+                <% options.designations.forEach(designation => { %>
+                <option value="<%= designation.value %>"><%= designation.value %></option>
                 <% }) %>
               </select>
             </div>
@@ -149,38 +144,34 @@
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label for="districtName">District <span class="text-danger">*</span></label>
-                <select name="district" id="districtName" class="form-control custom-select" required>
-                  <option value="KPG">Kalimpong</option>
-                  <option value="DRJ">Darjeeling</option>
-                  <option value="KUR">Kurseong</option>
-                  <option value="TIM">Sano Thimi</option>
+                <select name="district" id="districtName" class="form-control mx-3 custom-select" required>
+                  <% options.districts.forEach(district => { %>
+                    <option value="<%= district.value %>"><%= district.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
-                <select name="municipality" id="municipalityName" class="form-control custom-select" required>
-                  <option value="Pudung">Pudung</option>
-                  <option value="Pedong">Pedong</option>
-                  <option value="Eagles Den">Eagles Den</option>
-                  <option value="Thimi">Thimi</option>
+                <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select" required>
+                  <% options.municipalities.forEach(municipality => {%>
+                    <option value="<%= municipality.value %>"><%= municipality.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="blockName">Block <span class="text-danger">*</span></label>
-                <select name="block" id="blockName" class="form-control custom-select" required>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
+                <select name="block" id="blockName" class="form-control mx-3 custom-select" required>
+                  <% options.blocks.forEach(block => { %>
+                    <option value="<%= block.value %>"><%= block.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
-                <select name="gp" id="gp" class="form-control custom-select" required>
-                  <option value="P1">P1</option>
-                  <option value="P2">P2</option>
-                  <option value="P3">P3</option>
-                  <option value="P4">P4</option>
+                <select name="gp" id="gp" class="form-control mx-3 custom-select" required>
+                  <% options.gps.forEach(gp => { %>
+                    <option value="<%= gp.value %>"><%= gp.value %></option>
+                  <% }) %>
                 </select>
               </div>
               <div class="col-md-6 mb-3">
@@ -266,8 +257,9 @@
       url: '/session-data',
       method: 'GET',
       success: function(formData) {
-        console.log(`FormData: ${JSON.stringify(formData)}`)
+        // console.log(`FormData: ${JSON.stringify(formData)}`)
         var address = formData.addresses;
+        // console.log(`Address: ${JSON.stringify(address), null, 2}`)
         $('#districtName').val(address.district);
         $('#municipalityName').val(address.municipality);
         $('#blockName').val(address.block);
@@ -288,7 +280,7 @@
         return;
       }
       const formData = collectFormData();
-      console.log(formData); // Debugging - see the collected data object
+      // console.log(formData); // Debugging - see the collected data object
       $.ajax({
         url: '/information1', // Change to your endpoint
         method: 'POST',
@@ -296,7 +288,7 @@
         data: JSON.stringify(formData),
         success: function(response) {
           // Handle the response
-          console.log(response);
+          // console.log(response);
           if (response.success) {
             window.location.href = response.redirect;
           }
@@ -321,6 +313,33 @@
       return isValid;
     }
 
+    function getAdditionalDetails(form, employmentStatus) {
+        returnValue = {}
+      if (employmentStatus.toLowerCase() === 'retired') {
+        returnValue = 
+          {
+            trade_union_right_on: form.find('[name="trade_union_right_on"]').val(),
+            played_leadership_role_stage: form.find('[name="played_leadership_role_stage"]').val(),
+            contact_leader_name: form.find('[name="contact_leader_name"]').val(),
+            had_taken_opposition_membership: form.find('[name="had_taken_opposition_membership"]').val(),
+            has_played_leadership_role: form.find('[name="has_played_leadership_role"]').val(),
+            played_leadership_role_stage: form.find('[name="played_leadership_role_stage"]').val()
+          }
+      } else {
+        returnValue =
+          {
+            trade_union_right_on: null,
+            played_leadership_role_stage: null,
+            contact_leader_name: form.find('[name="contact_leader_name"]').val(),
+            had_taken_opposition_membership: null,
+            has_played_leadership_role: null,
+            played_leadership_role_stage: null
+          }
+      }
+      return returnValue;
+
+    }
+
     function collectFormData() {
       const form = $('#detailForm');
       const formData = {
@@ -329,7 +348,6 @@
         dob: form.find('[name="dob"]').val(),
         caste: form.find('[name="caste"]').val(),
         religion: form.find('[name="religion"]').val(),
-        contact_leader_name: form.find('[name="contact_leader_name"]').val(),
         status_of_employment: form.find('[name="status_of_employment"]').val(),
         had_taken_opposition_membership: form.find('[name="had_taken_opposition_membership"]').val(),
         trade_union_right_on: form.find('[name="trade_union_right_on"]').val(),
@@ -351,6 +369,8 @@
           remarks: form.find('[name="remarks"]').val()
         }
       };
+
+      formData.additional_details = getAdditionalDetails(form, formData.status_of_employment);
 
       return formData;
     }

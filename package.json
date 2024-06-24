@@ -1,13 +1,74 @@
 {
-  "type": "module",
+  "name": "coffee",
+  "productName": "coffee",
+  "version": "1.0.0-beta",
+  "description": "Coffee Desktop Application",
+  "main": "app/src/index.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "dev": "nodemon  --ext js,ejs --exec npm start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "publish": "electron-forge publish",
+    "lint": "eslint src --color"
+  },
+  "keywords": [],
+  "author": "Frank Brano Gomes <frankbr985gomes@gmail.com>",
+  "license": "MIT",
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "zip"
+        ],
+        "linux": [
+          "deb",
+          "rpm"
+        ]
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm"
+      },
+      "electronWinstallerConfig": {
+        "name": "app"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "",
+        "name": ""
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "app"
+      }
+    }
+  },
   "dependencies": {
+    "bootstrap": "^5.3.3",
     "ejs": "^3.1.10",
+    "electron-compile": "^6.4.4",
+    "electron-squirrel-startup": "^1.0.0",
     "express": "^4.19.2",
     "express-session": "^1.18.0",
-    "mongoose": "^8.3.3",
-    "parsleyjs": "^2.9.2"
+    "mongoose": "^8.4.1",
+    "multer": "^1.4.5-lts.1",
+    "pm2": "^5.4.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
-    "nodemon": "^3.1.0"
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.4",
+    "electron-prebuilt-compile": "8.2.0",
+    "eslint": "^3.19.0",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.34.1"
   }
 }
