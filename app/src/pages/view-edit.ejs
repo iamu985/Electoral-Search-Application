@@ -23,7 +23,11 @@
           </div>
           <div class="form-group">
             <label for="dob">Date of Birth:</label>
-            <input type="date" id="dob" name="dob" class="form-control" value="<%= new Date(data.dob).toISOString().substr(0, 10) %>" required>
+            <% if (data.dob) {%>
+              <input type="date" id="dob" name="dob" class="form-control" value="<%= new Date(data.dob).toISOString().substr(0, 10) %>">
+            <% } else { %>
+              <input type="date" id="dob" name="dob" class="form-control" value="<%= data.dob %>">
+            <% } %>
           </div>
           <div class="form-group">
             <label for="caste">Caste:</label>
@@ -81,7 +85,11 @@
           </div>
           <div class="form-group">
             <label for="date_of_joining">Date of Joining:</label>
-            <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= new Date(data.job_details.date_of_joining).toISOString().substr(0, 10) %>" required>
+            <% if (data.job_details.date_of_joining) {%>
+              <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= new Date(data.job_details.date_of_joining).toISOString().substr(0, 10) %>">
+            <% } else { %>
+              <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= data.job_details.date_of_joining %>">
+            <% } %>
           </div>
           <div class="form-group">
             <label for="nature_of_job">Nature of Job:</label>

@@ -36,7 +36,8 @@ const searchAPIRequestHandler = async (req, res) => {
       "institution_name": "family_information.family_members.institution_information.name_of_institution",
       "state_of_institution": "family_information.family_members.institution_information.state_of_institution",
       "club_name": "family_information.family_members.institution_information.club",
-      "dob": "dob"
+      "dob": "dob",
+      "beneficiary_scheme": "family_information.beneficiary_scheme"
     };
 
     const { queryData } = req.query;
