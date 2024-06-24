@@ -71,40 +71,40 @@
             <div class="row card input-group mb-3 py-3 px-3">
               <div class="row card-body" id="f-ra-p1">
                 <div class="col-sm">
-                  <label for="districtName">District</label>
-                  <select name="district" id="districtName" class="form-control mx-3 custom-select">
+                  <label for="districtName">District <span class="text-danger">*</span></label>
+                  <select name="district" id="districtName" class="form-control mx-3 custom-select" required>
                     <% options.districts.forEach(district => { %>
                       <option value="<%= district.value %>"><%= district.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="municipalityName">Municipality</label>
-                  <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select">
+                  <label for="municipalityName">Municipality <span class="text-danger">*</span></label>
+                  <select name="municipality" id="municipalityName" class="mx-3 form-control custom-select" required>
                     <% options.municipalities.forEach(municipality => {%>
                       <option value="<%= municipality.value %>"><%= municipality.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="blockName">Block</label>
-                  <select name="block" id="blockName" class="form-control mx-3 custom-select">
+                  <label for="blockName">Block <span class="text-danger">*</span></label>
+                  <select name="block" id="blockName" class="form-control mx-3 custom-select" required>
                     <% options.blocks.forEach(block => { %>
                       <option value="<%= block.value %>"><%= block.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="gp">Gram Panchayat</label>
-                  <select name="gp" id="gp" class="form-control mx-3 custom-select">
+                  <label for="gp">Gram Panchayat <span class="text-danger">*</span></label>
+                  <select name="gp" id="gp" class="form-control mx-3 custom-select" required>
                     <% options.gps.forEach(gp => { %>
                       <option value="<%= gp.value %>"><%= gp.value %></option>
                     <% }) %>
                   </select>
                 </div>
                 <div class="col-sm">
-                  <label for="villageName">Village/Para/Ward Number</label>
-                  <input type="text" name="village" id="villageName" class="form-control mx-3">
+                  <label for="villageName">Village/Para/Ward Number <span class="text-danger">*</span></label>
+                  <input type="text" name="village" id="villageName" class="form-control mx-3" required>
                 </div>
               </div>
               <div class="row card-body" id="f-ra-p2">
