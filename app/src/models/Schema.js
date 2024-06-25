@@ -23,6 +23,7 @@ const familyMemberSchema = new Schema({
 
 const SchemaObject = {
   id: { type: String, required: true, unique: true },
+  external_form_id: {type: String, unique: true},
   firstname: { type: String, required: true },
   middlename: String,
   lastname: { type: String, required: true },

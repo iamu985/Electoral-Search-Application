@@ -5,6 +5,10 @@
     <div class="d-flex justify-content-center my-3">
       <h1 class="center">Edit Details</h1>
     </div>
+    <div class="d-flex justify-content-start mb-3">
+      <button id="goBackBtn" class="btn btn-secondary ms-2">Go Back</button>
+      <button type="button" class="btn btn-primary mx-3" id="saveViewData">Save Changes</button>
+    </div>
 
     <form id="editForm" action="/update-details" method="post" data-form-id="<%= data._id %>">
       <input type="hidden" name="id" value="<%= data._id %>">
@@ -13,6 +17,10 @@
       <div class="card f-card my-3">
         <div class="card-body">
           <h4 class="card-title">Primary Details</h4>
+          <div class="form-group">
+            <label for="external_form_id">External Form Id:</label>
+            <input type="text" id="externalFormId" name="external_form_id" class="form-control" value="<%= data.external_form_id %>">
+          </div>
           <div class="form-group">
             <label for="fullname">Full Name:</label>
             <input type="text" id="fullname" name="fullname" class="form-control" value="<%= data.fullname %>" required>
@@ -24,9 +32,9 @@
           <div class="form-group">
             <label for="dob">Date of Birth:</label>
             <% if (data.dob) {%>
-              <input type="date" id="dob" name="dob" class="form-control" value="<%= new Date(data.dob).toISOString().substr(0, 10) %>">
+            <input type="date" id="dob" name="dob" class="form-control" value="<%= new Date(data.dob).toISOString().substr(0, 10) %>">
             <% } else { %>
-              <input type="date" id="dob" name="dob" class="form-control" value="<%= data.dob %>">
+            <input type="date" id="dob" name="dob" class="form-control" value="<%= data.dob %>">
             <% } %>
           </div>
           <div class="form-group">
@@ -86,9 +94,9 @@
           <div class="form-group">
             <label for="date_of_joining">Date of Joining:</label>
             <% if (data.job_details.date_of_joining) {%>
-              <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= new Date(data.job_details.date_of_joining).toISOString().substr(0, 10) %>">
+            <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= new Date(data.job_details.date_of_joining).toISOString().substr(0, 10) %>">
             <% } else { %>
-              <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= data.job_details.date_of_joining %>">
+            <input type="date" id="date_of_joining" name="date_of_joining" class="form-control" value="<%= data.job_details.date_of_joining %>">
             <% } %>
           </div>
           <div class="form-group">
@@ -385,7 +393,9 @@
           }
         });
       }
-  
+
+
+
       // Function to initialize click handlers
       function initializeClickHandler() {
         const data = JSON.parse(sessionStorage.getItem('data'));
@@ -403,7 +413,7 @@
           $('#edit_age').val(member.age);
           $('#editMemberModal').modal('show');
         });
-  
+
         // Handle save changes for family member
         $('#saveMemberChanges').click(function() {
           const index = $('#editMemberIndex').val();
@@ -421,12 +431,12 @@
           $('#editMemberModal').modal('hide');
           updateFamilyTable(data.family_information.family_members);
         });
-  
+
         // Handle modal close for family member
         $('.modalFamilyClose').click(function() {
           $('#editMemberModal').modal('hide');
         });
-  
+
         // Handle beneficiary scheme edit button click
         $('.edit-scheme').click(function() {
           const index = $(this).data('index');
@@ -435,7 +445,7 @@
           $('#edit_scheme_name').val(scheme);
           $('#editSchemeModal').modal('show');
         });
-  
+
         // Handle save changes for beneficiary scheme
         $('#saveSchemeChanges').click(function() {
           const index = $('#editSchemeIndex').val();
@@ -445,12 +455,12 @@
           $('#editSchemeModal').modal('hide');
           updateSchemeTable(data.family_information.beneficiary_scheme);
         });
-  
+
         // Handle modal close for beneficiary scheme
         $('.modalBeneficiaryClose').click(function() {
           $('#editSchemeModal').modal('hide');
         });
-  
+
         // Handle saving final data
         $('#saveViewData').click(function() {
           const formData = collectFormData();
@@ -470,17 +480,22 @@
           });
         });
       }
-  
+
       const formId = $('#editForm').data('form-id');
       getData(formId);
-  
+
+      $('#goBackBtn').click(function() {
+        window.location.href = `/view/${formId}`;
+      });
+
       // Function to collect form data
       function collectFormData() {
         const form = $('#editForm');
         const data = JSON.parse(sessionStorage.getItem('data'));
-  
+
         const updatedData = {
           _id: data._id,
+          external_form_id: form.find('[name="external_form_id"]').val(),
           fullname: form.find('[name="fullname"]').val(),
           nickname: form.find('[name="nickname"]').val(),
           dob: form.find('[name="dob"]').val(),
@@ -529,10 +544,10 @@
             }))
           }
         };
-  
+
         return updatedData;
       }
-  
+
       // Function to update family table
       function updateFamilyTable(familyMembers) {
         const tableBody = $('#fFamilyTable tbody');
@@ -556,7 +571,7 @@
         });
         initializeClickHandler(); // Reinitialize click handlers after updating the DOM
       }
-  
+
       // Function to update scheme table
       function updateSchemeTable(beneficiarySchemes) {
         const tableBody = $('#fBeneficiarySchemes tbody');

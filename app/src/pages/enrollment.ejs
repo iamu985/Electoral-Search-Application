@@ -16,6 +16,9 @@
           <div class="row input-group mb-3 card" id="details">
             <div class="card-body px-3 pb-4">
               <div class="my-1">
+                <input type="text" id="externalFormId" class="form-control" name="external_form_id" data-fName="External Form Id" placeholder="Optional External Form ID">
+              </div>
+              <div class="my-1">
                 <label for="firstName">First Name <span class="text-danger">*</span></label>
                 <input type="text" id="firstName" class="form-control" name="first_name" data-fName="First Name" required>
               </div>
@@ -255,6 +258,7 @@
     function collectFormData() {
       const form = $('#enrollmentForm');
       const formData = {
+        external_form_id: form.find('[name="external_form_id"]').val(),
         firstname: form.find('[name="first_name"]').val(),
         middlename: form.find('[name="middle_name"]').val(),
         lastname: form.find('[name="last_name"]').val(),
