@@ -76,7 +76,8 @@
       'state_of_institution': 'State of Institution',
       'beneficiary_scheme': 'Beneficiary Scheme',
       'club_name': 'Club Name',
-      'dob': 'Date of Birth'
+      'dob': 'Date of Birth',
+      'external_form_id': 'External Form Id'
     };
 
     const searchOptions = {
@@ -212,11 +213,12 @@
       resultsContainer.empty();
 
       if (results.length > 0) {
-        const table = $('<table class="table table-bordered" id="resultsTable"><thead><tr><th>Id</th><th>Full Name</th><th>Mobile Number</th><th>Association Name</th><th>Status Of Employment</th><th>Religion</th><th>Caste</th><th>Date Of Birth</th></tr></thead><tbody></tbody></table>');
+        const table = $('<table class="table table-bordered" id="resultsTable"><thead><tr><th>Id</th><th>External Form Id</th><th>Full Name</th><th>Mobile Number</th><th>Association Name</th><th>Status Of Employment</th><th>Religion</th><th>Caste</th><th>Date Of Birth</th></tr></thead><tbody></tbody></table>');
         results.forEach(result => {
           const row = `
           <tr>
             <td><a href="/view/${result._id}">${result._id}</a></td>
+            <td>${result.external_form_id}</td>
             <td>${result.fullname}</td>
             <td>${result.mobile_number}</td>
             <td>${result.association_name}</td>
