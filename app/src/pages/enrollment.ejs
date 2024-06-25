@@ -192,16 +192,16 @@
       return isValid;
     }
 
-    $('#phoneNumber').change(function(e) {
-      e.preventDefault();
+    $('#phoneNumber').on('blur change', function(e) {
       var mobileNumber = $(this).val();
-      var isUnique = isMobileNumberUnique(mobileNumber);
-      if (!isUnique) {
-        console.log('Mobile Number already exists!');
-      }
-    });
+      var phoneNumberPattern = /^[0-9]{10}$/;
+      var patternMatch = phoneNumberPattern.test(mobileNumber);
+      var validationMessage = "";
 
-    function isMobileNumberUnique(mobileNumber) {
+      if (!patternMatch) {
+        validationMessage += 'Mobile Number does not match the required pattern i.e. length should be exactly 10.<br>';
+      }
+
       $.ajax({
         url: `/webservice/api/v1/isUniqueMobileNumber/${mobileNumber}`,
         method: 'GET',
@@ -209,16 +209,22 @@
         success: function(response) {
           if (response.success) {
             if (!response.isUnique) {
-              alert.text('Mobile number already exists.').removeClass('f-hidden');
-            } else {
-              alert.addClass('f-hidden');
+              validationMessage += 'Mobile number already exists.<br>';
             }
           } else {
             console.log('Error: ' + response.error);
           }
+
+          if (validationMessage !== "") {
+            alert.html(validationMessage).removeClass('f-hidden');
+            $('#phoneNumber').addClass('f-error');
+          } else {
+            alert.addClass('f-hidden');
+            $('#phoneNumber').removeClass('f-error');
+          }
         }
       });
-    }
+    });
 
     function getFullName(firstname, middlename, lastname) {
       if (middlename !== '') {

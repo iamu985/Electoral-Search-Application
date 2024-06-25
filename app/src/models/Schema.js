@@ -28,7 +28,7 @@ const SchemaObject = {
   lastname: { type: String, required: true },
   fullname: { type: String },
   nickname: String,
-  mobile_number: { type: String, required: true },
+  mobile_number: { type: String, required: true, unique: true },
   dob: { type: Date },
   caste: String,
   religion: String,
