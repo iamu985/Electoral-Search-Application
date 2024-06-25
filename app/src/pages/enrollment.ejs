@@ -1,6 +1,4 @@
 <%- include('partials/base.ejs') %>
-
-
 <body>
   <div class="container mb-5">
     <div id="fValidationNotif" class="alert alert-danger f-hidden">
@@ -17,6 +15,9 @@
           <h4>Details</h4>
           <div class="row input-group mb-3 card" id="details">
             <div class="card-body px-3 pb-4">
+              <div class="my-1">
+                <input type="text" id="externalFormId" class="form-control" name="external_form_id" data-fName="External Form Id" placeholder="Optional External Form ID">
+              </div>
               <div class="my-1">
                 <label for="firstName">First Name <span class="text-danger">*</span></label>
                 <input type="text" id="firstName" class="form-control" name="first_name" data-fName="First Name" required>
@@ -41,25 +42,25 @@
                   <input name="number_of_family_members" type="number" min="0" max="10" class="form-control" value="4" required>
                 </div>
                 <div class="col-sm my-1">
-                  <label for="number_of_electors">Number of Electors <span class="text-danger">*</span></label>
-                  <input name="number_of_electors" type="number" min="0" max="10" class="form-control" value="4" required>
+                  <label for="number_of_electors">Number of Electors</label>
+                  <input name="number_of_electors" type="number" min="0" max="10" class="form-control" value="4">
                 </div>
                 <div class="col-sm my-1">
-                  <label for="number_of_new_electors">Number of New Electors <span class="text-danger">*</span></label>
-                  <input name="number_of_new_electors" type="number" min="0" max="10" class="form-control" value="4" required>
+                  <label for="number_of_new_electors">Number of New Electors</label>
+                  <input name="number_of_new_electors" type="number" min="0" max="10" class="form-control" value="4">
                 </div>
               </div>
               <div class="mt-1">
-                <label class="py-2" for="associationName">Name of the Association <span class="text-danger">*</span></label>
-                <select name="association_name" id="associationName" class="form-control custom-select" required>
+                <label class="py-2" for="associationName">Name of the Association</label>
+                <select name="association_name" id="associationName" class="form-control custom-select">
                   <% options.associations.forEach(association => { %>
                     <option value="<%= association.value %>"><%= association.value %></option>
                   <% }) %>
                 </select>
               </div>
               <div class="mt-2">
-                <label class="py-2" for="statusOfEmployment">Status of Employment <span class="text-danger">*</span></label>
-                <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select" required>
+                <label class="py-2" for="statusOfEmployment">Status of Employment</label>
+                <select name="status_of_employment" id="statusOfEmployment" class="form-control custom-select">
                   <option value="Working">Working</option>
                   <option value="Retired">Retired</option>
                 </select>
@@ -106,7 +107,7 @@
                 </div>
                 <div class="col-sm">
                   <label for="villageName">Village/Para/Ward Number <span class="text-danger">*</span></label>
-                  <input type="text" name="village" id="villageName" class="form-control mx-3">
+                  <input type="text" name="village" id="villageName" class="form-control mx-3" required>
                 </div>
               </div>
               <div class="row card-body" id="f-ra-p2">
@@ -194,16 +195,16 @@
       return isValid;
     }
 
-    $('#phoneNumber').change(function(e) {
-      e.preventDefault();
+    $('#phoneNumber').on('blur change', function(e) {
       var mobileNumber = $(this).val();
-      var isUnique = isMobileNumberUnique(mobileNumber);
-      if (!isUnique) {
-        console.log('Mobile Number already exists!');
-      }
-    });
+      var phoneNumberPattern = /^[0-9]{10}$/;
+      var patternMatch = phoneNumberPattern.test(mobileNumber);
+      var validationMessage = "";
 
-    function isMobileNumberUnique(mobileNumber) {
+      if (!patternMatch) {
+        validationMessage += 'Mobile Number does not match the required pattern i.e. length should be exactly 10.<br>';
+      }
+
       $.ajax({
         url: `/webservice/api/v1/isUniqueMobileNumber/${mobileNumber}`,
         method: 'GET',
@@ -211,16 +212,22 @@
         success: function(response) {
           if (response.success) {
             if (!response.isUnique) {
-              alert.text('Mobile number already exists.').removeClass('f-hidden');
-            } else {
-              alert.addClass('f-hidden');
+              validationMessage += 'Mobile number already exists.<br>';
             }
           } else {
             console.log('Error: ' + response.error);
           }
+
+          if (validationMessage !== "") {
+            alert.html(validationMessage).removeClass('f-hidden');
+            $('#phoneNumber').addClass('f-error');
+          } else {
+            alert.addClass('f-hidden');
+            $('#phoneNumber').removeClass('f-error');
+          }
         }
       });
-    }
+    });
 
     function getFullName(firstname, middlename, lastname) {
       if (middlename !== '') {
@@ -251,6 +258,7 @@
     function collectFormData() {
       const form = $('#enrollmentForm');
       const formData = {
+        external_form_id: form.find('[name="external_form_id"]').val(),
         firstname: form.find('[name="first_name"]').val(),
         middlename: form.find('[name="middle_name"]').val(),
         lastname: form.find('[name="last_name"]').val(),

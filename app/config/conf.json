@@ -2,56 +2,56 @@
     "configs": {
         "evaluation": [
             {
-                "question": "What role can you play in the organization?",
+                "question": "What role can he/she play in the organization?",
                 "values": ["Active", "Semi-active", "Occasional", "Very Occasional", "No Role At All"],
                 "name": "organization",
                 "type": "small"
             },
             {
-                "question": "Will you play role for concern association?",
+                "question": "Will he/she play a role in the association of concern?",
                 "values": ["Yes", "No"],
                 "name": "concern_association",
                 "type": "small"
             },
             {
-                "question": "Can you play role in working place?",
+                "question": "Can he/she play a role in the workplace?",
                 "values": ["Yes", "No"],
                 "name": "working_area",
                 "type": "small"
             },
             {
-                "question": "Will you play role in regular manner?",
+                "question": "Will he/she play a role on a regular basis?",
                 "values": ["Yes", "No"],
                 "name": "regular_manner",
                 "type": "small"
             },
             {
-                "question": "Will you play role in your residing area?",
+                "question": "Will he/she play a role in your residential area?",
                 "values": ["Yes", "No"],
                 "name": "eval-ques-1",
                 "type": "small"
             },
             
             {
-                "question": "Will you be able to organize people to join in a movement?",
+                "question": "Will he/she be able to organize people to join a movement?",
                 "values": ["Yes", "No"],
                 "name": "eval-ques-2",
                 "type": "small"
             },
             {
-                "question": "Do you believe in the movement?",
+                "question": "Does he/she believe in the movement?",
                 "values": ["Yes", "No"],
                 "name": "eval-ques-3",
                 "type": "small"
             },
             {
-                "question": "Can you motivate other family members towards organizational goals?",
+                "question": "Can he/she motivate other family members toward organizational goals?",
                 "values": ["Yes", "No"],
                 "name": "eval-ques-4",
                 "type": "small"
             },
             {
-                "question": "What form of movements attracts you?",
+                "question": "What types of movements attract him/her?",
                 "values": null,
                 "name": "eval-ques-5",
                 "type": "small"

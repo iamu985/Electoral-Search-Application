@@ -47,7 +47,7 @@ const searchGetHandler = async (req, res) => {
         const query = {};
         query[field] = value;
         // console.log(query);
-        const results = await DataModel.find(query, 'id firstname middlename lastname'); // Adjust the fields as needed
+        const results = await DataModel.find(query, 'id external_form_id firstname middlename lastname'); // Adjust the fields as needed
         // console.log('Returning from inside the handler: ', results);
         res.json(results);
     } catch (error) {
