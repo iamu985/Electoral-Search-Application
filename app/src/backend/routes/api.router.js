@@ -274,6 +274,26 @@ apiRouter.post('/download-excel', (req, res) => {
   }
 });
 
+apiRouter.delete('/delete/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    await DataModel.findByIdAndDelete(id);
+    const results = await DataModel.find(); // Fetch updated results
+    res.json({ success: true, results });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
+  }
+});
+
+apiRouter.delete('/deleteAll', async (req, res) => {
+  try {
+    await DataModel.deleteMany({});
+    res.json({ success: true });
+  } catch (err) {
+    res.json({ success: false, message: err.message });
+  }
+});
+
 apiRouter.post('/settings/import', settingsImportAPIHandler);
 // API Routes
 apiRouter.get('/', apiIndex);
