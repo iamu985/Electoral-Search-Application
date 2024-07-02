@@ -31,7 +31,8 @@ const viewEditHandler = async (req, res) => {
     console.log(`method: EDIT | handler: viewedithandler`);
     const formId = req.params.id;
     const data = await DataModel.findById(formId);
-    return res.render('view-edit', { title: 'View Edit', data: data });
+    let districtsObject = Config['configs']["districts"];
+    return res.render('view-edit', { title: 'View Edit', data: data, districts: districtsObject });
 }
 
 const searchGetHandler = async (req, res) => {
