@@ -4,7 +4,7 @@
   <div class="container mb-5">
 
     <div id="header-title" class="d-flex justify-content-center my-3">
-      <h1 class="center">Detail Information</h1>
+      <h1 class="center f-title">Detail Information</h1>
     </div>
 
     <div class="row d-flex justify-content-center">
@@ -12,7 +12,7 @@
         <!-- Personal Details -->
         <div class="card mb-4">
           <div class="card-header">
-            <h4>Personal Details</h4>
+            <h4 class="f-txt-col-1">Personal Details</h4>
           </div>
           <div class="card-body">
             <div class="form-group mb-3">
@@ -40,7 +40,7 @@
               <div class="col-md-6 mb-3">
                 <label class="py-1" for="religion">Religion</label>
                 <select name="religion" id="religion" class="form-control custom-select">
-                  <option value="Hinduism">Hindi</option>
+                  <option value="Hinduism">Hinduism</option>
                   <option value="Muslim">Muslim</option>
                   <option value="Christian">Christian</option>
                   <option value="Jain">Jain</option>
@@ -70,7 +70,7 @@
         <!-- Additional Details -->
         <div class="card mb-4">
           <div class="card-header">
-            <h4>Additional Details</h4>
+            <h4 class="f-txt-col-1">Additional Details</h4>
           </div>
           <div class="card-body">
             <div class="form-group mb-3">
@@ -83,7 +83,7 @@
         <!-- Employment Details -->
         <div class="card mb-4">
           <div class="card-header">
-            <h4>Employment</h4>
+            <h4 class="f-txt-col-1">Employment</h4>
           </div>
           <div class="card-body">
             <div class="form-group mb-3">
@@ -137,7 +137,7 @@
         <!-- Residential Address -->
         <div class="card mb-4">
           <div class="card-header">
-            <h4>Residential Address</h4>
+            <h4 class="f-txt-col-1">Residential Address</h4>
           </div>
           <div class="card-body">
             <div class="row">
@@ -196,6 +196,17 @@
 </body>
 
 <style>
+  #header-title {
+    background-color: #832BCF;
+    font-size: 1.5rem;
+    height: 100px;
+    align-items: center;
+    border-radius: 4%;
+  }
+  .f-title {
+    font-size: 2rem;
+    color: #f5f5f4;
+  }
   .f-error {
     display: block;
     border: 1px solid red;
@@ -203,6 +214,9 @@
 
   .f-hidden {
     display: none;
+  }
+  .f-txt-col-1 {
+    color: #753EA5
   }
 </style>
 

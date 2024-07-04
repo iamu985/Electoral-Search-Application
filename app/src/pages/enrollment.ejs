@@ -5,14 +5,14 @@
       <!-- Validation Message Goes here -->
     </div>
     
-    <div id="header-title" class="d-flex justify-content-center my-3">
-      <h1 class="center">Enrollment Form</h1>
+    <div id="header-title" class="d-flex justify-content-center my-3 rounded">
+      <h1 class="center f-title">Enrollment Form</h1>
     </div>
     <div class="row d-flex justify-content-left">
       <!-- Form begins here -->
       <form id="enrollmentForm" action="" method="post">
         <div class="form-group">
-          <h4>Details</h4>
+          <h4 class="f-txt-col-1">Details</h4>
           <div class="row input-group mb-3 card" id="details">
             <div class="card-body px-3 pb-4">
               <div class="my-1">
@@ -69,7 +69,7 @@
           </div>
 
           <!-- Card 2 Residential Address -->
-          <h4>Residential Address</h4>
+          <h4 class="f-txt-col-1">Residential Address</h4>
           <div class="my-3" id="residentialAddress">
             <div class="row card input-group mb-3 py-3 px-3">
               <div class="row card-body" id="f-ra-p1">
@@ -131,6 +131,34 @@
   </div>
 </body>
 <style>
+  #header-title {
+    background-color: #832BCF;
+    font-size: 1.5rem;
+    height: 100px;
+    align-items: center;
+  }
+  .f-title {
+    font-size: 2rem;
+    color: #f5f5f4;
+  }
+  .f-txt-col-1 {
+    color: #753EA5
+  }
+  .f-col-1 {
+    background-color: #832BCF;
+  }
+
+  .f-col-2 {
+    background-color: #753EA5;
+  }
+
+  .f-col-3 {
+    background-color: #8B0BFB;
+  }
+
+  .f-col-4 {
+    background-color: #60427A;
+  }
   .f-error {
     display: block;
     border: 1px solid red;

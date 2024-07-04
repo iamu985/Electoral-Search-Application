@@ -3,13 +3,13 @@
 <body>
   <div class="container mb-5">
     <div id="header-title" class="d-flex justify-content-center my-3">
-      <h1 class="center">Family Information</h1>
+      <h1 class="center f-title">Family Information</h1>
     </div>
     <div class="row d-flex justify-content-left">
       <!-- Form begins here -->
       <form id="familyForm" action="" method="post">
         <div class="form-group">
-          <h4>Family Details</h4>
+          <h4 class="f-txt-col-1">Family Details</h4>
           <!-- Family Details -->
           <div class="row input-group mb-3 card">
             <div class="card-body px-3 pb-4">
@@ -29,7 +29,7 @@
                 <input name="number_of_family_members" id="numberOfFamilyMembers" type="number" min="0" max="10" class="form-control" value="4">
               </div>
               <div class="col-sm my-3">
-                <button type="button" class="btn btn-primary" id="addFamilyMemberBtn">Add Family Member</button>
+                <button type="button" class="btn btn-primary btn-col-1" id="addFamilyMemberBtn">Add Family Member</button>
                 <button type="button" class="btn btn-primary" id="addBeneficiarySchemeBtn">Add Beneficiary Scheme</button>
               </div>
             </div>
@@ -39,7 +39,7 @@
             <!-- Family member cards will be appended here -->
           </div>
           <!-- Beneficiary Schemes List -->
-          <h4>Beneficiary Schemes</h4>
+          <h4 class="f-txt-col-1">Beneficiary Schemes</h4>
           <div class="row">
             <table class="table table-bordered" id="beneficiarySchemesTable">
               <thead>
@@ -63,8 +63,8 @@
   <div class="modal fade" id="familyMemberModal" tabindex="-1" aria-labelledby="familyMemberModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="familyMemberModalLabel">Add Family Member</h5>
+        <div class="modal-header f-modal-title">
+          <h5 class="modal-title f-title" id="familyMemberModalLabel">Add Family Member</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -164,8 +164,8 @@
   <div class="modal fade" id="beneficiarySchemeModal" tabindex="-1" aria-labelledby="beneficiarySchemeModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="beneficiarySchemeModalLabel">Add Beneficiary Scheme</h5>
+        <div class="modal-header f-modal-title">
+          <h5 class="modal-title f-title" id="beneficiarySchemeModalLabel">Add Beneficiary Scheme</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
@@ -184,6 +184,28 @@
 </body>
 
 <style>
+  .btn-col-1 {
+    background-color: #832BCF;
+  }
+   #header-title {
+    background-color: #832BCF;
+    font-size: 1.5rem;
+    height: 100px;
+    align-items: center;
+    border-radius: 4%;
+  }
+  .f-modal-title {
+    background-color: #832BCF;
+    font-size: 1.5rem;
+  }
+  .f-title {
+    font-size: 2rem;
+    color: #f5f5f4;
+  }
+
+.f-txt-col-1 {
+    color: #753EA5
+  }
   .f-card {
     border: 1px solid #ccc;
     border-radius: 4px;
