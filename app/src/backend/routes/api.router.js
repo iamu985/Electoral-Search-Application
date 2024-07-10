@@ -38,7 +38,12 @@ const searchAPIRequestHandler = async (req, res) => {
       "club_name": "family_information.family_members.institution_information.club",
       "dob": "dob",
       "beneficiary_scheme": "family_information.beneficiary_scheme",
-      "external_form_id": "external_form_id"
+      "external_form_id": "external_form_id",
+      "family_member_first_name": "family_information.family_members.firstname",
+      "family_member_last_name": "family_information.family_members.lastname",
+      "family_member_relationship": "family_information.family_members.relationship",
+      "family_member_is_student": "family_information.family_members.is_student",
+      "family_member_is_new_elector": "family_information.family_members.is_new_elector"
     };
 
     const { queryData } = req.query;

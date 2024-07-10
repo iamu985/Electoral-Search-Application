@@ -28,6 +28,10 @@
                 <label for="number_of_family_members">Number of Family Members</label>
                 <input name="number_of_family_members" id="numberOfFamilyMembers" type="number" min="0" max="10" class="form-control" value="4">
               </div>
+              <div class="col-sm my-1">
+                <label for="totalEarningMembers">Number of Earning Family Members</label>
+                <input name="total_earning_members" id="totalEarningMembers" type="number" min="0" max="10" class="form-control" value="4">
+              </div>
               <div class="col-sm my-3">
                 <button type="button" class="btn btn-primary btn-col-1" id="addFamilyMemberBtn">Add Family Member</button>
                 <button type="button" class="btn btn-primary" id="addBeneficiarySchemeBtn">Add Beneficiary Scheme</button>
@@ -470,6 +474,7 @@
       return {
         number_of_electors: form.find('[name="number_of_electors"]').val(),
         number_of_family_members: form.find('[name="number_of_family_members"]').val(),
+        total_earning_members: form.find('[name="total_earning_members"]').val(),
         family_information: {
           family_type: form.find('[name="family_type"]').val(),
           family_members: familyMembers,

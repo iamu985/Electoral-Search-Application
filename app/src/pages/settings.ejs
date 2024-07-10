@@ -2,8 +2,8 @@
 
 <body>
   <div class="container mb-5">
-    <div class="d-flex justify-content-center my-3">
-      <h1>Settings</h1>
+    <div id="header-title" class="d-flex justify-content-center my-3 rounded">
+      <h1 class="center f-title">Settings</h1>
     </div>
     <div class="row">
       <div class="col-md-12">
@@ -29,10 +29,11 @@
               </div>
             </div>
             <div class="col-md-3 my-3 align-self-end">
-              <button type="button" id="addBtn" class="btn btn-primary">Add</button>
+              <button type="button" id="addBtn" class="btn btn-primary f-btn-col-1">Add</button>
+              <a href="/" for="goBack" class="btn btn-secondary f-btn-col-1 mx-3">Go Back</a>
             </div>
             <div class="col-md-3 my-3 align-self-end">
-              <label for="importFile" class="btn btn-secondary">Import Excel</label>
+              <label for="importFile" class="btn btn-secondary f-btn-col-1">Import Excel</label>
               <input type="file" id="importFile" class="d-none" accept=".xlsx, .xls">
             </div>
           </div>
@@ -50,7 +51,7 @@
               </div>
               <div class="col-sm d-flex justify-content-end">
                 <input type="text" class="form-control" id="settingsSearchValue" name="searchValue" placeholder="Search...">
-                <button type="button" id="searchBtn" class="btn btn-secondary ms-2">Search</button>
+                <button type="button" id="searchBtn" class="btn btn-secondary ms-2 f-btn-col-1">Search</button>
               </div>
             </div>
           </div>
@@ -72,8 +73,8 @@
                     <input type="text" class="form-control" value="<%= result.value %>" data-id="<%= result._id %>" readonly>
                   </td>
                   <td>
-                    <button class="btn btn-sm btn-primary edit-btn" data-id="<%= result._id %>">Edit</button>
-                    <button class="btn btn-sm btn-danger delete-btn" data-id="<%= result._id %>">Delete</button>
+                    <button class="btn btn-sm btn-primary f-btn-col-1 edit-btn" data-id="<%= result._id %>">Edit</button>
+                    <button class="btn btn-sm btn-danger f-btn-col-1 delete-btn" data-id="<%= result._id %>">Delete</button>
                   </td>
                 </tr>
                 <% }) %>
@@ -89,6 +90,22 @@
 <style>
   .form-group {
     margin-bottom: 1rem;
+  }
+  #header-title {
+    background-color: #832BCF;
+    font-size: 1.5rem;
+    height: 100px;
+    align-items: center;
+  }
+  .f-title {
+    font-size: 2rem;
+    color: #f5f5f4;
+  }
+  .f-btn-col-1 {
+    background-color: #8b0bfb;
+  }
+  .f-btn-col-danger {
+    background-color: #c6600c;
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
@@ -145,8 +162,8 @@
                 <input type="text" class="form-control" value="${result.value}" data-id="${result._id}" readonly>
               </td>
               <td>
-                <button class="btn btn-sm btn-primary edit-btn" data-id="${result._id}">Edit</button>
-                <button class="btn btn-sm btn-danger delete-btn" data-id="${result._id}">Delete</button>
+                <button class="btn btn-sm btn-primary f-btn-col-1 edit-btn" data-id="${result._id}">Edit</button>
+                <button class="btn btn-sm btn-danger f-btn-col-danger delete-btn" data-id="${result._id}">Delete</button>
               </td>
             </tr>
           `;
