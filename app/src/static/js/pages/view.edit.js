@@ -31,6 +31,7 @@ $(document).ready(function () {
 
     // Handle save changes for family member
     $('#saveFamilyMemberBtn').click(function () {
+        console.log('#saveFamilyMemberBtn invoked')
         const index = $(this).data('index');
         const familyMember = collectModalData();
 
@@ -47,6 +48,7 @@ $(document).ready(function () {
     });
 
     function collectModalData() {
+        console.log('Inside collectModalData')
         return {
             firstname: $('#family_member_first_name').val(),
             middlename: $('#family_member_middle_name').val(),
@@ -75,9 +77,11 @@ $(document).ready(function () {
     });
 
     $('#saveBeneficiarySchemeBtn').click(function () {
+        console.log('saveBeneficiarySchemeBtn invoked.')
         const schemeName = $('#scheme_name').val();
         if (schemeName) {
             let data = JSON.parse(sessionStorage.getItem('data'));
+            console.log('data received: \n', JSON.stringify(data))
             data.family_information.beneficiary_scheme.push(schemeName);
             sessionStorage.setItem('data', JSON.stringify(data));
             $('#beneficiarySchemeModal').modal('hide');
@@ -87,6 +91,7 @@ $(document).ready(function () {
 
     // Function to initialize click handlers
     function initializeClickHandler() {
+        console.log('initializeClickHandler invoked.')
         const data = JSON.parse(sessionStorage.getItem('data'));
         $('.edit-member').click(function () {
             console.log(`FromGetData: ${JSON.stringify(data)}`);
@@ -100,13 +105,13 @@ $(document).ready(function () {
             $('#edit_is_student').val(member.is_student);
             $('#edit_is_new_elector').val(member.is_new_elector);
             $('#edit_age').val(member.age);
-            $('#name_of_institution').val(member.institution_information.name_of_institution);
-            $('#state_of_institution').val(member.institution_information.state_of_institution);
-            $('#club').val(member.institution_information.club);
+            $('#edit_name_of_institution').val(member.institution_information.name_of_institution);
+            $('#edit_state_of_institution').val(member.institution_information.state_of_institution);
+            $('#edit_club').val(member.institution_information.club);
 
-            $('#attached_association_name_of_organization').val(member.associated_association.name_of_organization);
-            $('#attached_association_association_phone').val(member.associated_association.phone);
-            $('#attached_association_in_leadership_role').val(member.associated_association.in_leadership_role);
+            $('#edit_name_of_organization').val(member.associated_association.name_of_organization);
+            $('#edit_association_phone').val(member.associated_association.phone);
+            $('#edit_in_leadership_role').val(member.associated_association.in_leadership_role);
             $('#editMemberModal').modal('show');
         });
 
@@ -130,6 +135,7 @@ $(document).ready(function () {
 
         // Handle save changes for family member
         $('#saveMemberChanges').click(function () {
+            console.log('saveMemberChanges invoked.')
             const index = $('#editMemberIndex').val();
             const updatedMember = {
                 firstname: $('#edit_firstname').val(),
@@ -140,16 +146,17 @@ $(document).ready(function () {
                 is_new_elector: $('#edit_is_new_elector').val(),
                 age: $('#edit_age').val(),
                 institution_information: {
-                    name_of_institution: $('#name_of_institution').val(),
-                    state_of_institution: $('#state_of_institution').val(),
-                    club: $('#club').val()
+                    name_of_institution: $('#edit_name_of_institution').val(),
+                    state_of_institution: $('#edit_state_of_institution').val(),
+                    club: $('#edit_club').val()
                 },
                 associated_association: {
-                    name_of_organization: $('#attached_association_name_of_organization').val(),
-                    phone: $('#attached_association_association_phone').val(),
-                    in_leadership_role: $('#attached_association_in_leadership_role').val()
+                    name_of_organization: $('#edit_name_of_organization').val(),
+                    phone: $('#edit_association_phone').val(),
+                    in_leadership_role: $('#edit_in_leadership_role').val()
                 }
             };
+            console.log('Updated Member: \n', JSON.stringify(updatedMember))
             data.family_information.family_members[index] = updatedMember;
             sessionStorage.setItem('data', JSON.stringify(data));
             $('#editMemberModal').modal('hide');
@@ -215,8 +222,10 @@ $(document).ready(function () {
 
     // Function to collect form data
     function collectFormData() {
+        console.log('collectFormData invoked.');
         const form = $('#editForm');
         const data = JSON.parse(sessionStorage.getItem('data'));
+        console.log('Data in sessionstorage: \n', JSON.stringify(data));
 
         const updatedData = {
             _id: data._id,
@@ -272,6 +281,7 @@ $(document).ready(function () {
                 }))
             }
         };
+        console.log('Updated Data: \n', JSON.stringify(updatedData));
 
         return updatedData;
     }
