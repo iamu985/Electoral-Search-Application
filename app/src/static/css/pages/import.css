@@ -1,12 +1,9 @@
-.form-group {
-    margin-bottom: 1rem;
-}
-
 #header-title {
     background-color: #832BCF;
     font-size: 1.5rem;
     height: 100px;
     align-items: center;
+    border-radius: 4%;
 }
 
 .f-title {

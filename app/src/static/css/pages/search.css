@@ -70,3 +70,9 @@
 .slide-down {
     animation: slideDown 0.5s ease-out;
 }
+.f-btn-col-1 {
+    background-color: #8b0bfb;
+}
+.f-btn-col-danger {
+    background-color: #c6600c;
+}
