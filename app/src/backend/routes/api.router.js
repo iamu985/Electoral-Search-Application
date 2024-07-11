@@ -43,7 +43,8 @@ const searchAPIRequestHandler = async (req, res) => {
       "family_member_last_name": "family_information.family_members.lastname",
       "family_member_relationship": "family_information.family_members.relationship",
       "family_member_is_student": "family_information.family_members.is_student",
-      "family_member_is_new_elector": "family_information.family_members.is_new_elector"
+      "family_member_is_new_elector": "family_information.family_members.is_new_elector",
+      "total_earning_members": "total_earning_members"
     };
 
     const { queryData } = req.query;
@@ -56,6 +57,7 @@ const searchAPIRequestHandler = async (req, res) => {
     parsedQueryData.forEach((query, index) => {
       // console.log(JSON.stringify(query));
       const condition = buildQueryCondition(searchFieldMapping[query.field], query.option, query.value);
+      console.log('TypeValue: ', typeof(query.value));
       currentConditionGroup.push(condition);
 
       // Check if the next logical operator is AND or OR, and handle accordingly
@@ -72,7 +74,7 @@ const searchAPIRequestHandler = async (req, res) => {
 
     // Combine all query conditions with $or
     const finalQuery = queryConditions.length > 1 ? { $or: queryConditions } : queryConditions[0];
-    // console.log(`FinalQuery: ${JSON.stringify(finalQuery)}`);
+    console.log(`FinalQuery: ${JSON.stringify(finalQuery)}`);
 
     try {
       const results = await DataModel.find(finalQuery);
@@ -199,6 +201,7 @@ const updateDataByIdAPIHandler = async (req, res) => {
   console.log(`method: POST | handler: updatedatabyidapihandler`);
   const formId = req.params.id;
   const updateData = req.body;
+  console.log(typeof(updateData), updateData.family_information.family_members);
   try {
     const response = await DataModel.findByIdAndUpdate(formId, updateData);
     if (response) {

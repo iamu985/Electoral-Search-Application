@@ -83,7 +83,8 @@
       'family_member_last_name': 'Family Member Last Name',
       'family_member_relationship': 'Family Member Relationship',
       'family_member_is_student': 'Family Member Is Student',
-      'family_member_is_new_elector': 'Family Member Is New Elector'
+      'family_member_is_new_elector': 'Family Member Is New Elector',
+      'total_earning_members': 'Total Earning Members'
     };
 
     const searchOptions = {
@@ -176,13 +177,27 @@
       $(`.query-group[data-index="${index}"]`).remove();
     });
 
+    const convertValue = (value) => {
+      console.log('Convert value');
+      console.log(typeof(value), value);
+      let verdict = Number(value);
+      console.log(verdict)
+      if (!isNaN(verdict)) {
+        console.log('Returning number');
+        return verdict  
+      } else {
+        console.log('returning string')
+        return value
+      }
+    }
+
     $('#executeQueryBtn').click(function() {
       const queryData = [];
       $('.query-group').each(function() {
         const index = $(this).data('index');
         const field = $(this).find('.query-field').val();
         const option = $(this).find('.query-option').val();
-        const value = $(this).find('.query-value').val();
+        const value = convertValue($(this).find('.query-value').val());
         queryData.push({
           field,
           option,
